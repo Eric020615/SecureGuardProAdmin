@@ -21,6 +21,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const baseURL = `${process.env.BACKEND_API}`;
   return (
     <html lang="en">
       <body className={cn("font-inter antialiased", inter.variable)}>
