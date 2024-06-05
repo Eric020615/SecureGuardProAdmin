@@ -1,15 +1,13 @@
-import React from 'react'
+import React from "react";
 
-const Layout = ({ children }: {children: React.ReactNode}) => {
+const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <main className='root'>
-        <div className='root-container'>
-            <div className='wrapper'>
-                {children}
-            </div>
-        </div>
-    </main>
-  )
-}
+    <div className=" w-full">
+      <div className="md:px-10 md:py-8 p-5 items-center justify-center">
+        {children}
+      </div>
+    </div>
+  );
+};
 
-export default Layout
+export default Layout;

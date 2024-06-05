@@ -1,8 +1,11 @@
+import FacilityPage from '@/page/facility'
 import React from 'react'
 
 const FacilityManagementPage = () => {
   return (
-    <div>FacilityManagementPage</div>
+    <>
+      <FacilityPage/>
+    </>
   )
 }
 

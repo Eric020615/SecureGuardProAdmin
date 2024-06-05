@@ -24,28 +24,28 @@ import {
 const Sidebar = () => {
   return (
     <Command className="bg-secondary">
-      <CommandInput placeholder="Type a command or search..." />
+      <CommandInput className="text-base" placeholder="Type a command or search..." />
       <CommandList>
-        <CommandEmpty>No results found.</CommandEmpty>
+        <CommandEmpty className="text-base">No results found.</CommandEmpty>
         <CommandGroup heading="Suggestions">
           <CommandItem>
-            <LayoutDashboard className="mr-2 h-4 w-4"/>
-            <Link href="/">Dashboard</Link>
+            <LayoutDashboard className="mr-2 h-5 w-5"/>
+            <Link href="/" className="text-base">Dashboard</Link>
           </CommandItem>
           <CommandItem>
-            <Building className="mr-2 h-4 w-4"/>
-            <Link href="/facility">Facility Management</Link>
+            <Building className="mr-2 h-5 w-5"/>
+            <Link href="/facility" className="text-base">Facility Management</Link>
           </CommandItem>
           <CommandItem>
-            <Newspaper className="mr-2 h-4 w-4"/>
-            <Link href="/Notices">Notices Management</Link>
+            <Newspaper className="mr-2 h-5 w-5"/>
+            <Link href="/Notices" className="text-base">Notices Management</Link>
           </CommandItem>
         </CommandGroup>
         <CommandSeparator />
         <CommandGroup heading="Settings">
-          <CommandItem>Profile</CommandItem>
-          <CommandItem>Billing</CommandItem>
-          <CommandItem>Settings</CommandItem>
+          <CommandItem className="text-base">Profile</CommandItem>
+          <CommandItem className="text-base">Billing</CommandItem>
+          <CommandItem className="text-base">Settings</CommandItem>
         </CommandGroup>
       </CommandList>
     </Command>

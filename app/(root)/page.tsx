@@ -1,11 +1,11 @@
 import React from 'react'
 import { Button } from '@/components/ui/button'
-import Dashboard from '@/components/dashboard/Dashboard'
+import DashboardPage from '@/page/dashboard'
 
 const Home = () => {
   return (
     <>
-        <Dashboard/>
+        <DashboardPage />
     </>
   )
 }
