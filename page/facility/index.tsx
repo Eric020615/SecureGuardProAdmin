@@ -23,6 +23,7 @@ import { GetFacilityBookingList } from "@/zustand/types";
 import moment from "moment";
 import "moment-timezone"
 import { FacilityName } from "../../config/index"
+import { useRouter } from "next/navigation";
 
 export const columns: ColumnDef<GetFacilityBookingList>[] = [
   {
@@ -124,6 +125,7 @@ export const columns: ColumnDef<GetFacilityBookingList>[] = [
 const FacilityPage = () => {
   const getBookingHistory = useFacility((state) => state.getBookingHistory);
   const [bookingHistory, setBookingHistory] = useState<GetFacilityBookingList[]>([]);
+  const router = useRouter()
 
   useEffect(() => {
     getData();
@@ -131,7 +133,6 @@ const FacilityPage = () => {
 
   const getData = async () => {
     const response = await getBookingHistory();
-    console.log(response)
     setBookingHistory(response.data);
   };
 
@@ -139,9 +140,14 @@ const FacilityPage = () => {
     <>
       <div className="flex flex-row justify-between">
         <h3 className="text-3xl font-bold text-black">Facility</h3>
-        <Button className="flex items-center gap-1">
+        <Button 
+          className="flex items-center gap-1"
+          onClick={() => {
+            router.push("/facility/create-booking")
+          }}
+        >
           <RiAddBoxLine className="text-xl" />
-          <p className="flex items-center text-center ">Create</p>
+          <p className="flex items-center text-center">Create</p>
         </Button>
       </div>
       <div className="mt-5">

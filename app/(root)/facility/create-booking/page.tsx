@@ -1,8 +1,10 @@
+"use client"
+import BookingUploadPage from '@/page/facility/bookingUpload'
 import React from 'react'
 
 const CreateFacilityPage = () => {
   return (
-    <div>CreateFacilityPage</div>
+      <BookingUploadPage/>
   )
 }
 
