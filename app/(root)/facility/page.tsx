@@ -1,3 +1,5 @@
+"use client"
+
 import FacilityPage from '@/page/facility'
 import React from 'react'
 

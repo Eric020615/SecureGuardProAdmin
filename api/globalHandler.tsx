@@ -1,5 +1,8 @@
 import Axios from "axios";
 import queryString from "query-string";
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 interface IHandler {
   path: string;
@@ -22,7 +25,7 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
     try {
       const { path, type, data, isBloob } = payload;
       const token = payload._token;
-      const baseURL = `${process.env.BACKEND_API}${path}`;
+      const baseURL = `${process.env.NEXT_PUBLIC_BACKEND_API}${path}`;
       let success = false;
       const maxAttempt = 2;
       let attempt = 0;
@@ -39,7 +42,11 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
                 paramsSerializer: (params) => parseParams(params),
                 headers: {
                   "Content-Type": "application/json",
-                  "Authorization": `Bearer ${token}`
+                  ...(token != null
+                    ? {
+                        Authorization: `Bearer ${token}`,
+                      }
+                    : {}),
                 },
               });
             } else if (type === "put") {

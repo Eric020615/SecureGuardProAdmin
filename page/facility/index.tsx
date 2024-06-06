@@ -1,21 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RiAddBoxLine } from "react-icons/ri";
 import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
+  ColumnDef
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
@@ -26,57 +17,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 import CustomTable from "@/components/Table";
+import { useFacility } from "../../zustand/facilityService/facility";
+import { GetFacilityBookingList } from "@/zustand/types";
+import moment from "moment";
+import "moment-timezone"
+import { FacilityName } from "../../config/index"
 
-const data: Payment[] = [
-  {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@yahoo.com",
-  },
-  {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@gmail.com",
-  },
-  {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@gmail.com",
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@gmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@hotmail.com",
-  },
-];
-
-export type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
-};
-
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<GetFacilityBookingList>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -100,48 +48,59 @@ export const columns: ColumnDef<Payment>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "facilityId",
+    header: "Facility",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{
+        FacilityName[row.getValue("facilityId") as string]
+      }</div>
     ),
   },
   {
-    accessorKey: "email",
+    accessorKey: "startDate",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email
+          Start Date
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    cell: ({ row }) => <div className="lowercase">{
+      moment(row.getValue("startDate")).tz('Asia/Kuala_Lumpur').format("DD MMM YYYY, HH:mm")
+    }</div>,
   },
   {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
-
-      return <div className="text-right font-medium">{formatted}</div>;
+    accessorKey: "endDate",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          End Date
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
     },
+    cell: ({ row }) => <div className="lowercase">{
+      moment(row.getValue("endDate")).tz('Asia/Kuala_Lumpur').format("DD MMM YYYY, HH:mm")
+    }</div>,
+  },
+  {
+    accessorKey: "userGUID",
+    header: "Created By",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("userGUID")}</div>
+    ),
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -152,11 +111,6 @@ export const columns: ColumnDef<Payment>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>View customer</DropdownMenuItem>
             <DropdownMenuItem>View payment details</DropdownMenuItem>
@@ -168,29 +122,18 @@ export const columns: ColumnDef<Payment>[] = [
 ];
 
 const FacilityPage = () => {
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = useState({});
+  const getBookingHistory = useFacility((state) => state.getBookingHistory);
+  const [bookingHistory, setBookingHistory] = useState<GetFacilityBookingList[]>([]);
 
-  const table = useReactTable({
-    data,
-    columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
-  });
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async () => {
+    const response = await getBookingHistory();
+    console.log(response)
+    setBookingHistory(response.data);
+  };
 
   return (
     <>
@@ -203,7 +146,7 @@ const FacilityPage = () => {
       </div>
       <div className="mt-5">
         <CustomTable 
-          data={data}
+          data={bookingHistory}
           columns={columns}
         />
       </div>

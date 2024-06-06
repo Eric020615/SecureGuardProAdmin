@@ -17,7 +17,7 @@ export const listUrl = {
             type: IType.post
         },
         getBookingHistory: {
-            path: "facility",
+            path: "facility/admin",
             type: IType.get
         }
     }
