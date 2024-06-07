@@ -13,7 +13,7 @@ export const listUrl = {
     },
     facility: {
         book: {
-            path: "facility/book",
+            path: "facility/book/admin",
             type: IType.post
         },
         getBookingHistory: {

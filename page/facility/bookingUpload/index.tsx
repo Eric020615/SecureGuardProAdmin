@@ -21,6 +21,7 @@ import { FacilitySelect } from "@/config";
 import moment from "moment";
 import "moment-timezone";
 import CustomDatePicker from "@/components/DatePicker";
+import { useFacility } from "../../../zustand/facilityService/facility";
 
 const formSchema = z
   .object({
@@ -30,9 +31,7 @@ const formSchema = z
     facilityId: z.string().min(1, {
       message: "Facility is required to be selected",
     }),
-    date: z.date().min(moment().toDate(), {
-      message: "Date is required to be selected",
-    }),
+    date: z.date(),
     startTime: z.string().min(1, {
       message: "Start Time is required",
     }),
@@ -50,6 +49,7 @@ const formSchema = z
 
 const BookingUploadPage = () => {
   const router = useRouter();
+  const createBooking = useFacility((state) => state.createBooking);
   const [facility, setFacility] = useState("");
   const [date, setDate] = useState<Date | undefined>(moment().toDate());
 
@@ -60,6 +60,8 @@ const BookingUploadPage = () => {
       date: date,
       startTime: "",
       endTime: "",
+      user: "",
+      numOfGuest: ""
     },
   });
 
@@ -67,15 +69,25 @@ const BookingUploadPage = () => {
     form.setValue("facilityId", facility);
   }, [facility]);
 
-  //   useEffect(() => {
-  //     let value = moment(startDate);
-  //     value.hour(19).minute(33);
-  //     console.log(value.toDate())
-  //   }, [form.getValues("startTime")])
+  useEffect(() => {
+    form.setValue("date", date ? date: moment().toDate());
+  }, [date])
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    let startDate = moment(date).hour(12).minute(23);
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    let startTimeSplit = values.startTime.split(":");
+    let endTimeSplit = values.endTime.split(":");
+    let startDate = moment(values.date).hour(parseInt(startTimeSplit[0])).minute(parseInt(startTimeSplit[1]));
+    let endDate = moment(values.date).hour(parseInt(endTimeSplit[0])).minute(parseInt(endTimeSplit[1]));
+    const response = await createBooking({
+        facilityId: values.facilityId,
+        userGUID: values.user,
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+        numOfGuest: parseInt(values.numOfGuest)
+    });
+    if(response.success){
+        router.push("/facility")
+    }
   }
 
   return (
