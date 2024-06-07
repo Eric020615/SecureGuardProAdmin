@@ -20,5 +20,15 @@ export const listUrl = {
             path: "facility/admin",
             type: IType.get
         }
+    },
+    notice: {
+        create: {
+            path: "notice/create-notice",
+            type: IType.post
+        },
+        getNotices: {
+            path: "notice",
+            type: IType.get
+        }
     }
 }

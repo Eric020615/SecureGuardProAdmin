@@ -18,14 +18,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import CustomTable from "@/components/Table";
-import { useFacility } from "../../zustand/facilityService/facility";
-import { GetFacilityBookingList } from "@/zustand/types";
+import { useNotice } from "@/zustand/noticeService/notice";
+import { GetNoticeList } from "@/zustand/types";
 import moment from "moment";
 import "moment-timezone"
-import { FacilityName } from "../../config/index"
 import { useRouter } from "next/navigation";
 
-export const columns: ColumnDef<GetFacilityBookingList>[] = [
+export const columns: ColumnDef<GetNoticeList>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -49,12 +48,19 @@ export const columns: ColumnDef<GetFacilityBookingList>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "facilityId",
-    header: "Facility",
+    accessorKey: "title",
+    header: "Title",
     cell: ({ row }) => (
       <div className="capitalize">{
-        FacilityName[row.getValue("facilityId") as string]
+        row.getValue("title") as string
       }</div>
+    ),
+  },
+  {
+    accessorKey: "description",
+    header: "Description",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("description")}</div>
     ),
   },
   {
@@ -92,13 +98,6 @@ export const columns: ColumnDef<GetFacilityBookingList>[] = [
     }</div>,
   },
   {
-    accessorKey: "userGUID",
-    header: "Created By",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("userGUID")}</div>
-    ),
-  },
-  {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
@@ -123,8 +122,8 @@ export const columns: ColumnDef<GetFacilityBookingList>[] = [
 ];
 
 const NoticePage = () => {
-  const getBookingHistory = useFacility((state) => state.getBookingHistory);
-  const [bookingHistory, setBookingHistory] = useState<GetFacilityBookingList[]>([]);
+  const getNotice = useNotice((state) => state.getNotice);
+  const [noticeHistory, setNoticeHistory] = useState<GetNoticeList[]>([]);
   const router = useRouter()
 
   useEffect(() => {
@@ -132,8 +131,8 @@ const NoticePage = () => {
   }, []);
 
   const getData = async () => {
-    const response = await getBookingHistory();
-    setBookingHistory(response.data);
+    const response = await getNotice();
+    setNoticeHistory(response.data);
   };
 
   return (
@@ -152,7 +151,7 @@ const NoticePage = () => {
       </div>
       <div className="mt-5">
         <CustomTable 
-          data={bookingHistory}
+          data={noticeHistory}
           columns={columns}
         />
       </div>

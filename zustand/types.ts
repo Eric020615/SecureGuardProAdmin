@@ -13,3 +13,17 @@ export interface CreateFacilityBooking {
     numOfGuest: number;
     userGUID: string;
 }
+
+export interface CreateNotice {
+    title: string;
+    description: string;
+    startDate: string;
+    endDate: string;
+}
+
+export interface GetNoticeList {
+    title: string;
+    description: string;
+    startDate: string;
+    endDate: string;
+}

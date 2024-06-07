@@ -73,7 +73,7 @@ const BookingUploadPage = () => {
     form.setValue("date", date ? date: moment().toDate());
   }, [date])
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     let startTimeSplit = values.startTime.split(":");
     let endTimeSplit = values.endTime.split(":");
     let startDate = moment(values.date).hour(parseInt(startTimeSplit[0])).minute(parseInt(startTimeSplit[1]));
@@ -89,7 +89,7 @@ const BookingUploadPage = () => {
         router.push("/facility")
     }
   }
-
+  
   return (
     <>
       <div className="flex flex-row justify-between">
