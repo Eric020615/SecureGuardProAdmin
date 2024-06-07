@@ -38,7 +38,7 @@ const Sidebar = () => {
           </CommandItem>
           <CommandItem>
             <Newspaper className="mr-2 h-5 w-5"/>
-            <Link href="/Notices" className="text-base">Notices Management</Link>
+            <Link href="/notice" className="text-base">Notices Management</Link>
           </CommandItem>
         </CommandGroup>
         <CommandSeparator />

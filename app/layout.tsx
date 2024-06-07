@@ -27,7 +27,7 @@ export default function RootLayout({
       <body className={cn("font-inter antialiased", inter.variable)}>
         <Navbar/>
         <div className="flex">
-          <div className="hidden md:block h-[100vh] w-[350px]">
+          <div className="hidden md:block h-[110vh] w-[350px]">
             <Sidebar/> 
           </div>
           <div className="w-full">
