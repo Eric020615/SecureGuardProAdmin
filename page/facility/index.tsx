@@ -70,7 +70,7 @@ export const columns: ColumnDef<GetFacilityBookingList>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{
+    cell: ({ row }) => <div className="capitalize">{
       moment(row.getValue("startDate")).tz('Asia/Kuala_Lumpur').format("DD MMM YYYY, HH:mm")
     }</div>,
   },
@@ -87,7 +87,7 @@ export const columns: ColumnDef<GetFacilityBookingList>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{
+    cell: ({ row }) => <div className="capitalize">{
       moment(row.getValue("endDate")).tz('Asia/Kuala_Lumpur').format("DD MMM YYYY, HH:mm")
     }</div>,
   },
