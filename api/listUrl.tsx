@@ -19,6 +19,10 @@ export const listUrl = {
         getBookingHistory: {
             path: "facility/admin",
             type: IType.get
+        },
+        cancelBooking: {
+            path: "facility/cancel",
+            type: IType.put
         }
     },
     notice: {

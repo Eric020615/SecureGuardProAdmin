@@ -1,4 +1,4 @@
-import { CreateFacilityBooking, GetFacilityBookingList } from "../../zustand/types"
+import { CancelBooking, CreateFacilityBooking, GetFacilityBookingList } from "../../zustand/types"
 import GlobalHandler, { IResponse } from "../globalHandler"
 import { listUrl } from "../listUrl"
 
@@ -34,6 +34,30 @@ export const getBookingHistory = async (): Promise<any> => {
             path: listUrl.facility.getBookingHistory.path,
             type: listUrl.facility.getBookingHistory.type,
             // _token: token
+        })
+        const result : IResponse<any> = {
+            success,
+            msg: success ? 'success': data?.message,
+            data: success ? data?.data.data : undefined
+        }
+        return result;
+    } catch (error: any) {
+        const result : IResponse<any> = {
+            success: false,
+            msg: error,
+            data: null
+        }
+        return result;
+    }
+}
+
+
+export const cancelBooking = async (cancelBookingForm: CancelBooking): Promise<any> => {
+    try {
+        const [success, data] = await GlobalHandler({
+            path: listUrl.facility.cancelBooking.path,
+            type: listUrl.facility.cancelBooking.type,
+            data: cancelBookingForm,
         })
         const result : IResponse<any> = {
             success,

@@ -24,108 +24,134 @@ import moment from "moment";
 import "moment-timezone"
 import { FacilityName } from "../../config/index"
 import { useRouter } from "next/navigation";
-
-export const columns: ColumnDef<GetFacilityBookingList>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "facilityId",
-    header: "Facility",
-    cell: ({ row }) => (
-      <div className="capitalize">{
-        FacilityName[row.getValue("facilityId") as string]
-      }</div>
-    ),
-  },
-  {
-    accessorKey: "startDate",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Start Date
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div className="capitalize">{
-      moment(row.getValue("startDate")).tz('Asia/Kuala_Lumpur').format("DD MMM YYYY, HH:mm")
-    }</div>,
-  },
-  {
-    accessorKey: "endDate",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          End Date
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div className="capitalize">{
-      moment(row.getValue("endDate")).tz('Asia/Kuala_Lumpur').format("DD MMM YYYY, HH:mm")
-    }</div>,
-  },
-  {
-    accessorKey: "userGUID",
-    header: "Created By",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("userGUID")}</div>
-    ),
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
+import CancelBookingDialog from "@/components/dialog/CancelBookingDialog";
+import { Badge } from "@/components/ui/badge"
 
 const FacilityPage = () => {
   const getBookingHistory = useFacility((state) => state.getBookingHistory);
   const [bookingHistory, setBookingHistory] = useState<GetFacilityBookingList[]>([]);
-  const router = useRouter()
+  const [openCancelDialog, setOpenCancelDialog] = useState(false)
+  const [selectedBookingId, setSelectedBookingId] = useState("")
+  const router = useRouter();
+  
+  const columns: ColumnDef<GetFacilityBookingList>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "bookingId",
+      header: "Id",
+      cell: ({ row }) => (
+        <div>{
+          row.getValue("bookingId")
+        }</div>
+      ),
+    },
+    {
+      accessorKey: "facilityId",
+      header: "Facility",
+      cell: ({ row }) => (
+        <div className="capitalize">{
+          FacilityName[row.getValue("facilityId") as string]
+        }</div>
+      ),
+    },
+    {
+      accessorKey: "startDate",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Start Date
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => <div className="capitalize">{
+        moment(row.getValue("startDate")).tz('Asia/Kuala_Lumpur').format("DD MMM YYYY, HH:mm")
+      }</div>,
+    },
+    {
+      accessorKey: "endDate",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            End Date
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => <div className="capitalize">{
+        moment(row.getValue("endDate")).tz('Asia/Kuala_Lumpur').format("DD MMM YYYY, HH:mm")
+      }</div>,
+    },
+    {
+      accessorKey: "userGUID",
+      header: "Created By",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("userGUID")}</div>
+      ),
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {
+                moment(row.getValue("startDate")).tz('Asia/Kuala_Lumpur') > moment().tz('Asia/Kuala_Lumpur') ? (
+                  <DropdownMenuItem onClick={() => {openCancelBookingDialog(row.getValue("bookingId"))}}>Cancel Booking</DropdownMenuItem>
+                ) : 
+                (
+                  <div className="flex justify-center">
+                    <Badge className="w-full bg-red-500 text-center">Expired Booking</Badge>
+                  </div>
+                )
+              }
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
+  
+  const openCancelBookingDialog = (bookingId: string) => {
+    setOpenCancelDialog(true)
+    setSelectedBookingId(bookingId)
+  }
 
   useEffect(() => {
     getData();
@@ -133,11 +159,17 @@ const FacilityPage = () => {
 
   const getData = async () => {
     const response = await getBookingHistory();
+    console.log(response)
     setBookingHistory(response.data);
   };
 
+  useEffect(() => {
+    console.log(bookingHistory[0])
+  }, [bookingHistory])
+
   return (
     <>
+      <CancelBookingDialog open={openCancelDialog} setOpen={setOpenCancelDialog} bookingId={selectedBookingId}/>
       <div className="flex flex-row justify-between">
         <h3 className="text-3xl font-bold text-black">Facility</h3>
         <Button 

@@ -1,6 +1,6 @@
 import { create } from "zustand"
-import { createBooking, getBookingHistory } from "../../api/facilityService/facilityService"
-import { CreateFacilityBooking } from "../types";
+import { cancelBooking, createBooking, getBookingHistory } from "../../api/facilityService/facilityService"
+import { CancelBooking, CreateFacilityBooking } from "../types";
 
 const application = (set: any, get: any) => ({
     createBooking: async (bookingForm : CreateFacilityBooking ) => {
@@ -14,6 +14,15 @@ const application = (set: any, get: any) => ({
     getBookingHistory: async () => {
         try {
             const response = await getBookingHistory();
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    
+    cancelBooking: async (cancelBookingForm: CancelBooking) => {
+        try {
+            const response = await cancelBooking(cancelBookingForm);
             return response;
         } catch (error) {
             console.log(error);

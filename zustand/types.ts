@@ -4,6 +4,8 @@ export interface GetFacilityBookingList {
     endDate: string;
     numOfGuest: number;
     userGUID: string;
+    bookingId: string;
+    isCancelled: boolean
 }
 
 export interface CreateFacilityBooking {
@@ -26,4 +28,9 @@ export interface GetNoticeList {
     description: string;
     startDate: string;
     endDate: string;
+}
+
+export interface CancelBooking {
+    bookingId: string;
+    cancelRemark: string
 }
