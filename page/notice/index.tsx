@@ -23,108 +23,119 @@ import { GetNoticeList } from "@/zustand/types";
 import moment from "moment";
 import "moment-timezone"
 import { useRouter } from "next/navigation";
-
-export const columns: ColumnDef<GetNoticeList>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "title",
-    header: "Title",
-    cell: ({ row }) => (
-      <div className="capitalize">{
-        row.getValue("title") as string
-      }</div>
-    ),
-  },
-  {
-    accessorKey: "description",
-    header: "Description",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("description")}</div>
-    ),
-  },
-  {
-    accessorKey: "startDate",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Start Date
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div className="capitalize">{
-      moment(row.getValue("startDate")).tz('Asia/Kuala_Lumpur').format("DD MMM YYYY, HH:mm")
-    }</div>,
-  },
-  {
-    accessorKey: "endDate",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          End Date
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div className="capitalize">{
-      moment(row.getValue("endDate")).tz('Asia/Kuala_Lumpur').format("DD MMM YYYY, HH:mm")
-    }</div>,
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
+import EditNoticeDialog from "@/components/dialog/EditNoticeDialog";
 
 const NoticePage = () => {
+  const columns: ColumnDef<GetNoticeList>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "noticeId",
+      header: "Id",
+      cell: ({ row }) => (
+        <div>{
+          row.getValue("noticeId") as string
+        }</div>
+      ),
+    },
+    {
+      accessorKey: "title",
+      header: "Title",
+      cell: ({ row }) => (
+        <div className="capitalize">{
+          row.getValue("title") as string
+        }</div>
+      ),
+    },
+    {
+      accessorKey: "description",
+      header: "Description",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("description")}</div>
+      ),
+    },
+    {
+      accessorKey: "startDate",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Start Date
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => <div className="capitalize">{
+        moment(row.getValue("startDate")).tz('Asia/Kuala_Lumpur').format("DD MMM YYYY, HH:mm")
+      }</div>,
+    },
+    {
+      accessorKey: "endDate",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            End Date
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => <div className="capitalize">{
+        moment(row.getValue("endDate")).tz('Asia/Kuala_Lumpur').format("DD MMM YYYY, HH:mm")
+      }</div>,
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => {openEditDialog(row.getValue("noticeId"))}}>Edit Notice</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
+
   const getNotice = useNotice((state) => state.getNotice);
   const [noticeHistory, setNoticeHistory] = useState<GetNoticeList[]>([]);
   const router = useRouter()
+  const [openEditNoticeDialog, setOpenEditNoticeDialog] = useState(false)
+  const [noticeId, setNoticeId] = useState("")
 
   useEffect(() => {
     getData();
@@ -135,8 +146,14 @@ const NoticePage = () => {
     setNoticeHistory(response.data);
   };
 
+  const openEditDialog = async (noticeId: string) => {
+    setOpenEditNoticeDialog(true)
+    setNoticeId(noticeId)
+  }
+
   return (
     <>
+      <EditNoticeDialog open={openEditNoticeDialog} setOpen={setOpenEditNoticeDialog} noticeId={noticeId}/>
       <div className="flex flex-row justify-between">
         <h3 className="text-3xl font-bold text-black">Notice</h3>
         <Button 

@@ -33,6 +33,14 @@ export const listUrl = {
         getNotices: {
             path: "notice",
             type: IType.get
+        },
+        getNoticeById: {
+            path: "notice/id",
+            type: IType.get
+        },
+        updateNoticeById: {
+            path: "notice/update/",
+            type: IType.put
         }
     }
 }

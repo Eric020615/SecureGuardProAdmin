@@ -24,6 +24,7 @@ export interface CreateNotice {
 }
 
 export interface GetNoticeList {
+    noticeId: string;
     title: string;
     description: string;
     startDate: string;
