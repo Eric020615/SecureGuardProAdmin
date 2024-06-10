@@ -62,7 +62,6 @@ const EditNoticeDialog = ({
       endDate: "",
     },
   });
-  const cancelBooking = useFacility((state) => state.cancelBooking);
   const getNoticeById = useNotice((state) => state.getNoticeById);
   const updateNoticeById = useNotice((state) => state.updateNoticeById);
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
