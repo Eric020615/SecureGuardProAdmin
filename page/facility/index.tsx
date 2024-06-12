@@ -117,6 +117,23 @@ const FacilityPage = () => {
       ),
     },
     {
+      accessorKey: "isCancelled",
+      header: "Status",
+      cell: ({ row }) => (
+        <div>
+          {row.getValue("isCancelled") ? (
+            <>
+              Cancelled
+            </>
+          ): (
+            <>
+              -
+            </>
+          )}
+        </div>
+      ),
+    },
+    {
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
@@ -133,7 +150,11 @@ const FacilityPage = () => {
               <DropdownMenuSeparator />
               {
                 moment(row.getValue("startDate")).tz('Asia/Kuala_Lumpur') > moment().tz('Asia/Kuala_Lumpur') ? (
-                  <DropdownMenuItem onClick={() => {openCancelBookingDialog(row.getValue("bookingId"))}}>Cancel Booking</DropdownMenuItem>
+                  row.getValue("isCancelled") ? (
+                    <Badge className="w-full bg-red-500 text-center">Cancelled</Badge>
+                  ) : (
+                    <DropdownMenuItem onClick={() => {openCancelBookingDialog(row.getValue("bookingId"))}}>Cancel Booking</DropdownMenuItem>
+                  )
                 ) : 
                 (
                   <div className="flex justify-center">
@@ -164,7 +185,7 @@ const FacilityPage = () => {
   };
 
   useEffect(() => {
-    console.log(bookingHistory[0])
+    console.log(bookingHistory)
   }, [bookingHistory])
 
   return (
