@@ -24,6 +24,7 @@ import moment from "moment";
 import "moment-timezone"
 import { useRouter } from "next/navigation";
 import EditNoticeDialog from "@/components/dialog/EditNoticeDialog";
+import CustomDialog from "@/components/dialog/CustomDialog";
 
 const NoticePage = () => {
   const columns: ColumnDef<GetNoticeList>[] = [
@@ -124,6 +125,7 @@ const NoticePage = () => {
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => {openEditDialog(row.getValue("noticeId"))}}>Edit Notice</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => {customDialog(row.getValue("noticeId"))}}>Delete Notice</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -132,9 +134,12 @@ const NoticePage = () => {
   ];
 
   const getNotice = useNotice((state) => state.getNotice);
+  const deleteNoticeById = useNotice((state) => state.deleteNoticeById);
+  const [selectedNoticeId, setSelectedNoticeId] = useState("");
   const [noticeHistory, setNoticeHistory] = useState<GetNoticeList[]>([]);
   const router = useRouter()
   const [openEditNoticeDialog, setOpenEditNoticeDialog] = useState(false)
+  const [openCustomDialog, setOpenCustomDialog] = useState(false)
   const [noticeId, setNoticeId] = useState("")
 
   useEffect(() => {
@@ -151,9 +156,32 @@ const NoticePage = () => {
     setNoticeId(noticeId)
   }
 
+  const customDialog = async (noticeId: string) => {
+    setOpenCustomDialog(true)
+    setSelectedNoticeId(noticeId)
+  }
+
+  const isConfirm = async () => {
+    const response = await deleteNoticeById(
+      selectedNoticeId
+    );
+    if(response.success){
+      window.location.reload();
+    }
+    else{
+      console.log(response.message)
+    }
+  }
+
   return (
     <>
       <EditNoticeDialog open={openEditNoticeDialog} setOpen={setOpenEditNoticeDialog} noticeId={noticeId}/>
+      <CustomDialog 
+        title="Are you sure to delete this notice?"
+        subtitle="Changes are irrevisible"
+        open={openCustomDialog}
+        setOpen={setOpenCustomDialog}
+        isConfirm={isConfirm}/>
       <div className="flex flex-row justify-between">
         <h3 className="text-3xl font-bold text-black">Notice</h3>
         <Button 

@@ -41,6 +41,10 @@ export const listUrl = {
         updateNoticeById: {
             path: "notice/update/",
             type: IType.put
+        },
+        deleteNoticeById: {
+            path: "notice/delete-notice/",
+            type: IType.delete
         }
     }
 }

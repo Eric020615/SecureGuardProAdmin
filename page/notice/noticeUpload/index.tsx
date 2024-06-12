@@ -48,7 +48,6 @@ const NoticeUploadPage = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
     const response = await createNotice({
         title: values.title,
         description: values.description,
