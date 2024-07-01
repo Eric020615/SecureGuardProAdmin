@@ -65,7 +65,6 @@ const EditNoticeDialog = ({
   const getNoticeById = useNotice((state) => state.getNoticeById);
   const updateNoticeById = useNotice((state) => state.updateNoticeById);
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
     const response = await updateNoticeById(
       noticeId,
       values

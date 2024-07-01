@@ -3,13 +3,17 @@ import { IType } from "../config/"
 export const listUrl = {
     auth: {
         logIn: {
-            path: 'log-in',
+            path: 'auth/log-in',
             type: IType.post
         },
         signUp: {
-            path: 'sign-up',
+            path: 'auth/sign-up',
             type: IType.post
-        }
+        },
+        checkJwtAuth: {
+            path: 'auth/check-auth/',
+            type: IType.get
+        },
     },
     facility: {
         book: {

@@ -24,14 +24,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn("font-inter antialiased", inter.variable)}>
-        <Navbar/>
-        <div className="flex">
-          <div className="hidden md:block h-[110vh] w-[350px]">
-            <Sidebar/> 
-          </div>
-          <div className="w-full">
-            {children}
-          </div>
+        <div className="w-full">
+          {children}
         </div>
       </body>
     </html>
