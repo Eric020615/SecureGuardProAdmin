@@ -1,6 +1,7 @@
 import GlobalHandler, { IResponse } from "../globalHandler"
 import { listUrl } from "../listUrl"
 import { SignInFormDto, UserSignUpFormDto } from "../../zustand/types"
+import { setCookies } from "@/lib/cookies"
 
 export const signUp = async (ISignUp: UserSignUpFormDto) : Promise<any> => {
     try {
@@ -37,6 +38,7 @@ export const signIn = async (ISignIn: SignInFormDto) : Promise<any> => {
             msg: success ? 'success': response?.message,
             data: success ? response?.data : undefined
         }
+        await setCookies("token", response?.data)
         return result;
     } catch (error: any) {
         const result : IResponse<any> = {

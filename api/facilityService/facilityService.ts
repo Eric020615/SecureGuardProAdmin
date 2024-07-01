@@ -1,15 +1,16 @@
+import { getCookies } from "@/lib/cookies"
 import { CancelBooking, CreateFacilityBooking, GetFacilityBookingList } from "../../zustand/types"
 import GlobalHandler, { IResponse } from "../globalHandler"
 import { listUrl } from "../listUrl"
 
 export const createBooking = async (bookingForm: CreateFacilityBooking): Promise<any> => {
     try {
-        // const token = await AsyncStorage.getItem("token")
+        const cookieValue = await getCookies("token")
         const [success, data] = await GlobalHandler({
             path: listUrl.facility.book.path,
             type: listUrl.facility.book.type,
-            data: bookingForm
-            // _token: token
+            data: bookingForm,
+            _token: cookieValue?.token as string
         })
         const result : IResponse<any> = {
             success,
@@ -29,16 +30,16 @@ export const createBooking = async (bookingForm: CreateFacilityBooking): Promise
 
 export const getBookingHistory = async (): Promise<any> => {
     try {
-        // const token = await AsyncStorage.getItem("token")
+        const cookieValue = await getCookies("token")
         const [success, data] = await GlobalHandler({
             path: listUrl.facility.getBookingHistory.path,
             type: listUrl.facility.getBookingHistory.type,
-            // _token: token
+            _token: cookieValue?.data as string
         })
         const result : IResponse<any> = {
             success,
             msg: success ? 'success': data?.message,
-            data: success ? data?.data.data : undefined
+            data: success ? data?.data : undefined
         }
         return result;
     } catch (error: any) {

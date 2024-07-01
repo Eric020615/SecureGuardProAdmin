@@ -5,7 +5,7 @@ import DashboardPage from '@/page/dashboard'
 const Home = () => {
   return (
     <>
-        <DashboardPage />
+      <DashboardPage />
     </>
   )
 }

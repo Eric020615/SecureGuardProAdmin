@@ -26,6 +26,7 @@ import { FacilityName } from "../../config/index"
 import { useRouter } from "next/navigation";
 import CancelBookingDialog from "@/components/dialog/CancelBookingDialog";
 import { Badge } from "@/components/ui/badge"
+import { getCookies } from "@/lib/cookies";
 
 const FacilityPage = () => {
   const getBookingHistory = useFacility((state) => state.getBookingHistory);

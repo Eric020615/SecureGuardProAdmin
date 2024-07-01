@@ -30,7 +30,7 @@ const Sidebar = () => {
         <CommandGroup heading="Suggestions">
           <CommandItem>
             <LayoutDashboard className="mr-2 h-5 w-5"/>
-            <Link href="/home" className="text-base">Dashboard</Link>
+            <Link href="/" className="text-base">Dashboard</Link>
           </CommandItem>
           <CommandItem>
             <Building className="mr-2 h-5 w-5"/>
