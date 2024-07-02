@@ -1,5 +1,5 @@
 import { getCookies } from "@/lib/cookies"
-import { CancelBooking, CreateFacilityBooking, GetFacilityBookingList } from "../../zustand/types"
+import { CancelBooking, CreateFacilityBooking } from "../../zustand/types"
 import GlobalHandler, { IResponse } from "../globalHandler"
 import { listUrl } from "../listUrl"
 

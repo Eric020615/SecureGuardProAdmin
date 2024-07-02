@@ -5,7 +5,7 @@ import { SignJWT, jwtVerify } from "jose"
 
 const MAX_AGE = 60 * 60 * 24 * 30 // 30 days
 const ALGORITHM = 'HS256'
-const JWT_SECRET = new TextEncoder().encode('SECUREGUARDPRO')
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SIGNATURE)
 
 const encrypt = async (data : any) => {
     const payload = await new SignJWT(data)
