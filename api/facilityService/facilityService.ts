@@ -6,7 +6,6 @@ import { listUrl } from "../listUrl"
 export const createBooking = async (bookingForm: CreateFacilityBooking): Promise<any> => {
     try {
         const cookieValue = await getCookies("token")
-        console.log(cookieValue)
         const [success, data] = await GlobalHandler({
             path: listUrl.facility.book.path,
             type: listUrl.facility.book.type,

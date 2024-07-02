@@ -35,12 +35,28 @@ export interface CreateNotice {
     endDate: string;
 }
 
-export interface GetNoticeList {
+export interface UpdateNotice {
     noticeId: string;
     title: string;
     description: string;
     startDate: string;
     endDate: string;
+}
+
+export interface DeleteNotice {
+    noticeId: string;
+}
+
+export interface GetNoticeList {
+    noticeId: string
+    title: string;
+    description: string;
+    startDate: string;
+    endDate: string;
+    createdBy: string;
+    createdDateTime: string;
+    updatedBy: string;
+    updatedDateTime: string;
 }
 
 export interface CancelBooking {

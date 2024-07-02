@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import CustomTable from "@/components/Table";
 import { useNotice } from "@/zustand/noticeService/notice";
-import { GetNoticeList } from "@/zustand/types";
+import { DeleteNotice, GetNoticeList } from "@/zustand/types";
 import moment from "moment";
 import "moment-timezone"
 import { useRouter } from "next/navigation";
@@ -162,9 +162,10 @@ const NoticePage = () => {
   }
 
   const isConfirm = async () => {
-    const response = await deleteNoticeById(
-      selectedNoticeId
-    );
+    let deleteNotice : DeleteNotice = {
+      noticeId: selectedNoticeId
+    }
+    const response = await deleteNoticeById(deleteNotice);
     if(response.success){
       window.location.reload();
     }

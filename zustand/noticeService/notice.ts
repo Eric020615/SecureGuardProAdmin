@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { CreateNotice } from "../types";
+import { CreateNotice, DeleteNotice, UpdateNotice } from "../types";
 import { createNotice, deleteNoticeById, getNotice, getNoticeById, updateNoticeById } from "@/api/noticeService/noticeService";
 
 const application = (set: any, get: any) => ({
@@ -27,17 +27,17 @@ const application = (set: any, get: any) => ({
             console.log(error);
         }
     },
-    updateNoticeById: async (noticeId: string, noticeForm: CreateNotice) => {
+    updateNoticeById: async (noticeForm: UpdateNotice) => {
         try {
-            const response = await updateNoticeById(noticeId, noticeForm);
+            const response = await updateNoticeById(noticeForm);
             return response;
         } catch (error) {
             console.log(error);
         }
     },
-    deleteNoticeById: async (noticeId: string) => {
+    deleteNoticeById: async (deleteNotice: DeleteNotice) => {
         try {
-            const response = await deleteNoticeById(noticeId);
+            const response = await deleteNoticeById(deleteNotice);
             return response;
         } catch (error) {
             console.log(error);

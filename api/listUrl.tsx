@@ -31,15 +31,15 @@ export const listUrl = {
     },
     notice: {
         create: {
-            path: "notice/create-notice",
+            path: "notice/create",
             type: IType.post
         },
         getNotices: {
-            path: "notice",
+            path: "notice/admin",
             type: IType.get
         },
         getNoticeById: {
-            path: "notice/id",
+            path: "notice/detail",
             type: IType.get
         },
         updateNoticeById: {
@@ -47,7 +47,7 @@ export const listUrl = {
             type: IType.put
         },
         deleteNoticeById: {
-            path: "notice/delete-notice/",
+            path: "notice/delete/",
             type: IType.delete
         }
     }

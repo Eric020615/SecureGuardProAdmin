@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/form";
 import { useFacility } from "@/zustand/facilityService/facility";
 import { useNotice } from "@/zustand/noticeService/notice";
-import { GetNoticeList } from "@/zustand/types";
+import { GetNoticeList, UpdateNotice } from "@/zustand/types";
 
 interface EditNoticeDialogProps {
   noticeId: string;
@@ -53,6 +53,7 @@ const EditNoticeDialog = ({
   setOpen,
 }: EditNoticeDialogProps) => {
   const [notice, setNotice] = useState<GetNoticeList>({} as GetNoticeList);
+  const [updateNotice, setUpdateNotice] = useState<UpdateNotice>({} as UpdateNotice)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -65,10 +66,14 @@ const EditNoticeDialog = ({
   const getNoticeById = useNotice((state) => state.getNoticeById);
   const updateNoticeById = useNotice((state) => state.updateNoticeById);
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const response = await updateNoticeById(
-      noticeId,
-      values
-    );
+    setUpdateNotice({
+      noticeId: noticeId,
+      title: values.title,
+      description: values.description,
+      startDate: values.startDate,
+      endDate: values.endDate
+    })
+    const response = await updateNoticeById(updateNotice);
     if (response.success) {
       window.location.reload();
     } else {
