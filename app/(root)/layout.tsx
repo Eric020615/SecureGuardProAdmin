@@ -1,17 +1,8 @@
-"use client"
-
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
-import React, { useState } from "react";
-import { useRouter } from 'next/navigation'
+import React from "react";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const router = useRouter();
-  const [token, setToken] = useState("")
-  if(false){
-    router.replace('/sign-in')
-    return;  
-  }
 
   return (
     <main className="w-full">

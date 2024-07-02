@@ -91,7 +91,7 @@ const AuthForm = ({ type }: authFormProps) => {
   };
 
   return (
-    <section className="auth-form">
+    <section className="auth-form w-1/2">
       <header className="flex flex-col gap-2 md:gap-5">
         <Link href="/" className="font-bold text-xl">
           Secure Guard Pro
