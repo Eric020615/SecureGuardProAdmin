@@ -6,7 +6,7 @@ import { listUrl } from "../listUrl"
 export const createBooking = async (bookingForm: CreateFacilityBooking): Promise<any> => {
     try {
         const cookieValue = await getCookies("token")
-        const [success, data] = await GlobalHandler({
+        const [success, response] = await GlobalHandler({
             path: listUrl.facility.book.path,
             type: listUrl.facility.book.type,
             data: bookingForm,
@@ -14,8 +14,8 @@ export const createBooking = async (bookingForm: CreateFacilityBooking): Promise
         })
         const result : IResponse<any> = {
             success,
-            msg: success ? 'success': data?.message,
-            data: success ? data?.data : undefined
+            msg: success ? 'success': response?.message,
+            data: success ? response?.data : undefined
         }
         return result;
     } catch (error: any) {
@@ -31,15 +31,15 @@ export const createBooking = async (bookingForm: CreateFacilityBooking): Promise
 export const getBookingHistory = async (): Promise<any> => {
     try {
         const cookieValue = await getCookies("token")
-        const [success, data] = await GlobalHandler({
+        const [success, response] = await GlobalHandler({
             path: listUrl.facility.getBookingHistory.path,
             type: listUrl.facility.getBookingHistory.type,
             _token: cookieValue?.data as string
         })
         const result : IResponse<any> = {
             success,
-            msg: success ? 'success': data?.message,
-            data: success ? data?.data : undefined
+            msg: success ? 'success': response?.message,
+            data: success ? response?.data : undefined
         }
         return result;
     } catch (error: any) {
@@ -55,15 +55,17 @@ export const getBookingHistory = async (): Promise<any> => {
 
 export const cancelBooking = async (cancelBookingForm: CancelBooking): Promise<any> => {
     try {
-        const [success, data] = await GlobalHandler({
+        const cookieValue = await getCookies("token")
+        const [success, response] = await GlobalHandler({
             path: listUrl.facility.cancelBooking.path,
             type: listUrl.facility.cancelBooking.type,
             data: cancelBookingForm,
+            _token: cookieValue?.data as string
         })
         const result : IResponse<any> = {
             success,
-            msg: success ? 'success': data?.message,
-            data: success ? data?.data.data : undefined
+            msg: success ? 'success': response?.message,
+            data: success ? response?.data : undefined
         }
         return result;
     } catch (error: any) {
