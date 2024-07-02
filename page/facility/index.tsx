@@ -26,7 +26,6 @@ import { FacilityName } from "../../config/index"
 import { useRouter } from "next/navigation";
 import CancelBookingDialog from "@/components/dialog/CancelBookingDialog";
 import { Badge } from "@/components/ui/badge"
-import { getCookies } from "@/lib/cookies";
 
 const FacilityPage = () => {
   const getBookingHistory = useFacility((state) => state.getBookingHistory);
@@ -111,10 +110,10 @@ const FacilityPage = () => {
       }</div>,
     },
     {
-      accessorKey: "userGUID",
+      accessorKey: "bookedBy",
       header: "Created By",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("userGUID")}</div>
+        <div className="capitalize">{row.getValue("bookedBy")}</div>
       ),
     },
     {

@@ -17,7 +17,7 @@ export const listUrl = {
     },
     facility: {
         book: {
-            path: "facility/book/admin",
+            path: "facility/create",
             type: IType.post
         },
         getBookingHistory: {

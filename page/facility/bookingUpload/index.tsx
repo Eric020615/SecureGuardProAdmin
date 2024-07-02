@@ -80,7 +80,7 @@ const BookingUploadPage = () => {
     let endDate = moment(values.date).hour(parseInt(endTimeSplit[0])).minute(parseInt(endTimeSplit[1]));
     const response = await createBooking({
         facilityId: values.facilityId,
-        userGUID: values.user,
+        bookedBy: values.user,
         startDate: startDate.toISOString(),
         endDate: endDate.toISOString(),
         numOfGuest: parseInt(values.numOfGuest)

@@ -15,17 +15,17 @@ export interface GetFacilityBookingList {
     startDate: string;
     endDate: string;
     numOfGuest: number;
-    userGUID: string;
+    bookedBy: string;
     bookingId: string;
     isCancelled: boolean
 }
 
 export interface CreateFacilityBooking {
+    bookedBy: string;
     facilityId: string;
     startDate: string;
     endDate: string;
     numOfGuest: number;
-    userGUID: string;
 }
 
 export interface CreateNotice {

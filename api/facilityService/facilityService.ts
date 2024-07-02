@@ -6,16 +6,17 @@ import { listUrl } from "../listUrl"
 export const createBooking = async (bookingForm: CreateFacilityBooking): Promise<any> => {
     try {
         const cookieValue = await getCookies("token")
+        console.log(cookieValue)
         const [success, data] = await GlobalHandler({
             path: listUrl.facility.book.path,
             type: listUrl.facility.book.type,
             data: bookingForm,
-            _token: cookieValue?.token as string
+            _token: cookieValue?.data as string
         })
         const result : IResponse<any> = {
             success,
             msg: success ? 'success': data?.message,
-            data: success ? data?.data.data : undefined
+            data: success ? data?.data : undefined
         }
         return result;
     } catch (error: any) {
