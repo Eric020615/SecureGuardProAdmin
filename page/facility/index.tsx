@@ -180,13 +180,8 @@ const FacilityPage = () => {
 
   const getData = async () => {
     const response = await getBookingHistory();
-    console.log(response)
     setBookingHistory(response.data);
   };
-
-  useEffect(() => {
-    console.log(bookingHistory)
-  }, [bookingHistory])
 
   return (
     <>

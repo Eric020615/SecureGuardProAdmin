@@ -81,8 +81,6 @@ const EditNoticeDialog = ({
     }
   };
 
-  console.log(form)
-
   useEffect(() => {
     if (noticeId != "") {
       getNotice(noticeId);

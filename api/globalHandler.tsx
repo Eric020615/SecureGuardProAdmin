@@ -25,7 +25,6 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
     try {
       const { path, type, data, isBloob } = payload;
       const token = payload._token;
-      console.log("token: " + token)
       const baseURL = `${process.env.NEXT_PUBLIC_BACKEND_API}${path}`;
       let success = false;
       const maxAttempt = 2;

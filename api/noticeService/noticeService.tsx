@@ -41,7 +41,6 @@ export const getNotice = async (): Promise<any> => {
             msg: success ? 'success': response?.message,
             data: success ? response?.data : undefined
         }
-        console.log(result)
         return result;
     } catch (error: any) {
         const result : IResponse<any> = {
