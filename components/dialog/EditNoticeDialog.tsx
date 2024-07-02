@@ -7,9 +7,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -22,7 +20,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useFacility } from "@/zustand/facilityService/facility";
 import { useNotice } from "@/zustand/noticeService/notice";
 import { GetNoticeList, UpdateNotice } from "@/zustand/types";
 
