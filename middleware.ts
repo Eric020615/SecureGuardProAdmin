@@ -1,5 +1,5 @@
 import type { NextRequest } from "next/server";
-import { getCookies } from "./lib/cookies";
+import { getCookies } from "@lib/cookies";
 
 export const middleware = async (request: NextRequest) => {
   try {
