@@ -4,7 +4,6 @@ import { Button } from "@components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -17,7 +16,7 @@ import { Input } from "@components/ui/input";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import CustomSelect from "@components/Select";
-import { FacilitySelect } from "../../../config/index";
+import { FacilitySelect } from "@config/facility";
 import moment from "moment";
 import "moment-timezone";
 import CustomDatePicker from "@components/DatePicker";
