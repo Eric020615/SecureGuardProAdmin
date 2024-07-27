@@ -43,6 +43,7 @@ export const getBookingHistory = async (): Promise<any> => {
         }
         return result;
     } catch (error: any) {
+        console.log(error)
         const result : IResponse<any> = {
             success: false,
             msg: error,

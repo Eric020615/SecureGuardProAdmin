@@ -23,6 +23,7 @@ const decrypt = async (data : any) => {
 }
 
 export const setCookies = async (name: string, data: any) => {
+    console.log(data)
     const encryptedData = await encrypt({data})
     cookies().set(name, encryptedData, {
         httpOnly: true,
@@ -33,10 +34,14 @@ export const setCookies = async (name: string, data: any) => {
 }
 
 export const getCookies = async (name: string) => {
-    const cookieValue = cookies().get(name)?.value
-    if(!cookieValue){
-        return null; 
+    try {
+        const cookieValue = cookies().get(name)?.value
+        if(!cookieValue){
+            return null; 
+        }
+        const decryptedData = await decrypt(cookieValue)
+        return decryptedData
+    } catch (error) {
+        console.log(error)
     }
-    const decryptedData = await decrypt(cookieValue)
-    return decryptedData
 }

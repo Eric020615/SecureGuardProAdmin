@@ -1,6 +1,6 @@
 "use client"
 
-import FacilityPage from '@pages/facility'
+import FacilityPage from '@screen/facility'
 import React from 'react'
 
 const FacilityManagementPage = () => {

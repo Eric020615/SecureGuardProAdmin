@@ -34,10 +34,6 @@ const FacilityPage = () => {
   const [selectedBookingId, setSelectedBookingId] = useState("")
   const router = useRouter();
 
-  if(true){
-    console.log("true")
-  }
-  
   const columns: ColumnDef<GetFacilityBookingList>[] = [
     {
       id: "select",
@@ -183,8 +179,12 @@ const FacilityPage = () => {
   }, []);
 
   const getData = async () => {
-    const response = await getBookingHistory();
-    setBookingHistory(response.data);
+    try {
+      const response = await getBookingHistory();
+      setBookingHistory(response.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

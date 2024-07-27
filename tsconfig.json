@@ -21,7 +21,7 @@
       // "@/*": ["./*"],
       "@components/*": ["./src/components/*"],
       "@zustand/*": ["./src/zustand/*"],
-      "@pages/*": ["./src/pages/*"],
+      "@screen/*": ["./src/screen/*"],
       "@lib/*": ["./src/lib/*"],
       "@api/*": ["./src/api/*"],
       "@config/*": ["./src/config/*"]

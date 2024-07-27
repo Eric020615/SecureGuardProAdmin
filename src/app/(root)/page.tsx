@@ -1,5 +1,5 @@
 import React from 'react'
-import DashboardPage from '@pages/dashboard'
+import DashboardPage from '@screen/dashboard'
 
 const Home = () => {
   return (

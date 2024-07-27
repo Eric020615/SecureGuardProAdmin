@@ -1,5 +1,5 @@
 "use client"
-import BookingUploadPage from '@pages/facility/bookingUpload'
+import BookingUploadPage from '@screen/facility/bookingUpload'
 import React from 'react'
 
 const CreateFacilityPage = () => {
