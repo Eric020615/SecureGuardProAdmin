@@ -9,7 +9,8 @@ export const signUp = async (ISignUp: UserSignUpFormDto) : Promise<any> => {
         const [success, response] = await GlobalHandler({
             path: listUrl.auth.signUp.path,
             type: listUrl.auth.signUp.type,
-            data: ISignUp
+            data: ISignUp,
+            params: { role: RoleEnum.SYSTEM_ADMIN }
         })
         const result : IResponse<any> = {
             success,
@@ -52,7 +53,7 @@ export const signIn = async (ISignIn: SignInFormDto) : Promise<any> => {
     }
 }
 
-export const checkAuth = async (token: string) : Promise<any> => {
+export const checkAuth = async (token: string) : Promise<IResponse<any>> => {
     try {
         const [success, response] = await GlobalHandler({
             path: listUrl.auth.checkJwtAuth.path,

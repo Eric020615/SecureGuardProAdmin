@@ -10,7 +10,7 @@ export const createBooking = async (bookingForm: CreateFacilityBooking): Promise
             path: listUrl.facility.book.path,
             type: listUrl.facility.book.type,
             data: bookingForm,
-            _token: cookieValue?.data as string
+            _token: cookieValue as string
         })
         const result : IResponse<any> = {
             success,
@@ -34,7 +34,7 @@ export const getBookingHistory = async (): Promise<any> => {
         const [success, response] = await GlobalHandler({
             path: listUrl.facility.getBookingHistory.path,
             type: listUrl.facility.getBookingHistory.type,
-            _token: cookieValue?.data as string
+            _token: cookieValue as string
         })
         const result : IResponse<any> = {
             success,
@@ -61,7 +61,7 @@ export const cancelBooking = async (cancelBookingForm: CancelBooking): Promise<a
             path: listUrl.facility.cancelBooking.path,
             type: listUrl.facility.cancelBooking.type,
             data: cancelBookingForm,
-            _token: cookieValue?.data as string
+            _token: cookieValue as string
         })
         const result : IResponse<any> = {
             success,

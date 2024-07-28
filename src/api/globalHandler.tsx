@@ -102,8 +102,6 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
                 data: data,
               });
             } else {
-              console.log("POST");
-              console.log(baseURL)
               response = await Axios.post(baseURL, data, {
                 headers: {
                   "Content-Type": payload.isFormData
@@ -123,7 +121,6 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
             }
             success = true;
           } catch (error: any) {
-            console.log(error)
             response = error.response;
           }
         }

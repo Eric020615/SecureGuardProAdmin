@@ -2,7 +2,6 @@
 
 import { cookies } from "next/headers"
 import { SignJWT, jwtVerify } from "jose"
-import { useAuth } from "@zustand/authService/auth"
 import { checkAuth } from "@api/authService/authService"
 
 const MAX_AGE = 60 * 60 * 24 * 30 // 30 days
@@ -39,8 +38,11 @@ export const getCookies = async (name: string) => {
         if(!cookieValue){
             return null; 
         }
-        const decryptedData = await checkAuth(cookieValue)
-        return decryptedData
+        const response = await checkAuth(cookieValue)
+        if(!response.success){
+            throw new Error("Unauthorized")
+        }
+        return cookieValue
     } catch (error) {
         console.log(error)
     }
