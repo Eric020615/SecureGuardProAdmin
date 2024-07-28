@@ -16,7 +16,7 @@ import { Input } from "@components/ui/input";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import CustomSelect from "@components/Select";
-import { FacilitySelect } from "@config/facility";
+import { FacilitySelect } from "@config/listOption/facility";
 import moment from "moment";
 import "moment-timezone";
 import CustomDatePicker from "@components/DatePicker";

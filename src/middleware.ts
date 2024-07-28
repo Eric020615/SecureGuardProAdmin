@@ -4,11 +4,10 @@ import { getCookies } from "@lib/cookies";
 export const middleware = async (request: NextRequest) => {
   try {
     const currentToken = await getCookies("token");
-
+    console.log(currentToken);
     if (currentToken && !request.nextUrl.pathname.startsWith("/")) {
       return Response.redirect(new URL("/", request.url));
     }
-
     if (
       !currentToken &&
       !request.nextUrl.pathname.startsWith("/sign-in") &&

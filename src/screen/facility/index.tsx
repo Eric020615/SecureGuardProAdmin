@@ -22,7 +22,7 @@ import { useFacility } from "@zustand/facilityService/facility";
 import { GetFacilityBookingList } from "@zustand/types";
 import moment from "moment";
 import "moment-timezone"
-import { FacilityName } from "@config/facility"
+import { FacilityName } from "@config/constant/facility"
 import { useRouter } from "next/navigation";
 import CancelBookingDialog from "@components/dialog/CancelBookingDialog";
 import { Badge } from "@components/ui/badge"

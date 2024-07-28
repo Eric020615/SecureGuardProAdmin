@@ -2,11 +2,12 @@
 
 import { cookies } from "next/headers"
 import { SignJWT, jwtVerify } from "jose"
+import { useAuth } from "@zustand/authService/auth"
+import { checkAuth } from "@api/authService/authService"
 
 const MAX_AGE = 60 * 60 * 24 * 30 // 30 days
 const ALGORITHM = 'HS256'
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SIGNATURE)
-
 const encrypt = async (data : any) => {
     const payload = await new SignJWT(data)
     .setProtectedHeader({alg:ALGORITHM})
@@ -24,8 +25,7 @@ const decrypt = async (data : any) => {
 
 export const setCookies = async (name: string, data: any) => {
     console.log(data)
-    const encryptedData = await encrypt({data})
-    cookies().set(name, encryptedData, {
+    cookies().set(name, data, {
         httpOnly: true,
         maxAge: MAX_AGE,
         secure: false,
@@ -39,7 +39,7 @@ export const getCookies = async (name: string) => {
         if(!cookieValue){
             return null; 
         }
-        const decryptedData = await decrypt(cookieValue)
+        const decryptedData = await checkAuth(cookieValue)
         return decryptedData
     } catch (error) {
         console.log(error)

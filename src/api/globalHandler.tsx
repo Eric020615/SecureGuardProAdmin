@@ -5,6 +5,7 @@ interface IHandler {
   path: string;
   type: string;
   data?: any;
+  params?: any;
   _token?: string;
   isFormData?: boolean;
   isUrlencoded?: Boolean;
@@ -101,7 +102,9 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
                 data: data,
               });
             } else {
-              const requestOptions = {
+              console.log("POST");
+              console.log(baseURL)
+              response = await Axios.post(baseURL, data, {
                 headers: {
                   "Content-Type": payload.isFormData
                     ? "multipart/form-data"
@@ -114,12 +117,14 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
                       }
                     : {}),
                 },
-              };
-              response = await Axios.post(baseURL, data, requestOptions);
+                params: payload.params,
+                paramsSerializer: (params) => parseParams(params),
+              });
             }
             success = true;
           } catch (error: any) {
-            response = error.response.data;
+            console.log(error)
+            response = error.response;
           }
         }
         if (!success) {
