@@ -10,7 +10,7 @@ export const createNotice = async (notice: CreateNotice): Promise<any> => {
             path: listUrl.notice.create.path,
             type: listUrl.notice.create.type,
             data: notice,
-            _token: cookieValue?.data as string
+            _token: cookieValue as string
         })
         const result : IResponse<any> = {
             success,
@@ -34,7 +34,7 @@ export const getNotice = async (): Promise<any> => {
         const [success, response] = await GlobalHandler({
             path: listUrl.notice.getNotices.path,
             type: listUrl.notice.getNotices.type,
-            _token: cookieValue?.data as string
+            _token: cookieValue as string
         })
         const result : IResponse<any> = {
             success,
@@ -59,7 +59,7 @@ export const getNoticeById = async (noticeId: string): Promise<any> => {
             path: listUrl.notice.getNoticeById.path,
             type: listUrl.notice.getNoticeById.type,
             data: {noticeId},
-            _token: cookieValue?.data as string
+            _token: cookieValue as string
         })
         const result : IResponse<any> = {
             success,
@@ -85,7 +85,7 @@ export const updateNoticeById = async (noticeForm: UpdateNotice): Promise<any> =
             path: listUrl.notice.updateNoticeById.path,
             type: listUrl.notice.updateNoticeById.type,
             data: noticeForm,
-            _token: cookieValue?.data as string
+            _token: cookieValue as string
         })
         const result : IResponse<any> = {
             success,
@@ -109,7 +109,7 @@ export const deleteNoticeById = async (deleteNotice: DeleteNotice): Promise<any>
         const [success, response] = await GlobalHandler({
             path: listUrl.notice.deleteNoticeById.path,
             type: listUrl.notice.deleteNoticeById.type,
-            _token: cookieValue?.data as string,
+            _token: cookieValue as string,
             data: deleteNotice
         })
         const result : IResponse<any> = {
