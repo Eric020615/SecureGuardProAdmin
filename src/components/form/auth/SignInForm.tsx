@@ -14,7 +14,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Input } from '@components/ui/input'
 import { useRouter } from 'next/navigation'
-import { useAuth } from '@zustand/authService/auth'
+import { useAuth } from '@zustand/auth/useAuth'
 import { SignInFormDto } from '@zustand/types'
 
 const signInSchema = z.object({

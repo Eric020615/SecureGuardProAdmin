@@ -20,7 +20,7 @@ import { FacilitySelect } from "@config/listOption/facility";
 import moment from "moment";
 import "moment-timezone";
 import CustomDatePicker from "@components/DatePicker";
-import { useFacility } from "@zustand/facilityService/facility";
+import { useFacility } from "@zustand/facility/useFacility";
 
 const formSchema = z
   .object({

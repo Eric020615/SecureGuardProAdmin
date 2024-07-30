@@ -23,7 +23,7 @@ import moment from "moment";
 import "moment-timezone"
 import { useRouter } from "next/navigation";
 import CustomDialog from "@components/dialog/CustomDialog";
-import { useUserManagement } from "@zustand/userManagementService/userManagement";
+import { useUserManagement } from "@zustand/userManagement/useUserManagement";
 
 const UserListPage = () => {
   const columns: ColumnDef<GetUser>[] = [

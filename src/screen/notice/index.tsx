@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@components/ui/dropdown-menu";
 import CustomTable from "@components/Table";
-import { useNotice } from "@zustand/noticeService/notice";
+import { useNotice } from "@zustand/notice/useNotice";
 import { DeleteNotice, GetNoticeList } from "@zustand/types";
 import moment from "moment";
 import "moment-timezone"

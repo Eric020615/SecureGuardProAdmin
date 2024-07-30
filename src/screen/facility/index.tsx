@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@components/ui/dropdown-menu";
 import CustomTable from "@components/Table";
-import { useFacility } from "@zustand/facilityService/facility";
+import { useFacility } from "@zustand/facility/useFacility";
 import { GetFacilityBookingList } from "@zustand/types";
 import moment from "moment";
 import "moment-timezone"

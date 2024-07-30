@@ -15,7 +15,7 @@ import { z } from "zod";
 import { Input } from "@components/ui/input";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { useNotice } from "@zustand/noticeService/notice";
+import { useNotice } from "@zustand/notice/notice";
 
 const formSchema = z.object({
   title: z.string().min(1, {
