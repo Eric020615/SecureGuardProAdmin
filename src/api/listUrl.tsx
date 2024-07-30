@@ -50,5 +50,11 @@ export const listUrl = {
             path: "notice/delete/",
             type: IType.delete
         }
+    },
+    userManagement: {
+        getUsers: {
+            path: "user/user-list",
+            type: IType.get
+        },
     }
 }

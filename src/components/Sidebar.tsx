@@ -12,12 +12,13 @@ import Link from "next/link";
 import {
   LayoutDashboard,
   Newspaper,
-  Building
+  Building,
+  CircleUser
 } from "lucide-react";
 
 const Sidebar = () => {
   return (
-    <Command className="bg-secondary">
+    <Command className="bg-secondary h-full">
       <CommandInput className="text-base" placeholder="Type a command or search..." />
       <CommandList>
         <CommandEmpty className="text-base">No results found.</CommandEmpty>
@@ -33,6 +34,10 @@ const Sidebar = () => {
           <CommandItem>
             <Newspaper className="mr-2 h-5 w-5"/>
             <Link href="/notice" className="text-base">Notices Management</Link>
+          </CommandItem>
+          <CommandItem>
+            <CircleUser className="mr-2 h-5 w-5"/>
+            <Link href="/user" className="text-base">User Management</Link>
           </CommandItem>
         </CommandGroup>
         <CommandSeparator />

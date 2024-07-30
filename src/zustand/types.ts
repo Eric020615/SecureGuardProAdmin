@@ -1,3 +1,4 @@
+import { RoleEnum } from "@config/constant/user";
 
 export interface UserSignUpFormDto {
     email: string;
@@ -62,4 +63,19 @@ export interface GetNoticeList {
 export interface CancelBooking {
     bookingId: string;
     cancelRemark: string
+}
+
+export interface GetUser {
+    userId: string;
+    firstName: string;
+    lastName: string;
+    userName: string;
+    contactNumber: string;
+    gender: string;
+    role: RoleEnum;
+    dateOfBirth: string;
+    createdBy: string;
+    createdDateTime: string;
+    updatedBy: string;
+    updatedDateTime: string;
 }
