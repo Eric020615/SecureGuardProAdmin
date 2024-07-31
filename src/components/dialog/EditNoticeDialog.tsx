@@ -20,7 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@components/ui/form";
-import { useNotice } from "@zustand/notice/notice";
+import { useNotice } from "@zustand/notice/useNotice";
 import { GetNoticeList, UpdateNotice } from "@zustand/types";
 
 interface EditNoticeDialogProps {

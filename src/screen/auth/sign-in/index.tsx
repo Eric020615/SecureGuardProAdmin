@@ -1,5 +1,4 @@
 'use client'
-import AuthForm from '@components/form/auth/SignUpForm'
 import SignInForm from '@components/form/auth/SignInForm'
 import Link from 'next/link'
 import React from 'react'
