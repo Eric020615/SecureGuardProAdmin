@@ -92,7 +92,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
                     </SheetContent>
                 </Sheet>
             ) : (
-                <div className="h-[100vh] min-w-[300px]">
+                <div className="h-[100vh] lg:w-[20%] md:w-[30%]">
                     <Command className="h-full w-full">
                         <CommandInput
                             className="text-base"

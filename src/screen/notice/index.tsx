@@ -195,7 +195,7 @@ const NoticePage = () => {
           <p className="flex items-center text-center">Create</p>
         </Button>
       </div>
-      <div className="mt-5">
+      <div className="mt-5 w-full">
         <CustomTable 
           data={noticeHistory}
           columns={columns}

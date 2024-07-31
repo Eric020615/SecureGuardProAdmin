@@ -202,7 +202,7 @@ const FacilityPage = () => {
           <p className="flex items-center text-center">Create</p>
         </Button>
       </div>
-      <div className="mt-5">
+      <div className="mt-5 w-full">
         <CustomTable 
           data={bookingHistory}
           columns={columns}
