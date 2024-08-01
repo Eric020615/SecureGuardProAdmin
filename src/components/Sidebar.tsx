@@ -19,9 +19,7 @@ import {
     ChevronRight,
 } from 'lucide-react'
 import { useMediaQuery } from 'usehooks-ts'
-import { Button } from './ui/button'
 import { Sheet, SheetContent } from './ui/sheet'
-import { set } from 'date-fns'
 
 interface SidebarProps {
     isCollapsed: boolean

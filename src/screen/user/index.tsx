@@ -4,7 +4,8 @@ import { Button } from "@components/ui/button";
 import React, { useEffect, useState } from "react";
 import { RiAddBoxLine } from "react-icons/ri";
 import {
-  ColumnDef
+  ColumnDef,
+  Row
 } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@components/ui/checkbox";
@@ -226,7 +227,7 @@ const UserListPage = () => {
         <Button 
           className="flex items-center gap-1"
           onClick={() => {
-            router.push("/User/create-User")
+            router.push("/user/create-User")
           }}
         >
           <RiAddBoxLine className="text-xl" />
@@ -237,6 +238,9 @@ const UserListPage = () => {
         <CustomTable 
           data={userList}
           columns={columns}
+          onView={(row: Row<any>) => {
+            router.push(`/user/${row.getValue("userId")}`);
+          }}
         />
       </div>
     </>

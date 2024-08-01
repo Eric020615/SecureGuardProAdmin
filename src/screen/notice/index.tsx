@@ -4,7 +4,8 @@ import { Button } from "@components/ui/button";
 import React, { useEffect, useState } from "react";
 import { RiAddBoxLine } from "react-icons/ri";
 import {
-  ColumnDef
+  ColumnDef,
+  Row
 } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@components/ui/checkbox";
@@ -199,6 +200,9 @@ const NoticePage = () => {
         <CustomTable 
           data={noticeHistory}
           columns={columns}
+          onView={(row: Row<any>) => {
+            
+          }}
         />
       </div>
     </>

@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import {
     ColumnDef,
     ColumnFiltersState,
+    Row,
     SortingState,
     VisibilityState,
     flexRender,
@@ -21,17 +22,21 @@ import {
     TableHeader,
     TableRow,
 } from '@components/ui/table'
+import { usePathname, useRouter } from 'next/navigation'
 
 interface CustomTableProps {
     data: any
     columns: ColumnDef<any>[]
+    onView: (row: Row<any>) => void
 }
 
-const CustomTable = ({ data, columns }: CustomTableProps) => {
+const CustomTable = ({ data, columns, onView }: CustomTableProps) => {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = useState({})
+    const router = useRouter();
+    const originalPath = usePathname();
 
     const table = useReactTable({
         data,
@@ -79,6 +84,10 @@ const CustomTable = ({ data, columns }: CustomTableProps) => {
                             <TableRow
                                 key={row.id}
                                 data-state={row.getIsSelected() && 'selected'}
+                                onClick={() => {
+                                    onView(row)
+                                }}
+                                className='cursor-pointer'
                             >
                                 {row.getVisibleCells().map((cell) => (
                                     <TableCell key={cell.id}>

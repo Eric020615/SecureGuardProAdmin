@@ -2,10 +2,10 @@
 import BookingUploadPage from '@screen/facility/bookingUpload'
 import React from 'react'
 
-const CreateFacilityPage = () => {
+const CreateFacilityLayout = () => {
   return (
       <BookingUploadPage/>
   )
 }
 
-export default CreateFacilityPage
+export default CreateFacilityLayout

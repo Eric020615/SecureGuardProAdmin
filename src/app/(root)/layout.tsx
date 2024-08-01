@@ -10,9 +10,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     return (
         <main className="w-full h-auto min-h-[100vh]">
             <Navbar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
-            <div className="flex">
+            <div className="flex bg-slate-50 min-h-[100vh]">
                 <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
-                <div className="lg:w-[80%] md:w-[70%] max-w-full">
+                <div className="lg:w-[80%] md:w-[70%] max-w-full w-full">
                   <div className="md:px-10 md:py-8 p-5">{children}</div>
                 </div>
             </div>
