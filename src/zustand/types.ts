@@ -79,3 +79,25 @@ export interface GetUser {
     updatedBy: string;
     updatedDateTime: string;
 }
+
+export interface GetUserDetails {
+    userId: string;
+    firstName: string;
+    lastName: string;
+    userName: string;
+    contactNumber: string;
+    gender: string;
+    role: RoleEnum;
+    roleInformation: ResidentInformation;
+    dateOfBirth: string;
+    createdBy: string;
+    createdDateTime: string;
+    updatedBy: string;
+    updatedDateTime: string;
+}
+
+export interface ResidentInformation {
+    floorNumber: string
+	unitNumber: string
+	supportedFiles: string[]
+}

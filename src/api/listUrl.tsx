@@ -56,5 +56,9 @@ export const listUrl = {
             path: "user/user-list",
             type: IType.get
         },
+        getUserDetailsById: {
+            path: "user/details/",
+            type: IType.get
+        },
     }
 }

@@ -5,13 +5,26 @@ import {
     AccordionTrigger,
 } from '@components/ui/accordion'
 import { Button } from '@components/ui/button'
+import { GetUserDetails } from '@zustand/types'
+import { useUserManagement } from '@zustand/userManagement/useUserManagement'
 import { ArrowLeft } from 'lucide-react'
+import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 const UserDetailsPage = () => {
     const params = useParams<{ userId: string }>()
     const router = useRouter()
+    const [userDetails, setUserDetails] = useState<GetUserDetails>({} as GetUserDetails)
+    const { getUserDetails } = useUserManagement()
+    const getUserDetailsById = async () => {
+        const response = await getUserDetails(params.userId)
+        setUserDetails(response.data)
+    }
+    useEffect(() => {
+        getUserDetailsById()
+    }, [])
+
     return (
         <div>
             <div className="flex items-center gap-3">
@@ -32,26 +45,120 @@ const UserDetailsPage = () => {
                         {params.userId}
                     </h2>
                 </div>
-                <div className='mt-5'>
-                    <Accordion type="single" collapsible className="w-full">
+                <div className="mt-5">
+                    <Accordion
+                        type="multiple"
+                        className="w-full"
+                        defaultValue={[
+                            'Personal Information',
+                            'Role',
+                            'Role Information',
+                            'Supported Documents',
+                        ]}
+                    >
                         <AccordionItem value="Personal Information">
-                            <AccordionTrigger className='p-2 bg-slate-100'>
+                            <AccordionTrigger className="py-2 px-4 bg-slate-100">
                                 <h2>Personal Information</h2>
                             </AccordionTrigger>
-                            <AccordionContent className='p-2 bg-slate-50'>
-                                <div className="flex flex-col gap-2">
+                            <AccordionContent className="p-4 bg-slate-50">
+                                <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
                                     <div className="flex flex-col gap-1">
                                         <span className="text-sm font-semibold">
-                                            Full Name
+                                            First Name:
                                         </span>
-                                        <span className="text-sm">John Doe</span>
+                                        <span className="text-sm">
+                                            {userDetails.firstName}
+                                        </span>
                                     </div>
                                     <div className="flex flex-col gap-1">
                                         <span className="text-sm font-semibold">
-                                            Email
+                                            Last Name:
                                         </span>
-                                        <span className="text-sm">abc@gmail.com</span>
+                                        <span className="text-sm">
+                                            {userDetails.lastName}
+                                        </span>
                                     </div>
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-sm font-semibold">
+                                            Email:
+                                        </span>
+                                        <span className="text-sm">-</span>
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-sm font-semibold">
+                                            Contact Number:
+                                        </span>
+                                        <span className="text-sm">
+                                            {userDetails.contactNumber}
+                                        </span>
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-sm font-semibold">
+                                            Gender:
+                                        </span>
+                                        <span className="text-sm">
+                                            {userDetails.gender}
+                                        </span>
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-sm font-semibold">
+                                            Birthday:
+                                        </span>
+                                        <span className="text-sm">
+                                            {userDetails.dateOfBirth}
+                                        </span>
+                                    </div>
+                                </div>
+                            </AccordionContent>
+                        </AccordionItem>
+                        <AccordionItem value="Role Information">
+                            <AccordionTrigger className="py-2 px-4 bg-slate-100">
+                                <h2>Role Information</h2>
+                            </AccordionTrigger>
+                            <AccordionContent className="p-4 bg-slate-50">
+                                <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-sm font-semibold">
+                                            Role:
+                                        </span>
+                                        <span className="text-sm">
+                                            {userDetails.role}
+                                        </span>
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-sm font-semibold">
+                                            Floor:
+                                        </span>
+                                        <span className="text-sm">
+                                            {userDetails.roleInformation?.floorNumber}
+                                        </span>
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-sm font-semibold">
+                                            Unit:
+                                        </span>
+                                        <span className="text-sm">
+                                            {userDetails.roleInformation?.unitNumber}
+                                        </span>
+                                    </div>
+                                </div>
+                            </AccordionContent>
+                        </AccordionItem>
+                        <AccordionItem value="Supported Documents">
+                            <AccordionTrigger className="py-2 px-4 bg-slate-100">
+                                <h2>Supported Documents</h2>
+                            </AccordionTrigger>
+                            <AccordionContent className="p-4 bg-slate-50">
+                                <div className="grid gap-1">
+                                    {
+                                        userDetails.roleInformation?.supportedFiles && userDetails.roleInformation?.supportedFiles.length > 0 ? (
+                                            userDetails.roleInformation.supportedFiles.map((document, index) => (
+                                                <Link href={document} key={index} className='text-blue-700'>{`Document ${index + 1}`}</Link>
+                                            ))
+                                        ) : (
+                                            <span>No supported documents</span>
+                                        )
+                                    }
                                 </div>
                             </AccordionContent>
                         </AccordionItem>
