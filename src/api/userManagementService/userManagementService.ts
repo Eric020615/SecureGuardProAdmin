@@ -3,13 +3,15 @@ import GlobalHandler, { IResponse } from "../globalHandler"
 import { listUrl } from "../listUrl"
 import { GetUser, GetUserDetails } from "@zustand/types"
 
-export const getUserList = async (): Promise<IResponse<GetUser[]>> => {
+export const getUserList = async (isActive: boolean): Promise<IResponse<GetUser[]>> => {
     try {
         const cookieValue = await getCookies("token")
+        console.log(isActive)
         const [success, response] = await GlobalHandler({
             path: listUrl.userManagement.getUsers.path,
             type: listUrl.userManagement.getUsers.type,
-            _token: cookieValue as string
+            _token: cookieValue as string,
+            data: {isActive}
         })
         const result : IResponse<GetUser[]> = {
             success,

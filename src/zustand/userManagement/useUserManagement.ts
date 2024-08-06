@@ -6,7 +6,7 @@ import { IResponse } from "@api/globalHandler";
 interface userManagementState {
     isLoading: boolean;
     error: string | null;
-    getUserList: () => Promise<IResponse<GetUser[]>>;
+    getUserList: (isActive: boolean) => Promise<IResponse<GetUser[]>>;
     getUserDetails: (userId: string) => Promise<IResponse<GetUserDetails>>;
     setLoading: (isLoading: boolean) => void;
     setError: (error: string | null) => void;
@@ -17,11 +17,11 @@ export const useUserManagement = create<userManagementState>((set) => ({
     error: null,
     setLoading: (isLoading) => set({ isLoading }),
     setError: (error) => set({ error }),
-    getUserList: async () => {
+    getUserList: async (isActive: boolean) => {
         let response : IResponse<GetUser[]> = {} as IResponse<GetUser[]>;
         try {
             set({ isLoading: true, error: null });
-            response = await getUserList();
+            response = await getUserList(isActive);
         } catch (error: any) {
             console.log(error);
             set({ error: error.msg });
