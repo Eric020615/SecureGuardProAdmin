@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import { GetUser, GetUserDetails } from "../types";
-import { getUserDetailsById, getUserList } from "@api/userManagementService/userManagementService";
+import { activateUserById, deactivateUserById, getUserDetailsById, getUserList } from "@api/userManagementService/userManagementService";
 import { IResponse } from "@api/globalHandler";
 
 interface userManagementState {
@@ -8,6 +8,8 @@ interface userManagementState {
     error: string | null;
     getUserList: (isActive: boolean) => Promise<IResponse<GetUser[]>>;
     getUserDetails: (userId: string) => Promise<IResponse<GetUserDetails>>;
+    activateUserByIdAction: (userId: string) => Promise<IResponse<any>>;
+    deactivateUserByIdAction: (userId: string) => Promise<IResponse<any>>;
     setLoading: (isLoading: boolean) => void;
     setError: (error: string | null) => void;
 }
@@ -35,6 +37,34 @@ export const useUserManagement = create<userManagementState>((set) => ({
         try {
             set({ isLoading: true, error: null });
             response = await getUserDetailsById(userId);
+            console.log(response)
+        } catch (error: any) {
+            console.log(error);
+            set({ error: error.msg });
+        } finally {
+            set({ isLoading: false })
+            return response;
+        }
+    },
+    activateUserByIdAction: async (userId: string) => {
+        let response : IResponse<any> = {} as IResponse<any>;
+        try {
+            set({ isLoading: true, error: null });
+            response = await activateUserById(userId);
+            console.log(response)
+        } catch (error: any) {
+            console.log(error);
+            set({ error: error.msg });
+        } finally {
+            set({ isLoading: false })
+            return response;
+        }
+    },
+    deactivateUserByIdAction: async (userId: string) => {
+        let response : IResponse<any> = {} as IResponse<any>;
+        try {
+            set({ isLoading: true, error: null });
+            response = await deactivateUserById(userId);
             console.log(response)
         } catch (error: any) {
             console.log(error);

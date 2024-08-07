@@ -53,3 +53,53 @@ export const getUserDetailsById = async (userId: string): Promise<IResponse<GetU
         return result;
     }
 }
+
+export const activateUserById = async (userId: string): Promise<IResponse<any>> => {
+    try {
+        const cookieValue = await getCookies("token")
+        const [success, response] = await GlobalHandler({
+            path: listUrl.userManagement.activateUserById.path,
+            type: listUrl.userManagement.activateUserById.type,
+            _token: cookieValue as string,
+            params: {userId}
+        })
+        const result : IResponse<any> = {
+            success,
+            msg: success ? 'success': response?.message,
+            data: success ? response?.data : undefined
+        }
+        return result;
+    } catch (error: any) {
+        const result : IResponse<any> = {
+            success: false,
+            msg: error,
+            data: null
+        }
+        return result;
+    }
+}
+
+export const deactivateUserById = async (userId: string): Promise<IResponse<any>> => {
+    try {
+        const cookieValue = await getCookies("token")
+        const [success, response] = await GlobalHandler({
+            path: listUrl.userManagement.deactivateUserById.path,
+            type: listUrl.userManagement.deactivateUserById.type,
+            _token: cookieValue as string,
+            params: {userId}
+        })
+        const result : IResponse<any> = {
+            success,
+            msg: success ? 'success': response?.message,
+            data: success ? response?.data : undefined
+        }
+        return result;
+    } catch (error: any) {
+        const result : IResponse<any> = {
+            success: false,
+            msg: error,
+            data: null
+        }
+        return result;
+    }
+}

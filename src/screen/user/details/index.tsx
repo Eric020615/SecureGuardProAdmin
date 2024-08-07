@@ -18,7 +18,7 @@ const UserDetailsPage = () => {
     const params = useParams<{ userId: string }>()
     const router = useRouter()
     const [userDetails, setUserDetails] = useState<GetUserDetails>({} as GetUserDetails)
-    const { getUserDetails } = useUserManagement()
+    const { getUserDetails, activateUserByIdAction, deactivateUserByIdAction } = useUserManagement()
     const getUserDetailsById = async () => {
         const response = await getUserDetails(params.userId)
         setUserDetails(response.data)
@@ -26,6 +26,19 @@ const UserDetailsPage = () => {
     useEffect(() => {
         getUserDetailsById()
     }, [])
+
+    const activateUserById = async () => {
+        const response = await activateUserByIdAction(userDetails.userId)
+        if (response.success) {
+            window.location.reload()
+        }
+    }
+    const deactivateUserById = async () => {
+        const response = await deactivateUserByIdAction(userDetails.userId)
+        if (response.success) {
+            window.location.reload()
+        }
+    }
 
     return (
         <div>
@@ -44,11 +57,15 @@ const UserDetailsPage = () => {
                 <div>
                     <div>
                         {userDetails.isActive ? (
-                            <Button type="submit" className="w-full bg-red-800">
+                            <Button type="submit" className="w-full bg-red-800" onClick={() => {
+                                deactivateUserById()
+                            }}>
                                 Disable
                             </Button>
                         ) : (
-                            <Button type="submit" className="w-full bg-green-800">
+                            <Button type="submit" className="w-full bg-green-800" onClick={() => {
+                                activateUserById()
+                            }}>
                                 Enable
                             </Button>
                         )}

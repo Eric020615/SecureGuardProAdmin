@@ -60,5 +60,13 @@ export const listUrl = {
             path: "user/details/",
             type: IType.get
         },
+        activateUserById: {
+            path: "user/activate/",
+            type: IType.put
+        },
+        deactivateUserById: {
+            path: "user/deactivate/",
+            type: IType.put
+        },
     }
 }
