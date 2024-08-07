@@ -222,6 +222,7 @@ const InactiveUserList = () => {
           },
       },
   ]
+  console.log(userList)
   return (
       <CustomTable
           data={userList}

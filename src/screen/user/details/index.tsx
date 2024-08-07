@@ -4,6 +4,7 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from '@components/ui/accordion'
+import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
 import { GetUserDetails } from '@zustand/types'
 import { useUserManagement } from '@zustand/userManagement/useUserManagement'
@@ -11,6 +12,7 @@ import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
+import Avatar from 'react-avatar'
 
 const UserDetailsPage = () => {
     const params = useParams<{ userId: string }>()
@@ -27,23 +29,54 @@ const UserDetailsPage = () => {
 
     return (
         <div>
-            <div className="flex items-center gap-3">
-                <Button
-                    className="bg-transparent text-primary p-0"
-                    onClick={() => {
-                        router.push('/user')
-                    }}
-                >
-                    <ArrowLeft size={30} />
-                </Button>
-                <h1 className="text-3xl font-bold">User Details</h1>
+            <div className="flex justify-between items-center">
+                <div className="flex items-center gap-3">
+                    <Button
+                        className="bg-transparent text-primary p-0"
+                        onClick={() => {
+                            router.push('/user')
+                        }}
+                    >
+                        <ArrowLeft size={30} />
+                    </Button>
+                    <h1 className="text-3xl font-bold">User Details</h1>
+                </div>
+                <div>
+                    <div>
+                        {userDetails.isActive ? (
+                            <Button type="submit" className="w-full bg-red-800">
+                                Disable
+                            </Button>
+                        ) : (
+                            <Button type="submit" className="w-full bg-green-800">
+                                Enable
+                            </Button>
+                        )}
+                    </div>
+                </div>
             </div>
             <div className="bg-white w-full h-full flex-col p-8 mt-5 rounded-md">
                 {/* User header */}
-                <div>
-                    <h2 className="md:text-lg text-base font-semibold">
-                        {params.userId}
-                    </h2>
+                <div className="flex flex-row justify-between items-center">
+                    <div className="flex flex-row gap-2">
+                        {userDetails.userName ? (
+                            <Avatar
+                                className="text-[32px]"
+                                name={userDetails.userName}
+                                round
+                                size="110"
+                                color="#7078C0"
+                            />
+                        ) : (
+                            <Avatar
+                                className="text-[32px]"
+                                name=""
+                                round
+                                size="110"
+                                color="#7078C0"
+                            />
+                        )}
+                    </div>
                 </div>
                 <div className="mt-5">
                     <Accordion
@@ -64,6 +97,28 @@ const UserDetailsPage = () => {
                                 <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
                                     <div className="flex flex-col gap-1">
                                         <span className="text-sm font-semibold">
+                                            User Id:
+                                        </span>
+                                        <span className="text-sm">
+                                            {userDetails.userId}
+                                        </span>
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-sm font-semibold">
+                                            Status:
+                                        </span>
+                                        {userDetails.isActive ? (
+                                            <Badge className="w-[60px] bg-green-500 flex justify-center">
+                                                Active
+                                            </Badge>
+                                        ) : (
+                                            <Badge className="w-[60px] bg-red-500 flex justify-center">
+                                                Inactive
+                                            </Badge>
+                                        )}
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-sm font-semibold">
                                             First Name:
                                         </span>
                                         <span className="text-sm">
@@ -82,7 +137,9 @@ const UserDetailsPage = () => {
                                         <span className="text-sm font-semibold">
                                             Email:
                                         </span>
-                                        <span className="text-sm">-</span>
+                                        <span className="text-sm">
+                                            {userDetails.email}
+                                        </span>
                                     </div>
                                     <div className="flex flex-col gap-1">
                                         <span className="text-sm font-semibold">
@@ -150,15 +207,21 @@ const UserDetailsPage = () => {
                             </AccordionTrigger>
                             <AccordionContent className="p-4 bg-slate-50">
                                 <div className="grid gap-1">
-                                    {
-                                        userDetails.roleInformation?.supportedFiles && userDetails.roleInformation?.supportedFiles.length > 0 ? (
-                                            userDetails.roleInformation.supportedFiles.map((document, index) => (
-                                                <Link href={document} key={index} className='text-blue-700'>{`Document ${index + 1}`}</Link>
-                                            ))
-                                        ) : (
-                                            <span>No supported documents</span>
+                                    {userDetails.roleInformation?.supportedFiles &&
+                                    userDetails.roleInformation?.supportedFiles.length >
+                                        0 ? (
+                                        userDetails.roleInformation.supportedFiles.map(
+                                            (document, index) => (
+                                                <Link
+                                                    href={document}
+                                                    key={index}
+                                                    className="text-blue-700"
+                                                >{`Document ${index + 1}`}</Link>
+                                            )
                                         )
-                                    }
+                                    ) : (
+                                        <span>No supported documents</span>
+                                    )}
                                 </div>
                             </AccordionContent>
                         </AccordionItem>

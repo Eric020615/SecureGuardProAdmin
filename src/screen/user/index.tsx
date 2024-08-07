@@ -16,17 +16,11 @@ const UserListPage = () => {
                     <TabsList>
                         <TabsTrigger
                             value="active"
-                            onClick={() => {
-                                console.log('hello')
-                            }}
                         >
                             Active
                         </TabsTrigger>
                         <TabsTrigger
                             value="inactive"
-                            onClick={() => {
-                                console.log('hllo2')
-                            }}
                         >
                             Inactive
                         </TabsTrigger>

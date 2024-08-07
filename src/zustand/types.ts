@@ -85,11 +85,13 @@ export interface GetUserDetails {
     firstName: string;
     lastName: string;
     userName: string;
+    email: string;
     contactNumber: string;
     gender: string;
     role: RoleEnum;
     roleInformation: ResidentInformation;
     dateOfBirth: string;
+    isActive: boolean;
     createdBy: string;
     createdDateTime: string;
     updatedBy: string;
