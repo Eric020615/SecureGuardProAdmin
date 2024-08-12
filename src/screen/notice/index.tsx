@@ -171,7 +171,7 @@ const NoticePage = () => {
       window.location.reload();
     }
     else{
-      console.log(response.message)
+      console.log(response.msg)
     }
   }
 

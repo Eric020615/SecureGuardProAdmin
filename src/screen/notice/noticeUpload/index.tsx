@@ -56,7 +56,7 @@ const NoticeUploadPage = () => {
         router.push("/notice")
     }
     else{
-      console.log(response.message)
+      console.log(response.msg)
     }
   };
 
