@@ -42,8 +42,8 @@ export const listUrl = {
             path: "notice/detail",
             type: IType.get
         },
-        updateNoticeById: {
-            path: "notice/update/",
+        editNoticeById: {
+            path: "notice/edit/",
             type: IType.put
         },
         deleteNoticeById: {
