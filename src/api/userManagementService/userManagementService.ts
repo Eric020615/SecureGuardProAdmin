@@ -6,7 +6,6 @@ import { GetUser, GetUserDetails } from "@zustand/types"
 export const getUserList = async (isActive: boolean): Promise<IResponse<GetUser[]>> => {
     try {
         const cookieValue = await getCookies("token")
-        console.log(isActive)
         const [success, response] = await GlobalHandler({
             path: listUrl.userManagement.getUsers.path,
             type: listUrl.userManagement.getUsers.type,

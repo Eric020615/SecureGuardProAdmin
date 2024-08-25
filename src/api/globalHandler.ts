@@ -47,7 +47,6 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
                     : {}),
                 },
               });
-              console.log(response)
             } else if (type === "put") {
               response = await Axios.put(
                 baseURL,

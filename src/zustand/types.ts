@@ -36,7 +36,7 @@ export interface CreateNotice {
     endDate: string;
 }
 
-export interface UpdateNotice {
+export interface EditNotice {
     noticeId: string;
     title: string;
     description: string;

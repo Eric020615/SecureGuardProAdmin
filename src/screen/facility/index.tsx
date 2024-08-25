@@ -90,7 +90,7 @@ const FacilityPage = () => {
         );
       },
       cell: ({ row }) => <div className="capitalize">{
-        moment(row.getValue("startDate")).tz('Asia/Kuala_Lumpur').format("DD MMM YYYY, HH:mm")
+        moment.utc(row.getValue("startDate")).tz('Asia/Kuala_Lumpur').format("DD MMM YYYY, HH:mm")
       }</div>,
     },
     {
@@ -107,7 +107,7 @@ const FacilityPage = () => {
         );
       },
       cell: ({ row }) => <div className="capitalize">{
-        moment(row.getValue("endDate")).tz('Asia/Kuala_Lumpur').format("DD MMM YYYY, HH:mm")
+        moment.utc(row.getValue("endDate")).tz('Asia/Kuala_Lumpur').format("DD MMM YYYY, HH:mm")
       }</div>,
     },
     {
@@ -150,7 +150,7 @@ const FacilityPage = () => {
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {
-                moment(row.getValue("startDate")).tz('Asia/Kuala_Lumpur') > moment().tz('Asia/Kuala_Lumpur') ? (
+                moment.utc(row.getValue("startDate")).tz('Asia/Kuala_Lumpur') > moment().tz('Asia/Kuala_Lumpur') ? (
                   row.getValue("isCancelled") ? (
                     <Badge className="w-full bg-red-500 text-center">Cancelled</Badge>
                   ) : (

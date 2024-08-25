@@ -127,7 +127,7 @@ const ActiveUserList = () => {
             },
             cell: ({ row }) => (
                 <div className="capitalize">
-                    {moment(row.getValue('dateOfBirth')).format('DD MMM YYYY')}
+                    {moment.utc(row.getValue('dateOfBirth')).format('DD MMM YYYY')}
                 </div>
             ),
         },
@@ -153,7 +153,7 @@ const ActiveUserList = () => {
             },
             cell: ({ row }) => (
                 <div className="capitalize">
-                    {moment(row.getValue('updatedDateTime'))
+                    {moment.utc(row.getValue('updatedDateTime'))
                         .tz('Asia/Kuala_Lumpur')
                         .format('DD MMM YYYY, HH:mm')}
                 </div>
@@ -181,7 +181,7 @@ const ActiveUserList = () => {
             },
             cell: ({ row }) => (
                 <div className="capitalize">
-                    {moment(row.getValue('updatedDateTime'))
+                    {moment.utc(row.getValue('updatedDateTime'))
                         .tz('Asia/Kuala_Lumpur')
                         .format('DD MMM YYYY, HH:mm')}
                 </div>

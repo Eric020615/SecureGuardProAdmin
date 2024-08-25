@@ -37,7 +37,6 @@ export const useUserManagement = create<userManagementState>((set) => ({
         try {
             set({ isLoading: true, error: null });
             response = await getUserDetailsById(userId);
-            console.log(response)
         } catch (error: any) {
             console.log(error);
             set({ error: error.msg });
@@ -51,7 +50,6 @@ export const useUserManagement = create<userManagementState>((set) => ({
         try {
             set({ isLoading: true, error: null });
             response = await activateUserById(userId);
-            console.log(response)
         } catch (error: any) {
             console.log(error);
             set({ error: error.msg });
@@ -65,7 +63,6 @@ export const useUserManagement = create<userManagementState>((set) => ({
         try {
             set({ isLoading: true, error: null });
             response = await deactivateUserById(userId);
-            console.log(response)
         } catch (error: any) {
             console.log(error);
             set({ error: error.msg });
