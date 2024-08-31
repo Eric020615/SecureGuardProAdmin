@@ -16,6 +16,8 @@ import { Input } from "@components/ui/input";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useNotice } from "@zustand/notice/useNotice";
+import { convertLocalDateStringToUTCString } from "@lib/time";
+import { ITimeFormat } from "@config/constant";
 
 const formSchema = z.object({
   title: z.string().min(1, {
@@ -29,7 +31,10 @@ const formSchema = z.object({
   }),
   endDate: z.string().min(1, {
     message: "End Date is required",
-  }),
+  })
+}).refine((data) => new Date(data.endDate) > new Date(data.startDate), {
+  message: "End Date cannot be before Start Date",
+  path: ["endDate"], // Path to the field that will receive the error message
 });
 
 const NoticeUploadPage = () => {
@@ -46,11 +51,12 @@ const NoticeUploadPage = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log(values)
     const response = await createNotice({
         title: values.title,
         description: values.description,
-        startDate: values.startDate,
-        endDate: values.endDate
+        startDate: convertLocalDateStringToUTCString(values.startDate, ITimeFormat.dateTime),
+        endDate: convertLocalDateStringToUTCString(values.endDate, ITimeFormat.dateTime),
     });
     if(response.success){
         router.push("/notice")

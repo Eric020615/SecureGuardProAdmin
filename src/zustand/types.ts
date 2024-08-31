@@ -11,7 +11,7 @@ export interface SignInFormDto {
     password: string;
 }
 
-export interface GetFacilityBookingList {
+export interface GetFacilityBooking {
     facilityId: string;
     startDate: string;
     endDate: string;

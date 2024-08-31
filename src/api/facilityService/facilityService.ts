@@ -28,7 +28,7 @@ export const createBooking = async (bookingForm: CreateFacilityBooking): Promise
     }
 }
 
-export const getBookingHistory = async (): Promise<any> => {
+export const getBookingHistory = async (): Promise<IResponse<any>> => {
     try {
         const cookieValue = await getCookies("token")
         const [success, response] = await GlobalHandler({
@@ -43,7 +43,6 @@ export const getBookingHistory = async (): Promise<any> => {
         }
         return result;
     } catch (error: any) {
-        console.log(error)
         const result : IResponse<any> = {
             success: false,
             msg: error,

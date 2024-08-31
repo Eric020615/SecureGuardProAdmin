@@ -35,8 +35,6 @@ const CustomTable = ({ data, columns, onView }: CustomTableProps) => {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = useState({})
-    const router = useRouter();
-    const originalPath = usePathname();
 
     const table = useReactTable({
         data,

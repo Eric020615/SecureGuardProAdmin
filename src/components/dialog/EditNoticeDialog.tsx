@@ -21,7 +21,7 @@ import {
   FormMessage,
 } from "@components/ui/form";
 import { useNotice } from "@zustand/notice/useNotice";
-import { GetNoticeList, UpdateNotice } from "@zustand/types";
+import { EditNotice, GetNoticeList } from "@zustand/types";
 
 interface EditNoticeDialogProps {
   noticeId: string;
@@ -50,7 +50,7 @@ const EditNoticeDialog = ({
   setOpen,
 }: EditNoticeDialogProps) => {
   const [notice, setNotice] = useState<GetNoticeList>({} as GetNoticeList);
-  const [updateNotice, setUpdateNotice] = useState<UpdateNotice>({} as UpdateNotice)
+  const [updateNotice, setUpdateNotice] = useState<EditNotice>({} as EditNotice)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

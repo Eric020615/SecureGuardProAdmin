@@ -17,11 +17,11 @@ import {
 } from '@components/ui/dropdown-menu'
 import CustomTable from '@components/Table'
 import { GetUser } from '@zustand/types'
-import moment from 'moment'
-import 'moment-timezone'
 import { useRouter } from 'next/navigation'
 import CustomDialog from '@components/dialog/CustomDialog'
 import { useUserManagement } from '@zustand/userManagement/useUserManagement'
+import { convertUTCStringToLocalDateString } from '@lib/time'
+import { ITimeFormat } from '@config/constant'
 
 const ActiveUserList = () => {
     const { getUserList } = useUserManagement()
@@ -127,7 +127,10 @@ const ActiveUserList = () => {
             },
             cell: ({ row }) => (
                 <div className="capitalize">
-                    {moment.utc(row.getValue('dateOfBirth')).format('DD MMM YYYY')}
+                    {convertUTCStringToLocalDateString(
+                        row.getValue('dateOfBirth'),
+                        ITimeFormat.date
+                    )}
                 </div>
             ),
         },
@@ -153,9 +156,10 @@ const ActiveUserList = () => {
             },
             cell: ({ row }) => (
                 <div className="capitalize">
-                    {moment.utc(row.getValue('updatedDateTime'))
-                        .tz('Asia/Kuala_Lumpur')
-                        .format('DD MMM YYYY, HH:mm')}
+                    {convertUTCStringToLocalDateString(
+                        row.getValue('createdDateTime'),
+                        ITimeFormat.dateTime
+                    )}
                 </div>
             ),
         },
@@ -181,9 +185,10 @@ const ActiveUserList = () => {
             },
             cell: ({ row }) => (
                 <div className="capitalize">
-                    {moment.utc(row.getValue('updatedDateTime'))
-                        .tz('Asia/Kuala_Lumpur')
-                        .format('DD MMM YYYY, HH:mm')}
+                    {convertUTCStringToLocalDateString(
+                        row.getValue('updatedDateTime'),
+                        ITimeFormat.dateTime
+                    )}
                 </div>
             ),
         },

@@ -18,11 +18,11 @@ import {
 import CustomTable from '@components/Table'
 import { useNotice } from '@zustand/notice/useNotice'
 import { DeleteNotice, GetNoticeList } from '@zustand/types'
-import moment from 'moment'
-import 'moment-timezone'
 import { useRouter } from 'next/navigation'
 import EditNoticeDialog from '@components/dialog/EditNoticeDialog'
 import CustomDialog from '@components/dialog/CustomDialog'
+import { convertUTCStringToLocalDateString } from '@lib/time'
+import { ITimeFormat } from '@config/constant'
 
 const NoticePage = () => {
     const columns: ColumnDef<GetNoticeList>[] = [
@@ -84,9 +84,7 @@ const NoticePage = () => {
             },
             cell: ({ row }) => (
                 <div className="capitalize">
-                    {moment.utc(row.getValue('startDate'))
-                        .tz('Asia/Kuala_Lumpur')
-                        .format('DD MMM YYYY, HH:mm')}
+                    {convertUTCStringToLocalDateString(row.getValue('startDate'), ITimeFormat.dateTime)}
                 </div>
             ),
         },
@@ -107,9 +105,7 @@ const NoticePage = () => {
             },
             cell: ({ row }) => (
                 <div className="capitalize">
-                    {moment.utc(row.getValue('endDate'))
-                        .tz('Asia/Kuala_Lumpur')
-                        .format('DD MMM YYYY, HH:mm')}
+                    {convertUTCStringToLocalDateString(row.getValue('endDate'), ITimeFormat.dateTime)}
                 </div>
             ),
         },

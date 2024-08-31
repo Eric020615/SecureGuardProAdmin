@@ -18,9 +18,10 @@ import React, { useEffect, useState } from "react";
 import CustomSelect from "@components/Select";
 import { FacilitySelect } from "@config/listOption/facility";
 import moment from "moment";
-import "moment-timezone";
 import CustomDatePicker from "@components/DatePicker";
 import { useFacility } from "@zustand/facility/useFacility";
+import { getTodayDate, getUTCDateString } from "@lib/time";
+import { ITimeFormat } from "@config/constant";
 
 const formSchema = z
   .object({
@@ -50,7 +51,7 @@ const BookingUploadPage = () => {
   const router = useRouter();
   const submitBooking = useFacility((state) => state.submitBooking);
   const [facility, setFacility] = useState("");
-  const [date, setDate] = useState<Date | undefined>(moment().toDate());
+  const [date, setDate] = useState<Date | undefined>(getTodayDate());
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -69,7 +70,7 @@ const BookingUploadPage = () => {
   }, [facility]);
 
   useEffect(() => {
-    form.setValue("date", date ? date: moment().toDate());
+    form.setValue("date", date ? date: getTodayDate())
   }, [date])
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -80,8 +81,8 @@ const BookingUploadPage = () => {
     const response = await submitBooking({
         facilityId: values.facilityId,
         bookedBy: values.user,
-        startDate: startDate.toISOString(),
-        endDate: endDate.toISOString(),
+        startDate: getUTCDateString(startDate.toDate(), ITimeFormat.dateTime),
+        endDate: getUTCDateString(endDate.toDate(), ITimeFormat.dateTime),
         numOfGuest: parseInt(values.numOfGuest)
     });
     if(response.success){
@@ -185,23 +186,6 @@ const BookingUploadPage = () => {
                 </FormItem>
               )}
             />
-            {/* <FormField
-              control={form.control}
-              name="endDate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>End Date</FormLabel>
-                  <FormControl>
-                    <CustomDatePicker
-                      title="Select a end date"
-                      selectedDate={startDate}
-                      setSelectedDate={setStartDate}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
             <Button type="submit">Submit</Button>
           </form>
         </Form>
