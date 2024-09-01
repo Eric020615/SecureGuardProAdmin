@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Command,
     CommandEmpty,
@@ -11,23 +11,26 @@ import {
     CommandSeparator,
 } from './ui/command'
 import Link from 'next/link'
-import {
-    LayoutDashboard,
-    Newspaper,
-    Building,
-    CircleUser,
-    ChevronRight,
-} from 'lucide-react'
+import { LayoutDashboard, Newspaper, Building, CircleUser } from 'lucide-react'
 import { useMediaQuery } from 'usehooks-ts'
-import { Sheet, SheetContent } from './ui/sheet'
+import { Sheet, SheetContent, SheetTitle } from './ui/sheet'
+import { set } from 'date-fns'
 
 interface SidebarProps {
+    menuList: any
     isCollapsed: boolean
     setIsCollapsed: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
+const Sidebar = ({ isCollapsed, setIsCollapsed, menuList }: SidebarProps) => {
+    const [isClient, setIsClient] = useState(false)
     const isMobileView = useMediaQuery('(max-width: 768px)')
+
+    useEffect(() => {
+        setIsClient(true)
+    }, [])
+    if (!isClient) return <></>
+
     return (
         <>
             {isMobileView ? (
@@ -37,7 +40,8 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
                         setIsCollapsed(!isCollapsed)
                     }}
                 >
-                    <SheetContent side="left" className='w-[50%]'>
+                    <SheetContent side="left" className="w-[50%]">
+                        <SheetTitle></SheetTitle>
                         <Command className="h-full w-full">
                             <CommandInput
                                 className="text-base"
@@ -47,44 +51,21 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
                                 <CommandEmpty className="text-base">
                                     No results found.
                                 </CommandEmpty>
-                                <CommandGroup heading="Suggestions">
-                                    <CommandItem>
-                                        <LayoutDashboard className="mr-2 h-5 w-5" />
-                                        <Link href="/" className="text-base">
-                                            Dashboard
-                                        </Link>
-                                    </CommandItem>
-                                    <CommandItem>
-                                        <Building className="mr-2 h-5 w-5" />
-                                        <Link href="/facility" className="text-base">
-                                            Facility Management
-                                        </Link>
-                                    </CommandItem>
-                                    <CommandItem>
-                                        <Newspaper className="mr-2 h-5 w-5" />
-                                        <Link href="/notice" className="text-base">
-                                            Notices Management
-                                        </Link>
-                                    </CommandItem>
-                                    <CommandItem>
-                                        <CircleUser className="mr-2 h-5 w-5" />
-                                        <Link href="/user" className="text-base">
-                                            User Management
-                                        </Link>
-                                    </CommandItem>
-                                </CommandGroup>
-                                <CommandSeparator />
-                                <CommandGroup heading="Settings">
-                                    <CommandItem className="text-base">
-                                        Profile
-                                    </CommandItem>
-                                    <CommandItem className="text-base">
-                                        Billing
-                                    </CommandItem>
-                                    <CommandItem className="text-base">
-                                        Settings
-                                    </CommandItem>
-                                </CommandGroup>
+                                {menuList.map((menu: any, key: number) => (
+                                    <CommandGroup key={key} heading={menu.group}>
+                                        {menu.items.map((item: any, key: number) => (
+                                            <CommandItem key={key}>
+                                                {item.icon}
+                                                <Link
+                                                    href={item.link}
+                                                    className="text-base"
+                                                >
+                                                    {item.text}
+                                                </Link>
+                                            </CommandItem>
+                                        ))}
+                                    </CommandGroup>
+                                ))}
                             </CommandList>
                         </Command>
                     </SheetContent>
@@ -100,38 +81,18 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
                             <CommandEmpty className="text-base">
                                 No results found.
                             </CommandEmpty>
-                            <CommandGroup heading="Suggestions">
-                                <CommandItem>
-                                    <LayoutDashboard className="mr-2 h-5 w-5" />
-                                    <Link href="/" className="text-base">
-                                        Dashboard
-                                    </Link>
-                                </CommandItem>
-                                <CommandItem>
-                                    <Building className="mr-2 h-5 w-5" />
-                                    <Link href="/facility" className="text-base">
-                                        Facility Management
-                                    </Link>
-                                </CommandItem>
-                                <CommandItem>
-                                    <Newspaper className="mr-2 h-5 w-5" />
-                                    <Link href="/notice" className="text-base">
-                                        Notices Management
-                                    </Link>
-                                </CommandItem>
-                                <CommandItem>
-                                    <CircleUser className="mr-2 h-5 w-5" />
-                                    <Link href="/user" className="text-base">
-                                        User Management
-                                    </Link>
-                                </CommandItem>
-                            </CommandGroup>
-                            <CommandSeparator />
-                            <CommandGroup heading="Settings">
-                                <CommandItem className="text-base">Profile</CommandItem>
-                                <CommandItem className="text-base">Billing</CommandItem>
-                                <CommandItem className="text-base">Settings</CommandItem>
-                            </CommandGroup>
+                            {menuList.map((menu: any, key: number) => (
+                                <CommandGroup key={key} heading={menu.group}>
+                                    {menu.items.map((item: any, key: number) => (
+                                        <CommandItem key={key}>
+                                            {item.icon}
+                                            <Link href={item.link} className="text-base">
+                                                {item.text}
+                                            </Link>
+                                        </CommandItem>
+                                    ))}
+                                </CommandGroup>
+                            ))}
                         </CommandList>
                     </Command>
                 </div>

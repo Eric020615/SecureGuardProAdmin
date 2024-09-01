@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { AlignLeft } from 'lucide-react'
 import { Button } from './ui/button'
@@ -16,6 +16,9 @@ const Navbar = ({ isCollapsed, setIsCollapsed }: NavbarProps) => {
     const toggleSidebar = () => {
         setIsCollapsed(!isCollapsed)
     }
+    const [client, setClient] = useState(false)
+    useEffect(() => {setClient(true)}, [])
+    if(!client) return <></>
     return (
         <div className="bg-primary dark:bg-slate-700 text-white py-2 px-5 flex justify-between items-center">
             {isMobileView && (
