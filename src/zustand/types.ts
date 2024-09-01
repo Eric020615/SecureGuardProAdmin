@@ -48,7 +48,19 @@ export interface DeleteNotice {
     noticeId: string;
 }
 
-export interface GetNoticeList {
+export interface GetNotice {
+    noticeId: string
+    title: string;
+    description: string;
+    startDate: string;
+    endDate: string;
+    createdBy: string;
+    createdDateTime: string;
+    updatedBy: string;
+    updatedDateTime: string;
+}
+
+export interface GetNoticeDetailsById {
     noticeId: string
     title: string;
     description: string;

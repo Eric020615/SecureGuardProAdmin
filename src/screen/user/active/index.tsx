@@ -22,9 +22,11 @@ import CustomDialog from '@components/dialog/CustomDialog'
 import { useUserManagement } from '@zustand/userManagement/useUserManagement'
 import { convertUTCStringToLocalDateString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
+import { useApplication } from '@zustand/index'
 
 const ActiveUserList = () => {
     const { getUserList } = useUserManagement()
+    const { setIsLoading } = useApplication()
     const [selectedUserId, setSelectedUserId] = useState('')
     const [userList, setUserList] = useState<GetUser[]>([])
     const router = useRouter()
@@ -37,8 +39,19 @@ const ActiveUserList = () => {
     }, [])
 
     const getData = async () => {
-        const response = await getUserList(true)
-        setUserList(response.data)
+        try {
+            setIsLoading(true)
+            const response = await getUserList(true)
+            if (response.success) {
+                setUserList(response.data)
+            } else {
+                console.log(response.msg)
+            }
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     const openEditDialog = async (userId: string) => {

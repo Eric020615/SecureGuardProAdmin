@@ -24,7 +24,8 @@
       "@screen/*": ["./src/screen/*"],
       "@lib/*": ["./src/lib/*"],
       "@api/*": ["./src/api/*"],
-      "@config/*": ["./src/config/*"]
+      "@config/*": ["./src/config/*"],
+      "@public/*": ["./src/public/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src"],

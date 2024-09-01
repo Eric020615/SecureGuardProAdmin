@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { CreateNotice, DeleteNotice, UpdateNotice } from "../types";
+import { CreateNotice, DeleteNotice, EditNotice } from "../types";
 import { createNotice, deleteNoticeById, getNotice, getNoticeById, updateNoticeById } from "@api/noticeService/noticeService";
 
 interface noticeState {
@@ -8,7 +8,7 @@ interface noticeState {
     createNotice: (notice : CreateNotice) => Promise<any>;
     getNotice: () => Promise<any>;
     getNoticeById: (noticeId: string) => Promise<any>;
-    updateNoticeById: (noticeForm: UpdateNotice) => Promise<any>;
+    updateNoticeById: (noticeForm: EditNotice) => Promise<any>;
     deleteNoticeById: (deleteNotice: DeleteNotice) => Promise<any>;
     setLoading: (isLoading: boolean) => void;
     setError: (error: string | null) => void;
@@ -16,7 +16,7 @@ interface noticeState {
 
 export const useNotice = create<noticeState>((set) => ({
     isLoading: false,
-    error: null,
+    error: null, 
     setLoading: (isLoading) => set({ isLoading }),
     setError: (error) => set({ error }),
     createNotice: async (notice : CreateNotice) => {
@@ -55,7 +55,7 @@ export const useNotice = create<noticeState>((set) => ({
             set({ isLoading: false });
         }
     },
-    updateNoticeById: async (noticeForm: UpdateNotice) => {
+    updateNoticeById: async (noticeForm: EditNotice) => {
         try {
             set({ isLoading: true, error: null });
             const response = await updateNoticeById(noticeForm);

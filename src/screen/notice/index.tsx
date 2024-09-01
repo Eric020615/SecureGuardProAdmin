@@ -17,15 +17,16 @@ import {
 } from '@components/ui/dropdown-menu'
 import CustomTable from '@components/Table'
 import { useNotice } from '@zustand/notice/useNotice'
-import { DeleteNotice, GetNoticeList } from '@zustand/types'
+import { DeleteNotice, GetNotice } from '@zustand/types'
 import { useRouter } from 'next/navigation'
 import EditNoticeDialog from '@components/dialog/EditNoticeDialog'
 import CustomDialog from '@components/dialog/CustomDialog'
 import { convertUTCStringToLocalDateString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
+import { useApplication } from '@zustand/index'
 
 const NoticePage = () => {
-    const columns: ColumnDef<GetNoticeList>[] = [
+    const columns: ColumnDef<GetNotice>[] = [
         {
             id: 'select',
             header: ({ table }) => (
@@ -84,7 +85,10 @@ const NoticePage = () => {
             },
             cell: ({ row }) => (
                 <div className="capitalize">
-                    {convertUTCStringToLocalDateString(row.getValue('startDate'), ITimeFormat.dateTime)}
+                    {convertUTCStringToLocalDateString(
+                        row.getValue('startDate'),
+                        ITimeFormat.dateTime
+                    )}
                 </div>
             ),
         },
@@ -105,7 +109,10 @@ const NoticePage = () => {
             },
             cell: ({ row }) => (
                 <div className="capitalize">
-                    {convertUTCStringToLocalDateString(row.getValue('endDate'), ITimeFormat.dateTime)}
+                    {convertUTCStringToLocalDateString(
+                        row.getValue('endDate'),
+                        ITimeFormat.dateTime
+                    )}
                 </div>
             ),
         },
@@ -145,10 +152,10 @@ const NoticePage = () => {
         },
     ]
 
-    const getNotice = useNotice((state) => state.getNotice)
-    const deleteNoticeById = useNotice((state) => state.deleteNoticeById)
+    const { getNotice, deleteNoticeById } = useNotice()
+    const { setIsLoading } = useApplication()
     const [selectedNoticeId, setSelectedNoticeId] = useState('')
-    const [noticeHistory, setNoticeHistory] = useState<GetNoticeList[]>([])
+    const [noticeHistory, setNoticeHistory] = useState<GetNotice[]>([])
     const router = useRouter()
     const [openEditNoticeDialog, setOpenEditNoticeDialog] = useState(false)
     const [openCustomDialog, setOpenCustomDialog] = useState(false)
@@ -159,8 +166,19 @@ const NoticePage = () => {
     }, [])
 
     const getData = async () => {
-        const response = await getNotice()
-        setNoticeHistory(response.data)
+        try {
+            setIsLoading(true)
+            const response = await getNotice()
+            if (response.success) {
+                setNoticeHistory(response.data)
+            } else {
+                console.log(response.msg)
+            }
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     const openEditDialog = async (noticeId: string) => {

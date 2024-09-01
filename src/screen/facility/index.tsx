@@ -28,9 +28,11 @@ import {
     getTodayDate,
 } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
+import { useApplication } from '@zustand/index'
 
 const FacilityPage = () => {
     const { getBookingHistory } = useFacility()
+    const { setIsLoading } = useApplication()
     const [bookingHistory, setBookingHistory] = useState<GetFacilityBooking[]>([])
     const [openCancelDialog, setOpenCancelDialog] = useState(false)
     const [selectedBookingId, setSelectedBookingId] = useState('')
@@ -199,9 +201,9 @@ const FacilityPage = () => {
 
     const getData = async () => {
         try {
+            setIsLoading(true)
             const response = await getBookingHistory()
             if (response.success) {
-              console.log(response.data[2])
                 const bookingHistory = response.data.map((x: any) => {
                     return {
                         facilityId: FacilityName[x.facilityId as string],
@@ -225,6 +227,8 @@ const FacilityPage = () => {
             }
         } catch (error) {
             console.log(error)
+        } finally {
+          setIsLoading(false)
         }
     }
 

@@ -3,6 +3,7 @@
 import { cookies } from "next/headers"
 import { SignJWT, jwtVerify } from "jose"
 import { checkAuth } from "@api/authService/authService"
+import { useApplication } from "@zustand/index"
 
 const MAX_AGE = 60 * 60 * 24 * 30 // 30 days
 const ALGORITHM = 'HS256'
@@ -23,7 +24,6 @@ const decrypt = async (data : any) => {
 }
 
 export const setCookies = async (name: string, data: any) => {
-    console.log(data)
     cookies().set(name, data, {
         httpOnly: true,
         maxAge: MAX_AGE,
@@ -33,7 +33,9 @@ export const setCookies = async (name: string, data: any) => {
 }
 
 export const getCookies = async (name: string) => {
+    // const { setIsLoading } = useApplication()
     try {
+        // setIsLoading(true)
         const cookieValue = cookies().get(name)?.value
         if(!cookieValue){
             return null; 
@@ -45,5 +47,7 @@ export const getCookies = async (name: string) => {
         return cookieValue
     } catch (error) {
         console.log(error)
+    } finally {
+        // setIsLoading(false)
     }
 }
