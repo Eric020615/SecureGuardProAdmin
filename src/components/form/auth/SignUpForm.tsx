@@ -16,6 +16,7 @@ import { Input } from '@components/ui/input'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@zustand/auth/useAuth'
 import { UserSignUpFormDto } from '@zustand/types'
+import { useApplication } from '@zustand/index'
 
 const signUpSchema = z
     .object({
@@ -31,6 +32,7 @@ const signUpSchema = z
 const SignUpForm = () => {
     const router = useRouter()
     const { signUp } = useAuth()
+    const { setIsLoading } = useApplication()
     const form = useForm<z.infer<typeof signUpSchema>>({
         resolver: zodResolver(signUpSchema),
         defaultValues: {
@@ -41,15 +43,22 @@ const SignUpForm = () => {
     })
 
     const onSubmit = async (values: z.infer<typeof signUpSchema>) => {
-        const result = await signUp({
-            email: values.email,
-            password: values.password,
-            confirmPassword: values.confirmPassword,
-        } as UserSignUpFormDto)
-        if (result.success) {
-            router.replace('/')
-        } else {
-            console.log(result.msg)
+        try {
+            setIsLoading(true)
+            const response = await signUp({
+                email: values.email,
+                password: values.password,
+                confirmPassword: values.confirmPassword,
+            } as UserSignUpFormDto)
+            if (response.success) {
+                router.replace('/')
+            } else {
+                console.log(response.msg)
+            }
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -59,7 +68,7 @@ const SignUpForm = () => {
                 <Link href="/" className="font-bold text-4xl">
                     Secure Guard Pro
                 </Link>
-                <h1 className='text-3xl'>Sign Up</h1>
+                <h1 className="text-3xl">Sign Up</h1>
             </header>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -110,7 +119,9 @@ const SignUpForm = () => {
                             </FormItem>
                         )}
                     />
-                    <Button type="submit" className='w-[30%]'>Submit</Button>
+                    <Button type="submit" className="w-[30%]">
+                        Submit
+                    </Button>
                 </form>
             </Form>
         </section>
