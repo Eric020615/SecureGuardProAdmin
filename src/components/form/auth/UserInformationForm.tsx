@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import React, { forwardRef } from 'react'
+import React, { forwardRef, useEffect } from 'react'
 import { Button } from '@components/ui/button'
 import {
     Form,
@@ -16,8 +16,10 @@ import { Input } from '@components/ui/input'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@zustand/auth/useAuth'
 import { userInformationConst } from '@config/constant/user'
+import { useDropzone, FileWithPath } from 'react-dropzone'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
+import { getBase64 } from '@lib/file'
 
 const userInformationSchema = z.object({
     firstName: z.string().min(1, { message: 'First Name is required' }),
@@ -27,6 +29,7 @@ const userInformationSchema = z.object({
     phoneNumber: z.string().min(1, { message: 'Phone Number is required' }),
     gender: z.string().min(1, { message: 'Gender is required' }),
     dateOfBirth: z.string().min(1, { message: 'Date of Birth is required' }),
+    files: z.array(z.any()).nonempty({ message: 'Please upload at least one file.' }),
 })
 
 const PhoneNumberInput = forwardRef<HTMLInputElement>((props, ref) => {
@@ -177,12 +180,63 @@ const UserInformationForm = () => {
                             </FormItem>
                         )}
                     />
+                    <FormField
+                        control={form.control}
+                        name="files"
+                        render={({ field: { onChange, value } }) => (
+                            <FormItem>
+                                <FormLabel>Supported Documents</FormLabel>
+                                <FormControl>
+                                    <FileDropzone 
+                                        onChange={onChange} 
+                                        value={value}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                     <Button type="submit" className="w-[30%]">
                         Submit
                     </Button>
                 </form>
             </Form>
         </section>
+    )
+}
+
+interface FileDropzoneProps {
+    onChange: (event: any[]) => void
+    value: FileWithPath[]
+}
+
+const FileDropzone = ({onChange, value} : FileDropzoneProps) => {
+    const { getRootProps, getInputProps } = useDropzone({
+        onDrop: (acceptedFiles: FileWithPath[]) => {
+            onChange(acceptedFiles)
+        }
+    })
+    return (
+        <>
+            <div
+                {...getRootProps({
+                    className:
+                        'dropzone flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400',
+                })}
+            >
+                <input {...getInputProps()} />
+                <p className="text-gray-500">
+                    Drag 'n' drop some files here, or click to select files
+                </p>
+            </div>
+            <aside className="mt-4">
+                <ul className="list-disc list-inside mt-2 text-gray-600 text-sm">
+                    {value &&
+                        value.length > 0 &&
+                        value.map((file, index) => <li key={index}>{file.name}</li>)}
+                </ul>
+            </aside>
+        </>
     )
 }
 

@@ -11,4 +11,5 @@ export const userInformationConst = {
     phoneNumber: '',
     gender: '',
     dateOfBirth: '',
+    files: []
 }
