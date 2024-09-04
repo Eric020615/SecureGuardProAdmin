@@ -20,6 +20,10 @@ import { useDropzone, FileWithPath } from 'react-dropzone'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 import { getBase64 } from '@lib/file'
+import { useApplication } from '@zustand/index'
+import { useUser } from '@zustand/user/useUser'
+import { getUTCDateString } from '@lib/time'
+import { ITimeFormat } from '@config/constant'
 
 const userInformationSchema = z.object({
     firstName: z.string().min(1, { message: 'First Name is required' }),
@@ -29,7 +33,8 @@ const userInformationSchema = z.object({
     phoneNumber: z.string().min(1, { message: 'Phone Number is required' }),
     gender: z.string().min(1, { message: 'Gender is required' }),
     dateOfBirth: z.string().min(1, { message: 'Date of Birth is required' }),
-    files: z.array(z.any()).nonempty({ message: 'Please upload at least one file.' }),
+    files: z.array(z.any())
+    // .nonempty({ message: 'Please upload at least one file.' }),
 })
 
 const PhoneNumberInput = forwardRef<HTMLInputElement>((props, ref) => {
@@ -38,14 +43,60 @@ const PhoneNumberInput = forwardRef<HTMLInputElement>((props, ref) => {
 
 const UserInformationForm = () => {
     const router = useRouter()
-    const { signUp } = useAuth()
+    const { tempToken } = useAuth()
+    const { setIsLoading } = useApplication() 
+    const { createUserAction } = useUser()
     const form = useForm<z.infer<typeof userInformationSchema>>({
         resolver: zodResolver(userInformationSchema),
         defaultValues: userInformationConst,
     })
+    useEffect(() => {
+        if(!tempToken){
+            router.replace("/")
+        }
+    }, [tempToken])
 
     const onSubmit = async (values: z.infer<typeof userInformationSchema>) => {
-        console.log(values)
+        try {
+            setIsLoading(true)
+            const response = await createUserAction (
+                {
+                    firstName: values.firstName,
+                    lastName: values.lastName,
+                    userName: values.userName,
+                    contactNumber: values.phoneNumber,
+                    gender: values.gender,
+                    staffId: values.staffId,
+                    dateOfBirth: getUTCDateString(new Date(values.dateOfBirth), ITimeFormat.date),
+                    supportedFiles:
+                        values.files.length > 0
+                            ? await Promise.all(
+                                    values.files.map(async (file) => {
+                                        const base64 = await getBase64(file)
+                                        return base64
+                                    }),
+                              )
+                            : [],
+                },
+                tempToken,
+            )
+            if (response.success) {
+                // setCustomFailedModal({
+                //     title: 'Account updated successfully',
+                //     subtitle: 'Please wait for system admin approval to log in',
+                // })
+                router.replace('/')
+            } else {
+                // setCustomFailedModal({
+                //     title: 'Account updated failed',
+                //     subtitle: 'Please contact our support team for assistance',
+                // })
+            }
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     return (

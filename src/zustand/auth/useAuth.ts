@@ -7,6 +7,8 @@ interface authenticationState {
     error: string | null;
     signUp: (userSignUpForm: UserSignUpFormDto) => Promise<any>;
     signIn: (userSignInForm: SignInFormDto) => Promise<any>;
+    tempToken: string;
+    setTempToken: (value: string) => void;
     checkJwtAuth: (token: string) => Promise<any>;
     setLoading: (isLoading: boolean) => void;
     setError: (error: string | null) => void;
@@ -17,6 +19,8 @@ export const useAuth = create<authenticationState>((set) => ({
     error: null,
     setLoading: (isLoading) => set({ isLoading }),
     setError: (error) => set({ error }),
+    tempToken: "",
+    setTempToken: (tempToken) => set({ tempToken }),
     signUp: async (userSignUpForm: UserSignUpFormDto) => {
         try {
             set({ isLoading: true, error: null });

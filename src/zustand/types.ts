@@ -115,3 +115,19 @@ export interface ResidentInformation {
 	unitNumber: string
 	supportedFiles: string[]
 }
+
+export type GeneralFile = {
+	fileName: string;
+	data: string
+}
+
+export interface UserInformationFormDto {
+	firstName: string
+	lastName: string
+	userName: string
+	contactNumber: string
+	gender: string
+	dateOfBirth: string
+    staffId: string
+	supportedFiles: GeneralFile[]
+}

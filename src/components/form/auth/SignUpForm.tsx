@@ -31,7 +31,7 @@ const signUpSchema = z
 
 const SignUpForm = () => {
     const router = useRouter()
-    const { signUp } = useAuth()
+    const { signUp, setTempToken } = useAuth()
     const { setIsLoading } = useApplication()
     const form = useForm<z.infer<typeof signUpSchema>>({
         resolver: zodResolver(signUpSchema),
@@ -51,7 +51,8 @@ const SignUpForm = () => {
                 confirmPassword: values.confirmPassword,
             } as UserSignUpFormDto)
             if (response.success) {
-                router.replace('/')
+                setTempToken(response.data)
+                router.replace('/user-information')
             } else {
                 console.log(response.msg)
             }

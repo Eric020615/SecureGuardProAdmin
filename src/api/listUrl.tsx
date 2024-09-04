@@ -15,6 +15,12 @@ export const listUrl = {
             type: IType.get
         },
     },
+    user: {
+        createUser: {
+            path: 'user/create/',
+            type: IType.post
+        }
+    },
     facility: {
         book: {
             path: "facility/create",
