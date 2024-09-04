@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { AlignLeft } from 'lucide-react'
-import { Button } from './ui/button'
+import { Button } from '../ui/button'
 import { useMediaQuery } from 'usehooks-ts'
 
 interface NavbarProps {

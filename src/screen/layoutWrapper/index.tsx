@@ -1,6 +1,6 @@
 'use client'
 
-import CustomLoader from '@components/Loader'
+import CustomLoader from '@components/loader/Loader'
 import { useApplication } from '@zustand/index'
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {

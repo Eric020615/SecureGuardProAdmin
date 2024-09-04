@@ -6,8 +6,13 @@ import {
 } from '@components/ui/accordion'
 import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
+import { RoleEnum } from '@config/constant/user'
 import { useApplication } from '@zustand/index'
-import { GetUserDetails } from '@zustand/types'
+import {
+    GetUserDetails,
+    ResidentInformation,
+    SystemAdminInformation,
+} from '@zustand/types'
 import { useUserManagement } from '@zustand/userManagement/useUserManagement'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
@@ -15,11 +20,36 @@ import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import Avatar from 'react-avatar'
 
+// Method to render Resident Role Information
+const RenderResidentRoleInformation = (roleInfo: ResidentInformation) => (
+    <>
+        <div className="flex flex-col gap-1">
+            <span className="text-sm font-semibold">Floor:</span>
+            <span className="text-sm">{roleInfo.floorNumber}</span>
+        </div>
+        <div className="flex flex-col gap-1">
+            <span className="text-sm font-semibold">Unit:</span>
+            <span className="text-sm">{roleInfo.unitNumber}</span>
+        </div>
+    </>
+)
+
+// Method to render System Admin Information
+const RenderSystemAdminInformation = (roleInfo: SystemAdminInformation) => (
+    <>
+        <div className="flex flex-col gap-1">
+            <span className="text-sm font-semibold">Staff Id:</span>
+            <span className="text-sm">{roleInfo.staffId}</span>
+        </div>
+    </>
+)
+
 const UserDetailsPage = () => {
     const params = useParams<{ userId: string }>()
     const router = useRouter()
     const [userDetails, setUserDetails] = useState<GetUserDetails>({} as GetUserDetails)
-    const { getUserDetails, activateUserByIdAction, deactivateUserByIdAction } = useUserManagement()
+    const { getUserDetails, activateUserByIdAction, deactivateUserByIdAction } =
+        useUserManagement()
     const { setIsLoading } = useApplication()
     const getUserDetailsById = async () => {
         try {
@@ -88,15 +118,23 @@ const UserDetailsPage = () => {
                 <div>
                     <div>
                         {userDetails.isActive ? (
-                            <Button type="submit" className="w-full bg-red-800" onClick={() => {
-                                deactivateUserById()
-                            }}>
+                            <Button
+                                type="submit"
+                                className="w-full bg-red-800"
+                                onClick={() => {
+                                    deactivateUserById()
+                                }}
+                            >
                                 Disable
                             </Button>
                         ) : (
-                            <Button type="submit" className="w-full bg-green-800" onClick={() => {
-                                activateUserById()
-                            }}>
+                            <Button
+                                type="submit"
+                                className="w-full bg-green-800"
+                                onClick={() => {
+                                    activateUserById()
+                                }}
+                            >
                                 Enable
                             </Button>
                         )}
@@ -230,22 +268,23 @@ const UserDetailsPage = () => {
                                             {userDetails.role}
                                         </span>
                                     </div>
-                                    <div className="flex flex-col gap-1">
-                                        <span className="text-sm font-semibold">
-                                            Floor:
-                                        </span>
-                                        <span className="text-sm">
-                                            {userDetails.roleInformation?.floorNumber}
-                                        </span>
-                                    </div>
-                                    <div className="flex flex-col gap-1">
-                                        <span className="text-sm font-semibold">
-                                            Unit:
-                                        </span>
-                                        <span className="text-sm">
-                                            {userDetails.roleInformation?.unitNumber}
-                                        </span>
-                                    </div>
+                                    {userDetails.roleInformation &&
+                                    userDetails.role == RoleEnum.RESIDENT ? (
+                                        <>
+                                            {RenderResidentRoleInformation(
+                                                userDetails.roleInformation as ResidentInformation
+                                            )}
+                                        </>
+                                    ) : userDetails.roleInformation &&
+                                      userDetails.role == RoleEnum.SYSTEM_ADMIN ? (
+                                        <>
+                                            {RenderSystemAdminInformation(
+                                                userDetails.roleInformation as SystemAdminInformation
+                                            )}
+                                        </>
+                                    ) : (
+                                        <></>
+                                    )}
                                 </div>
                             </AccordionContent>
                         </AccordionItem>

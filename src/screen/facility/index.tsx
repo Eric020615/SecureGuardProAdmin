@@ -15,7 +15,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu'
-import CustomTable from '@components/Table'
+import CustomTable from '@components/table/Table'
 import { useFacility } from '@zustand/facility/useFacility'
 import { GetFacilityBooking } from '@zustand/types'
 import { FacilityName } from '@config/constant/facility'

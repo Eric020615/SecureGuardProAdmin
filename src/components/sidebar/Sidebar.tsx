@@ -8,13 +8,10 @@ import {
     CommandInput,
     CommandItem,
     CommandList,
-    CommandSeparator,
-} from './ui/command'
+} from '../ui/command'
 import Link from 'next/link'
-import { LayoutDashboard, Newspaper, Building, CircleUser } from 'lucide-react'
 import { useMediaQuery } from 'usehooks-ts'
-import { Sheet, SheetContent, SheetTitle } from './ui/sheet'
-import { set } from 'date-fns'
+import { Sheet, SheetContent, SheetTitle } from '../ui/sheet'
 
 interface SidebarProps {
     menuList: any

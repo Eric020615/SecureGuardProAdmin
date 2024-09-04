@@ -1,7 +1,7 @@
 "use client";
 
-import Navbar from '@components/Navbar'
-import Sidebar from '@components/Sidebar'
+import Navbar from '@components/navbar/Navbar'
+import Sidebar from '@components/sidebar/Sidebar'
 import React, { useState } from 'react'
 import { LayoutDashboard, Newspaper, Building, CircleUser } from 'lucide-react'
 

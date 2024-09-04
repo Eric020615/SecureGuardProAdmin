@@ -15,7 +15,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu'
-import CustomTable from '@components/Table'
+import CustomTable from '@components/table/Table'
 import { useNotice } from '@zustand/notice/useNotice'
 import { DeleteNotice, GetNotice } from '@zustand/types'
 import { useRouter } from 'next/navigation'

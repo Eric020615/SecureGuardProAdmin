@@ -15,7 +15,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu'
-import CustomTable from '@components/Table'
+import CustomTable from '@components/table/Table'
 import { GetUser } from '@zustand/types'
 import { useRouter } from 'next/navigation'
 import CustomDialog from '@components/dialog/CustomDialog'

@@ -101,7 +101,7 @@ export interface GetUserDetails {
     contactNumber: string;
     gender: string;
     role: RoleEnum;
-    roleInformation: ResidentInformation;
+    roleInformation: ResidentInformation | SystemAdminInformation;
     dateOfBirth: string;
     isActive: boolean;
     createdBy: string;
@@ -113,6 +113,11 @@ export interface GetUserDetails {
 export interface ResidentInformation {
     floorNumber: string
 	unitNumber: string
+	supportedFiles: string[]
+}
+
+export interface SystemAdminInformation {
+    staffId: string
 	supportedFiles: string[]
 }
 
