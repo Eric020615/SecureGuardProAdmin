@@ -6,7 +6,7 @@ import {
 } from '@components/ui/accordion'
 import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
-import { RoleEnum } from '@config/constant/user'
+import { GenderConst, RoleConst, RoleEnum } from '@config/constant/user'
 import { useApplication } from '@zustand/index'
 import {
     GetUserDetails,
@@ -240,7 +240,7 @@ const UserDetailsPage = () => {
                                             Gender:
                                         </span>
                                         <span className="text-sm">
-                                            {userDetails.gender}
+                                            {GenderConst[userDetails.gender]}
                                         </span>
                                     </div>
                                     <div className="flex flex-col gap-1">
@@ -265,7 +265,7 @@ const UserDetailsPage = () => {
                                             Role:
                                         </span>
                                         <span className="text-sm">
-                                            {userDetails.role}
+                                            {RoleConst[userDetails.role]}
                                         </span>
                                     </div>
                                     {userDetails.roleInformation &&

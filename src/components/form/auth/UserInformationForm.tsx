@@ -15,7 +15,7 @@ import { z } from 'zod'
 import { Input } from '@components/ui/input'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@zustand/auth/useAuth'
-import { userInformationConst } from '@config/constant/user'
+import { GenderEnum, userInformationConst } from '@config/constant/user'
 import { useDropzone, FileWithPath } from 'react-dropzone'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
@@ -24,6 +24,8 @@ import { useApplication } from '@zustand/index'
 import { useUser } from '@zustand/user/useUser'
 import { getUTCDateString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
+import CustomSelect from '@components/select/Select'
+import { GenderList } from '@config/listOption/user'
 
 const userInformationSchema = z.object({
     firstName: z.string().min(1, { message: 'First Name is required' }),
@@ -33,7 +35,7 @@ const userInformationSchema = z.object({
     phoneNumber: z.string().min(1, { message: 'Phone Number is required' }),
     gender: z.string().min(1, { message: 'Gender is required' }),
     dateOfBirth: z.string().min(1, { message: 'Date of Birth is required' }),
-    files: z.array(z.any())
+    files: z.array(z.any()),
     // .nonempty({ message: 'Please upload at least one file.' }),
 })
 
@@ -44,48 +46,51 @@ const PhoneNumberInput = forwardRef<HTMLInputElement>((props, ref) => {
 const UserInformationForm = () => {
     const router = useRouter()
     const { tempToken } = useAuth()
-    const { setIsLoading } = useApplication() 
+    const { setIsLoading } = useApplication()
     const { createUserAction } = useUser()
     const form = useForm<z.infer<typeof userInformationSchema>>({
         resolver: zodResolver(userInformationSchema),
         defaultValues: userInformationConst,
     })
     useEffect(() => {
-        if(!tempToken){
-            router.replace("/")
+        if (!tempToken) {
+            router.replace('/sign-up')
         }
     }, [tempToken])
 
     const onSubmit = async (values: z.infer<typeof userInformationSchema>) => {
         try {
             setIsLoading(true)
-            const response = await createUserAction (
+            const response = await createUserAction(
                 {
                     firstName: values.firstName,
                     lastName: values.lastName,
                     userName: values.userName,
                     contactNumber: values.phoneNumber,
-                    gender: values.gender,
+                    gender: values.gender as GenderEnum,
                     staffId: values.staffId,
-                    dateOfBirth: getUTCDateString(new Date(values.dateOfBirth), ITimeFormat.date),
+                    dateOfBirth: getUTCDateString(
+                        new Date(values.dateOfBirth),
+                        ITimeFormat.date
+                    ),
                     supportedFiles:
                         values.files.length > 0
                             ? await Promise.all(
-                                    values.files.map(async (file) => {
-                                        const base64 = await getBase64(file)
-                                        return base64
-                                    }),
+                                  values.files.map(async (file) => {
+                                      const base64 = await getBase64(file)
+                                      return base64
+                                  })
                               )
                             : [],
                 },
-                tempToken,
+                tempToken
             )
             if (response.success) {
                 // setCustomFailedModal({
                 //     title: 'Account updated successfully',
                 //     subtitle: 'Please wait for system admin approval to log in',
                 // })
-                router.replace('/')
+                router.replace('/sign-up')
             } else {
                 // setCustomFailedModal({
                 //     title: 'Account updated failed',
@@ -200,14 +205,16 @@ const UserInformationForm = () => {
                     <FormField
                         control={form.control}
                         name="gender"
-                        render={({ field }) => (
+                        render={({ field: { value, onChange } }) => (
                             <FormItem>
                                 <FormLabel>Gender</FormLabel>
                                 <FormControl>
-                                    <Input
-                                        type="text"
-                                        placeholder="Enter your gender"
-                                        {...field}
+                                    <CustomSelect
+                                        title="Gender"
+                                        selectLabel="Gender"
+                                        selectItem={GenderList}
+                                        onDataChange={onChange}
+                                        value={value}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -238,10 +245,7 @@ const UserInformationForm = () => {
                             <FormItem>
                                 <FormLabel>Supported Documents</FormLabel>
                                 <FormControl>
-                                    <FileDropzone 
-                                        onChange={onChange} 
-                                        value={value}
-                                    />
+                                    <FileDropzone onChange={onChange} value={value} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -261,11 +265,11 @@ interface FileDropzoneProps {
     value: FileWithPath[]
 }
 
-const FileDropzone = ({onChange, value} : FileDropzoneProps) => {
+const FileDropzone = ({ onChange, value }: FileDropzoneProps) => {
     const { getRootProps, getInputProps } = useDropzone({
         onDrop: (acceptedFiles: FileWithPath[]) => {
             onChange(acceptedFiles)
-        }
+        },
     })
     return (
         <>

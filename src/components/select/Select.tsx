@@ -15,7 +15,7 @@ interface SelectItemProps {
 }
 
 interface CustomSelectProps {
-  title: string;
+  title?: string;
   selectLabel: string;
   selectItem: SelectItemProps[];
   onDataChange:Dispatch<SetStateAction<any>>;

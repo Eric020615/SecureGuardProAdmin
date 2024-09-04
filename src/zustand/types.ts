@@ -1,4 +1,4 @@
-import { RoleEnum } from "@config/constant/user";
+import { GenderEnum, RoleEnum } from "@config/constant/user";
 
 export interface UserSignUpFormDto {
     email: string;
@@ -83,7 +83,7 @@ export interface GetUser {
     lastName: string;
     userName: string;
     contactNumber: string;
-    gender: string;
+    gender: GenderEnum;
     role: RoleEnum;
     dateOfBirth: string;
     createdBy: string;
@@ -99,7 +99,7 @@ export interface GetUserDetails {
     userName: string;
     email: string;
     contactNumber: string;
-    gender: string;
+    gender: GenderEnum;
     role: RoleEnum;
     roleInformation: ResidentInformation | SystemAdminInformation;
     dateOfBirth: string;
@@ -131,7 +131,7 @@ export interface UserInformationFormDto {
 	lastName: string
 	userName: string
 	contactNumber: string
-	gender: string
+	gender: GenderEnum
 	dateOfBirth: string
     staffId: string
 	supportedFiles: GeneralFile[]
