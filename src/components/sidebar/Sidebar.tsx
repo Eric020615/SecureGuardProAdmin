@@ -11,7 +11,14 @@ import {
 } from '../ui/command'
 import Link from 'next/link'
 import { useMediaQuery } from 'usehooks-ts'
-import { Sheet, SheetContent, SheetTitle } from '../ui/sheet'
+import {
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetHeader,
+    SheetTitle,
+} from '../ui/sheet'
+import { usePathname } from 'next/navigation'
 
 interface SidebarProps {
     menuList: any
@@ -22,9 +29,11 @@ interface SidebarProps {
 const Sidebar = ({ isCollapsed, setIsCollapsed, menuList }: SidebarProps) => {
     const [isClient, setIsClient] = useState(false)
     const isMobileView = useMediaQuery('(max-width: 768px)')
+    const path = usePathname()
 
     useEffect(() => {
         setIsClient(true)
+        console.log(path)
     }, [])
     if (!isClient) return <></>
 
@@ -38,6 +47,9 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, menuList }: SidebarProps) => {
                     }}
                 >
                     <SheetContent side="left" className="w-[50%]">
+                        <SheetHeader>
+                            <SheetDescription></SheetDescription>
+                        </SheetHeader>
                         <SheetTitle></SheetTitle>
                         <Command className="h-full w-full">
                             <CommandInput
@@ -51,7 +63,14 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, menuList }: SidebarProps) => {
                                 {menuList.map((menu: any, key: number) => (
                                     <CommandGroup key={key} heading={menu.group}>
                                         {menu.items.map((item: any, key: number) => (
-                                            <CommandItem key={key}>
+                                            <CommandItem
+                                                key={key}
+                                                className={`text-base ${
+                                                    path == item.link
+                                                        ? 'bg-slate-700 text-white rounded-md' // Add your selected class here
+                                                        : ''
+                                                }`}
+                                            >
                                                 {item.icon}
                                                 <Link
                                                     href={item.link}
@@ -81,7 +100,14 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, menuList }: SidebarProps) => {
                             {menuList.map((menu: any, key: number) => (
                                 <CommandGroup key={key} heading={menu.group}>
                                     {menu.items.map((item: any, key: number) => (
-                                        <CommandItem key={key}>
+                                        <CommandItem
+                                            key={key}
+                                            className={`text-base cursor-pointer ${
+                                                path == item.link
+                                                    ? 'bg-slate-700 text-white rounded-md' // Add your selected class here
+                                                    : ''
+                                            }`}
+                                        >
                                             {item.icon}
                                             <Link href={item.link} className="text-base">
                                                 {item.text}
