@@ -1,10 +1,10 @@
 "use client"
-import BookingUploadPage from '@screen/facility/bookingUpload'
+import CreateBookingPage from '@screen/facility/createBooking'
 import React from 'react'
 
 const CreateFacilityLayout = () => {
   return (
-      <BookingUploadPage/>
+      <CreateBookingPage/>
   )
 }
 

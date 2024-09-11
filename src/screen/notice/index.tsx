@@ -25,7 +25,7 @@ import { convertUTCStringToLocalDateString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
 import { useApplication } from '@zustand/index'
 
-const NoticePage = () => {
+const NoticeManagementPage = () => {
     const columns: ColumnDef<GetNotice>[] = [
         {
             id: 'select',
@@ -240,4 +240,4 @@ const NoticePage = () => {
     )
 }
 
-export default NoticePage
+export default NoticeManagementPage

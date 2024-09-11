@@ -1,12 +1,12 @@
 "use client"
 
-import NoticeUploadPage from '@screen/notice/noticeUpload'
+import CreateNoticePage from '@screen/notice/createNotice'
 import React from 'react'
 
-const CreateNoticePage = () => {
+const CreateNoticeLayout = () => {
   return (
-      <NoticeUploadPage/>
+      <CreateNoticePage/>
   )
 }
 
-export default CreateNoticePage
+export default CreateNoticeLayout

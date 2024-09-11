@@ -1,14 +1,14 @@
 "use client"
 
-import FacilityPage from '@screen/facility'
+import FacilityManagementPage from '@screen/facility'
 import React from 'react'
 
-const FacilityManagementPage = () => {
+const FacilityManagementLayout = () => {
   return (
     <>
-      <FacilityPage/>
+      <FacilityManagementPage/>
     </>
   )
 }
 
-export default FacilityManagementPage
+export default FacilityManagementLayout

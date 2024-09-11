@@ -48,7 +48,7 @@ const formSchema = z
         message: 'End Date must be after Start Date',
     })
 
-const BookingUploadPage = () => {
+const CreateBookingPage = () => {
     const router = useRouter()
     const { submitBooking } = useFacility()
     const { setIsLoading } = useApplication()
@@ -221,4 +221,4 @@ const BookingUploadPage = () => {
     )
 }
 
-export default BookingUploadPage
+export default CreateBookingPage

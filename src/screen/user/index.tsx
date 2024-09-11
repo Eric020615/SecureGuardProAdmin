@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs'
 import ActiveUserList from './active'
 import InactiveUserList from './inactive'
 
-const UserListPage = () => {
+const UserManagementPage = () => {
     return (
         <>
             <div className="flex flex-row justify-between">
@@ -37,4 +37,4 @@ const UserListPage = () => {
     )
 }
 
-export default UserListPage
+export default UserManagementPage

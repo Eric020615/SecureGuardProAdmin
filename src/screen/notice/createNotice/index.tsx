@@ -40,7 +40,7 @@ const formSchema = z
         path: ['endDate'], // Path to the field that will receive the error message
     })
 
-const NoticeUploadPage = () => {
+const CreateNoticePage = () => {
     const router = useRouter()
     const { createNotice } = useNotice()
     const { setIsLoading } = useApplication()
@@ -157,4 +157,4 @@ const NoticeUploadPage = () => {
     )
 }
 
-export default NoticeUploadPage
+export default CreateNoticePage

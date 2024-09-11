@@ -22,7 +22,6 @@ import {
     TableHeader,
     TableRow,
 } from '@components/ui/table'
-import { usePathname, useRouter } from 'next/navigation'
 
 interface CustomTableProps {
     data: any

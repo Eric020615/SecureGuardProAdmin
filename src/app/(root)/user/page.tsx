@@ -1,10 +1,10 @@
-import UserListPage from '@screen/user'
+import UserManagementPage from '@screen/user'
 import React from 'react'
 
-const UserManagementPage = () => {
+const UserManagementLayout = () => {
   return (
-    <UserListPage />
+    <UserManagementPage />
   )
 }
 
-export default UserManagementPage
+export default UserManagementLayout

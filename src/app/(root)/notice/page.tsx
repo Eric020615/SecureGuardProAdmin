@@ -1,14 +1,14 @@
 "use client"
 
-import NoticePage from '@screen/notice'
+import NoticeManagementPage from '@screen/notice'
 import React from 'react'
 
-const NoticeManagementPage = () => {
+const NoticeManagementLayout = () => {
   return (
     <>
-      <NoticePage/>
+      <NoticeManagementPage/>
     </>
   )
 }
 
-export default NoticeManagementPage
+export default NoticeManagementLayout

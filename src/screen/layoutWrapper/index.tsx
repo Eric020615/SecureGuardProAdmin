@@ -2,7 +2,6 @@
 
 import CustomLoader from '@components/loader/Loader'
 import { useApplication } from '@zustand/index'
-import { Suspense } from 'react'
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
     const { isLoading } = useApplication()
@@ -13,9 +12,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                     <CustomLoader />
                 </div>
             )}
-            <Suspense fallback={<CustomLoader></CustomLoader>}>
-                {children}
-            </Suspense>
+            {children}
         </>
     )
 }

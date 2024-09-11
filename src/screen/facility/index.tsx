@@ -30,7 +30,7 @@ import {
 import { ITimeFormat } from '@config/constant'
 import { useApplication } from '@zustand/index'
 
-const FacilityPage = () => {
+const FacilityManagementPage = () => {
     const { getBookingHistory } = useFacility()
     const { setIsLoading } = useApplication()
     const [bookingHistory, setBookingHistory] = useState<GetFacilityBooking[]>([])
@@ -262,4 +262,4 @@ const FacilityPage = () => {
     )
 }
 
-export default FacilityPage
+export default FacilityManagementPage
