@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { cn } from '@lib/utils'
 import LayoutWrapper from '@screen/layoutWrapper'
-import TopLoader from '@components/loadingBar/LoadingBar'
+import NextTopLoader from 'nextjs-toploader'
 
 const inter = Inter({
     subsets: ['latin'],
@@ -24,7 +24,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={cn('font-inter antialiased', inter.variable)}>
-                <TopLoader />
+                <NextTopLoader />
                 <div className="w-full">
                     <LayoutWrapper>{children}</LayoutWrapper>
                 </div>

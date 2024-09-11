@@ -74,7 +74,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, menuList }: SidebarProps) => {
                                                 {item.icon}
                                                 <Link
                                                     href={item.link}
-                                                    className="text-base"
+                                                    className="text-base w-full"
                                                 >
                                                     {item.text}
                                                 </Link>
@@ -109,7 +109,10 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, menuList }: SidebarProps) => {
                                             }`}
                                         >
                                             {item.icon}
-                                            <Link href={item.link} className="text-base">
+                                            <Link
+                                                href={item.link}
+                                                className="text-base w-full"
+                                            >
                                                 {item.text}
                                             </Link>
                                         </CommandItem>
