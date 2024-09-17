@@ -136,3 +136,32 @@ export interface UserInformationFormDto {
     staffId: string
 	supportedFiles: GeneralFile[]
 }
+
+export interface GetUserProfileByIdDto {
+    userId: string;
+    firstName: string;
+    lastName: string;
+    userName: string;
+    email: string;
+    contactNumber: string;
+    gender: GenderEnum;
+    role: RoleEnum;
+    roleInformation?: SystemAdminInformation;
+    dateOfBirth: string;
+    isActive?: boolean;
+    createdBy: string;
+    createdDateTime: string;
+    updatedBy: string;
+    updatedDateTime: string;
+}
+
+export interface EditUserDetailsByIdDto {
+    userId: string;
+    firstName: string;
+    lastName: string;
+    userName: string;
+    email: string;
+    contactNumber: string;
+    gender: string;
+    dateOfBirth: string;
+}
