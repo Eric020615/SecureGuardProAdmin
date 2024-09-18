@@ -17,6 +17,8 @@ import {
     DialogTitle,
 } from '@components/ui/dialog'
 import { Camera, Repeat, Upload } from 'lucide-react'
+import { useFaceAuth } from '@zustand/faceAuth/useFaceAuth'
+import { useApplication } from '@zustand/index'
 
 interface FaceIDDialogProps {
     open: boolean
@@ -27,6 +29,8 @@ const FaceIDDialog = ({ open, setOpen }: FaceIDDialogProps) => {
     // add reference to webcam component allow us to access webcam instance and take photo
     const webcamRef = useRef<Webcam>(null)
     const [faceImage, setFaceImage] = useState<string>()
+    const { uploadUserFaceAuthAction } = useFaceAuth()
+    const { setIsLoading } = useApplication()
 
     const capture = useCallback(() => {
         if (!webcamRef.current) return
@@ -39,7 +43,23 @@ const FaceIDDialog = ({ open, setOpen }: FaceIDDialogProps) => {
         setFaceImage('')
     }
 
-    const uploadImage = () => {}
+    const uploadImage = async () => {
+        try {
+            setIsLoading(true)
+            if (faceImage == null) return
+            const response = await uploadUserFaceAuthAction({
+                faceData: faceImage,
+            })
+            if (response.success) {
+            } else {
+                console.log(response.msg)
+            }
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
     useEffect(() => {
         setFaceImage('')

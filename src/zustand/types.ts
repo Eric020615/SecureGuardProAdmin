@@ -165,3 +165,7 @@ export interface EditUserDetailsByIdDto {
     gender: string;
     dateOfBirth: string;
 }
+
+export interface CreateUserFaceAuthDto {
+    faceData: string
+}

@@ -1,86 +1,92 @@
-import { IType } from "@config/index"
+import { IType } from '@config/index'
 
 export const listUrl = {
     auth: {
         logIn: {
             path: 'auth/log-in',
-            type: IType.post
+            type: IType.post,
         },
         signUp: {
             path: 'auth/sign-up',
-            type: IType.post
+            type: IType.post,
         },
         checkJwtAuth: {
             path: 'auth/check-auth/',
-            type: IType.get
+            type: IType.get,
+        },
+    },
+    faceAuth: {
+        create: {
+            path: 'face-auth/user/upload',
+            type: IType.post,
         },
     },
     user: {
         createUser: {
             path: 'user/create/',
-            type: IType.post
+            type: IType.post,
         },
         getUserProfileById: {
             path: 'user/profile/',
-            type: IType.get
+            type: IType.get,
         },
         editUserProfileById: {
             path: 'user/profile/',
-            type: IType.put
-        }
+            type: IType.put,
+        },
     },
     facility: {
         book: {
-            path: "facility/create",
-            type: IType.post
+            path: 'facility/create',
+            type: IType.post,
         },
         getBookingHistory: {
-            path: "facility/admin",
-            type: IType.get
+            path: 'facility/admin',
+            type: IType.get,
         },
         cancelBooking: {
-            path: "facility/cancel",
-            type: IType.put
-        }
+            path: 'facility/cancel',
+            type: IType.put,
+        },
     },
     notice: {
         create: {
-            path: "notice/create",
-            type: IType.post
+            path: 'notice/create',
+            type: IType.post,
         },
         getNotices: {
-            path: "notice/admin",
-            type: IType.get
+            path: 'notice/admin',
+            type: IType.get,
         },
         getNoticeById: {
-            path: "notice/detail",
-            type: IType.get
+            path: 'notice/detail',
+            type: IType.get,
         },
         editNoticeById: {
-            path: "notice/edit/",
-            type: IType.put
+            path: 'notice/edit/',
+            type: IType.put,
         },
         deleteNoticeById: {
-            path: "notice/delete/",
-            type: IType.delete
-        }
+            path: 'notice/delete/',
+            type: IType.delete,
+        },
     },
     userManagement: {
         getUsers: {
-            path: "user/user-list",
-            type: IType.get
+            path: 'user/user-list',
+            type: IType.get,
         },
         getUserDetailsById: {
-            path: "user/details/",
-            type: IType.get
+            path: 'user/details/',
+            type: IType.get,
         },
         activateUserById: {
-            path: "user/activate/",
-            type: IType.put
+            path: 'user/activate/',
+            type: IType.put,
         },
         deactivateUserById: {
-            path: "user/deactivate/",
-            type: IType.put
+            path: 'user/deactivate/',
+            type: IType.put,
         },
-    }
+    },
 }
