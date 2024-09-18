@@ -68,11 +68,9 @@ const MyProfilePage = () => {
             const response = await getUserProfileByIdAction()
             if (response.success) {
                 setProfileDetails(response.data)
-                console.log(response.data)
             } else {
                 console.log(response.msg)
             }
-            console.log(form)
             setIsLoading(false)
         } catch (error) {
             setIsLoading(false)
@@ -81,7 +79,6 @@ const MyProfilePage = () => {
 
     const onSubmit = async (values: z.infer<typeof profileSchema>) => {
         try {
-            console.log(values)
             setIsLoading(true)
             const response = await editUserProfileByIdAction({
                 userId: profileDetails?.userId ? profileDetails.userId : '',
@@ -139,10 +136,10 @@ const MyProfilePage = () => {
     }, [profileDetails && pageMode === 'edit'])
 
     return (
-        <div>
+        <div className='h-full'>
             <div className="grid gap-5">
                 {pageMode === 'view' ? (
-                    <div className="grid gap-4 my-4">
+                    <div className="grid gap-4 my-2">
                         <Card className="p-4 grid gap-2">
                             <div>
                                 {profileDetails?.userName ? (

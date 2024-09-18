@@ -12,6 +12,7 @@ import { Label } from '@components/ui/label'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import MyProfilePage from './myProfile'
+import SecurityPage from './security'
 
 const ProfilePage = () => {
     const [activeTab, setActiveTab] = useState('profile')
@@ -59,19 +60,17 @@ const ProfilePage = () => {
                     </div>
 
                     {/* Content Area */}
-                    <div className="xl:w-4/5 md:w-3/4 p-4">
+                    <div className="xl:w-4/5 md:w-3/4 p-4 min-h-[550px]">
                         <p className="text-3xl m-1 font-medium text-black">
                             {activeTab === 'profile'
                                 ? 'My Profile'
                                 : activeTab === 'security'
-                                  ? 'Security Settings'
+                                  ? 'Security'
                                   : 'Other Settings'}
                         </p>
-                        <div className='mt-3'>
+                        <div className="mt-3">
                             {activeTab === 'profile' && <MyProfilePage />}
-                            {activeTab === 'security' && (
-                                <div>Security form or details here</div>
-                            )}
+                            {activeTab === 'security' && <SecurityPage />}
                             {activeTab === 'settings' && (
                                 <div>Other settings form or details here</div>
                             )}
