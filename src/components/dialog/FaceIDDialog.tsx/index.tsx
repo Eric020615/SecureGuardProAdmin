@@ -19,6 +19,7 @@ import {
 import { Camera, Repeat, Upload } from 'lucide-react'
 import { useFaceAuth } from '@zustand/faceAuth/useFaceAuth'
 import { useApplication } from '@zustand/index'
+import { getBase64FromImage } from '@lib/file'
 
 interface FaceIDDialogProps {
     open: boolean
@@ -47,10 +48,12 @@ const FaceIDDialog = ({ open, setOpen }: FaceIDDialogProps) => {
         try {
             setIsLoading(true)
             if (faceImage == null) return
+            let base64 = await getBase64FromImage(faceImage)
             const response = await uploadUserFaceAuthAction({
-                faceData: faceImage,
+                faceData: base64
             })
             if (response.success) {
+                setOpen(false)
             } else {
                 console.log(response.msg)
             }
@@ -81,6 +84,8 @@ const FaceIDDialog = ({ open, setOpen }: FaceIDDialogProps) => {
                             width={600}
                             ref={webcamRef}
                             mirrored={true}
+                            screenshotFormat='image/jpeg'
+                            screenshotQuality={0.3}
                         />
                     )}
                 </div>

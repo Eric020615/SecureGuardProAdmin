@@ -9,12 +9,14 @@ import {
 import { Button } from '@components/ui/button'
 import { Camera } from 'lucide-react'
 import FaceIDDialog from '@components/dialog/FaceIDDialog.tsx'
+import CustomDialog from '@components/dialog/CustomDialog'
 
 const SecurityPage = () => {
     const [openFaceIDDialog, setOpenFaceIDDialog] = useState(false)
+
     return (
         <>
-            <FaceIDDialog open={openFaceIDDialog} setOpen={setOpenFaceIDDialog} />
+            <FaceIDDialog open={openFaceIDDialog} setOpen={setOpenFaceIDDialog}/>
             <div className="h-full">
                 <div className="grid gap-5">
                     <div className="grid gap-4 my-2">

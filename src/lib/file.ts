@@ -22,8 +22,10 @@ export const getBase64 = (file: File): Promise<GeneralFile> =>
         reader.onerror = () => {
             reject(new Error('File reading failed: ' + reader.error))
         }
-})
+    })
 
-export const getBase64FromImage = (image: string): Promise<string> =>{
-    return Promise.resolve("")
+export const getBase64FromImage = (image: string): Promise<string> => {
+    const base64 = image
+    const data = base64.split(',')[1]
+    return Promise.resolve(data)
 }
