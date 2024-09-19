@@ -20,6 +20,7 @@ import { Camera, Repeat, Upload } from 'lucide-react'
 import { useFaceAuth } from '@zustand/faceAuth/useFaceAuth'
 import { useApplication } from '@zustand/index'
 import { getBase64FromImage } from '@lib/file'
+import { useModal } from '@zustand/modal/useModal'
 
 interface FaceIDDialogProps {
     open: boolean
@@ -32,6 +33,7 @@ const FaceIDDialog = ({ open, setOpen }: FaceIDDialogProps) => {
     const [faceImage, setFaceImage] = useState<string>()
     const { uploadUserFaceAuthAction } = useFaceAuth()
     const { setIsLoading } = useApplication()
+    const { setCustomConfirmModal } = useModal();
 
     const capture = useCallback(() => {
         if (!webcamRef.current) return
@@ -53,14 +55,24 @@ const FaceIDDialog = ({ open, setOpen }: FaceIDDialogProps) => {
                 faceData: base64
             })
             if (response.success) {
-                setOpen(false)
+                setCustomConfirmModal({
+                    title: 'Success',
+                    subtitle: 'Image uploaded successfully',
+                })
             } else {
-                console.log(response.msg)
+                setCustomConfirmModal({
+                    title: 'Error',
+                    subtitle: 'Failed to upload image',
+                })
             }
         } catch (error) {
-            console.log(error)
+            setCustomConfirmModal({
+                title: 'Error',
+                subtitle: 'Failed to upload image',
+            })
         } finally {
             setIsLoading(false)
+            setOpen(false)
         }
     }
 

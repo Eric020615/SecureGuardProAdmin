@@ -8,7 +8,6 @@ import { ArrowUpDown, MoreHorizontal } from 'lucide-react'
 import { Checkbox } from '@components/ui/checkbox'
 import {
     DropdownMenu,
-    DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
@@ -24,6 +23,7 @@ import CustomDialog from '@components/dialog/CustomDialog'
 import { convertUTCStringToLocalDateString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
 import { useApplication } from '@zustand/index'
+import { useModal } from '@zustand/modal/useModal'
 
 const NoticeManagementPage = () => {
     const columns: ColumnDef<GetNotice>[] = [
@@ -140,7 +140,7 @@ const NoticeManagementPage = () => {
                             </DropdownMenuItem>
                             <DropdownMenuItem
                                 onClick={() => {
-                                    customDialog(row.getValue('noticeId'))
+                                    openCustomDialog(row.getValue('noticeId'))
                                 }}
                             >
                                 Delete Notice
@@ -158,8 +158,8 @@ const NoticeManagementPage = () => {
     const [noticeHistory, setNoticeHistory] = useState<GetNotice[]>([])
     const router = useRouter()
     const [openEditNoticeDialog, setOpenEditNoticeDialog] = useState(false)
-    const [openCustomDialog, setOpenCustomDialog] = useState(false)
     const [noticeId, setNoticeId] = useState('')
+    const { setCustomConfirmModal } = useModal();
 
     useEffect(() => {
         getData()
@@ -186,9 +186,12 @@ const NoticeManagementPage = () => {
         setNoticeId(noticeId)
     }
 
-    const customDialog = async (noticeId: string) => {
-        setOpenCustomDialog(true)
+    const openCustomDialog = async (noticeId: string) => {
         setSelectedNoticeId(noticeId)
+        setCustomConfirmModal({
+            title: 'Are you sure to delete this notice?',
+            subtitle: 'Changes are irrevisible',
+        })
     }
 
     const isConfirm = async () => {
@@ -211,11 +214,7 @@ const NoticeManagementPage = () => {
                 noticeId={noticeId}
             />
             <CustomDialog
-                title="Are you sure to delete this notice?"
-                subtitle="Changes are irrevisible"
-                open={openCustomDialog}
-                setOpen={setOpenCustomDialog}
-                isConfirm={isConfirm}
+                customConfirmButtonPress={isConfirm}
             />
             <div className="flex flex-row justify-between">
                 <h3 className="text-3xl font-bold text-black">Notice</h3>

@@ -8,34 +8,28 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@components/ui/dialog'
+import { useModal } from '@zustand/modal/useModal'
+
 
 interface CustomDialogProps {
-    title?: string
-    subtitle?: string
-    open: boolean
-    setOpen: Dispatch<SetStateAction<boolean>>
-    isConfirm: () => void
+	customConfirmButtonPress: () => void
 }
 
-const CustomDialog = ({
-    title,
-    subtitle,
-    open,
-    setOpen,
-    isConfirm,
-}: CustomDialogProps) => {
+const CustomDialog = ({customConfirmButtonPress} : CustomDialogProps) => {
+    const {isOpen, toogleModal, content} = useModal();
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog open={isOpen} onOpenChange={toogleModal}>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>{title}</DialogTitle>
-                    <DialogDescription>{subtitle}</DialogDescription>
+                    <DialogTitle>{content.title}</DialogTitle>
+                    <DialogDescription>{content.subtitle}</DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
                     <Button
                         className="flex justify-center items-center"
                         onClick={() => {
-                            isConfirm()
+                            customConfirmButtonPress()
+                            toogleModal()
                         }}
                     >
                         Confirm
