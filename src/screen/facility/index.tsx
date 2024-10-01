@@ -204,6 +204,7 @@ const FacilityManagementPage = () => {
             setIsLoading(true)
             const response = await getBookingHistory()
             if (response.success) {
+                console.log(response)
                 const bookingHistory = response.data.map((x: any) => {
                     return {
                         facilityId: FacilityName[x.facilityId as string],
@@ -237,7 +238,7 @@ const FacilityManagementPage = () => {
             <CancelBookingDialog
                 open={openCancelDialog}
                 setOpen={setOpenCancelDialog}
-                bookingId={selectedBookingId}
+                bookingGuid={selectedBookingId}
             />
             <div className="flex flex-row justify-between">
                 <h3 className="text-3xl font-bold text-black">Facility</h3>

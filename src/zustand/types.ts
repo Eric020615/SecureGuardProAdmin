@@ -12,13 +12,20 @@ export interface SignInFormDto {
 }
 
 export interface GetFacilityBooking {
-    facilityId: string;
-    startDate: string;
-    endDate: string;
-    numOfGuest: number;
-    bookedBy: string;
-    bookingId: string;
-    isCancelled: boolean
+    bookingId: number
+	bookingGuid: string
+	startDate: string
+	facilityId: string
+	facilityName: string
+	endDate: string
+	bookedBy: string
+	numOfGuest: number
+	isCancelled: boolean
+    cancelRemark: string
+	createdBy: string
+	createdDateTime: string
+	updatedBy: string
+	updatedDateTime: string
 }
 
 export interface CreateFacilityBooking {
@@ -37,7 +44,7 @@ export interface CreateNotice {
 }
 
 export interface EditNotice {
-    noticeId: string;
+    noticeGuid: string;
     title: string;
     description: string;
     startDate: string;
@@ -45,11 +52,12 @@ export interface EditNotice {
 }
 
 export interface DeleteNotice {
-    noticeId: string;
+    noticeGuid: string;
 }
 
 export interface GetNotice {
-    noticeId: string
+    noticeId: number;
+    noticeGuid: string;
     title: string;
     description: string;
     startDate: string;
@@ -61,7 +69,8 @@ export interface GetNotice {
 }
 
 export interface GetNoticeDetailsById {
-    noticeId: string
+    noticeId: number
+    noticeGuid: string
     title: string;
     description: string;
     startDate: string;
@@ -73,7 +82,7 @@ export interface GetNoticeDetailsById {
 }
 
 export interface CancelBooking {
-    bookingId: string;
+    bookingGuid: string;
     cancelRemark: string
 }
 

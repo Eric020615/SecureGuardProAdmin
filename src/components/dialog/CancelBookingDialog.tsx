@@ -24,7 +24,7 @@ import { useFacility } from '@zustand/facility/useFacility'
 import { useApplication } from '@zustand/index'
 
 interface CancelBookingDialogProps {
-    bookingId: string
+    bookingGuid: string
     open: boolean
     setOpen: Dispatch<SetStateAction<boolean>>
 }
@@ -35,7 +35,7 @@ const formSchema = z.object({
     }),
 })
 
-const CancelBookingDialog = ({ bookingId, open, setOpen }: CancelBookingDialogProps) => {
+const CancelBookingDialog = ({ bookingGuid, open, setOpen }: CancelBookingDialogProps) => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -48,7 +48,7 @@ const CancelBookingDialog = ({ bookingId, open, setOpen }: CancelBookingDialogPr
         try {
             setIsLoading(true)
             const response = await cancelBooking({
-                bookingId: bookingId,
+                bookingGuid: bookingGuid,
                 cancelRemark: values.cancelRemark,
             })
             if (response.success) {

@@ -33,7 +33,6 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, menuList }: SidebarProps) => {
 
     useEffect(() => {
         setIsClient(true)
-        console.log(path)
     }, [])
     if (!isClient) return <></>
 

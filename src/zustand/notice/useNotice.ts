@@ -7,7 +7,7 @@ interface noticeState {
     error: string | null;
     createNotice: (notice : CreateNotice) => Promise<any>;
     getNotice: () => Promise<any>;
-    getNoticeById: (noticeId: string) => Promise<any>;
+    getNoticeById: (noticeGuid: string) => Promise<any>;
     updateNoticeById: (noticeForm: EditNotice) => Promise<any>;
     deleteNoticeById: (deleteNotice: DeleteNotice) => Promise<any>;
     setLoading: (isLoading: boolean) => void;
@@ -43,10 +43,10 @@ export const useNotice = create<noticeState>((set) => ({
             set({ isLoading: false });
         }
     },
-    getNoticeById: async (noticeId: string) => {
+    getNoticeById: async (noticeGuid: string) => {
         try {
             set({ isLoading: true, error: null });
-            const response = await getNoticeById(noticeId);
+            const response = await getNoticeById(noticeGuid);
             return response;
         } catch (error : any) {
             console.log(error);

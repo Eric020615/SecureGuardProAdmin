@@ -24,7 +24,6 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={cn('font-inter antialiased', inter.variable)}>
-                <NextTopLoader />
                 <div className="w-full">
                     <LayoutWrapper>{children}</LayoutWrapper>
                 </div>

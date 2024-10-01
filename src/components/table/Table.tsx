@@ -22,11 +22,24 @@ import {
     TableHeader,
     TableRow,
 } from '@components/ui/table'
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from '@components/ui/pagination'
 
 interface CustomTableProps {
     data: any
     columns: ColumnDef<any>[]
     onView: (row: Row<any>) => void
+    lastId?: string
+    setCurrentPage?: (page: number) => void
+    onNextPage?: () => void
+    onPreviousPage?: () => void
 }
 
 const CustomTable = ({ data, columns, onView }: CustomTableProps) => {
@@ -84,7 +97,7 @@ const CustomTable = ({ data, columns, onView }: CustomTableProps) => {
                                 onClick={() => {
                                     onView(row)
                                 }}
-                                className='cursor-pointer'
+                                className="cursor-pointer"
                             >
                                 {row.getVisibleCells().map((cell) => (
                                     <TableCell key={cell.id}>
@@ -108,6 +121,22 @@ const CustomTable = ({ data, columns, onView }: CustomTableProps) => {
                     )}
                 </TableBody>
             </Table>
+            <Pagination>
+                <PaginationContent>
+                    <PaginationItem>
+                        <PaginationPrevious href="#" />
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationLink href="#">1</PaginationLink>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationEllipsis />
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationNext href="#" />
+                    </PaginationItem>
+                </PaginationContent>
+            </Pagination>
         </div>
     )
 }

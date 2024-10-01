@@ -1,7 +1,9 @@
 'use client'
 
 import CustomLoader from '@components/loader/Loader'
+import TopLoader from '@components/loadingBar/LoadingBar'
 import { useApplication } from '@zustand/index'
+import NextTopLoader from 'nextjs-toploader'
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
     const { isLoading } = useApplication()
@@ -12,6 +14,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                     <CustomLoader />
                 </div>
             )}
+            <TopLoader />
             {children}
         </>
     )

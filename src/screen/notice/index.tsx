@@ -52,7 +52,14 @@ const NoticeManagementPage = () => {
         {
             accessorKey: 'noticeId',
             header: 'Id',
+            enableSorting: true,
             cell: ({ row }) => <div>{row.getValue('noticeId') as string}</div>,
+        },
+        {
+            accessorKey: 'noticeGuid',
+            header: () => null,
+            cell: () => null,
+            enableHiding: true,
         },
         {
             accessorKey: 'title',
@@ -133,14 +140,14 @@ const NoticeManagementPage = () => {
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
                                 onClick={() => {
-                                    openEditDialog(row.getValue('noticeId'))
+                                    openEditDialog(row.getValue('noticeGuid'))
                                 }}
                             >
                                 Edit Notice
                             </DropdownMenuItem>
                             <DropdownMenuItem
                                 onClick={() => {
-                                    openCustomDialog(row.getValue('noticeId'))
+                                    openCustomDialog(row.getValue('noticeGuid'))
                                 }}
                             >
                                 Delete Notice
@@ -154,12 +161,11 @@ const NoticeManagementPage = () => {
 
     const { getNotice, deleteNoticeById } = useNotice()
     const { setIsLoading } = useApplication()
-    const [selectedNoticeId, setSelectedNoticeId] = useState('')
+    const [selectedNoticeGuid, setSelectedNoticeGuid] = useState('')
     const [noticeHistory, setNoticeHistory] = useState<GetNotice[]>([])
     const router = useRouter()
     const [openEditNoticeDialog, setOpenEditNoticeDialog] = useState(false)
-    const [noticeId, setNoticeId] = useState('')
-    const { setCustomConfirmModal } = useModal();
+    const { setCustomConfirmModal } = useModal()
 
     useEffect(() => {
         getData()
@@ -170,6 +176,7 @@ const NoticeManagementPage = () => {
             setIsLoading(true)
             const response = await getNotice()
             if (response.success) {
+                console.log(response.data)
                 setNoticeHistory(response.data)
             } else {
                 console.log(response.msg)
@@ -181,13 +188,13 @@ const NoticeManagementPage = () => {
         }
     }
 
-    const openEditDialog = async (noticeId: string) => {
+    const openEditDialog = async (noticeGuid: string) => {
         setOpenEditNoticeDialog(true)
-        setNoticeId(noticeId)
+        setSelectedNoticeGuid(noticeGuid)
     }
 
-    const openCustomDialog = async (noticeId: string) => {
-        setSelectedNoticeId(noticeId)
+    const openCustomDialog = async (noticeGuid: string) => {
+        setSelectedNoticeGuid(noticeGuid)
         setCustomConfirmModal({
             title: 'Are you sure to delete this notice?',
             subtitle: 'Changes are irrevisible',
@@ -196,7 +203,7 @@ const NoticeManagementPage = () => {
 
     const isConfirm = async () => {
         let deleteNotice: DeleteNotice = {
-            noticeId: selectedNoticeId,
+            noticeGuid: selectedNoticeGuid,
         }
         const response = await deleteNoticeById(deleteNotice)
         if (response.success) {
@@ -211,11 +218,9 @@ const NoticeManagementPage = () => {
             <EditNoticeDialog
                 open={openEditNoticeDialog}
                 setOpen={setOpenEditNoticeDialog}
-                noticeId={noticeId}
+                noticeGuid={selectedNoticeGuid}
             />
-            <CustomDialog
-                customConfirmButtonPress={isConfirm}
-            />
+            <CustomDialog customConfirmButtonPress={isConfirm} />
             <div className="flex flex-row justify-between">
                 <h3 className="text-3xl font-bold text-black">Notice</h3>
                 <Button

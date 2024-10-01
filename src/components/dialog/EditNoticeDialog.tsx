@@ -25,7 +25,7 @@ import { EditNotice, GetNoticeDetailsById } from '@zustand/types'
 import { useApplication } from '@zustand/index'
 
 interface EditNoticeDialogProps {
-    noticeId: string
+    noticeGuid: string
     open: boolean
     setOpen: Dispatch<SetStateAction<boolean>>
 }
@@ -45,7 +45,7 @@ const formSchema = z.object({
     }),
 })
 
-const EditNoticeDialog = ({ noticeId, open, setOpen }: EditNoticeDialogProps) => {
+const EditNoticeDialog = ({ noticeGuid, open, setOpen }: EditNoticeDialogProps) => {
     const [notice, setNotice] = useState<GetNoticeDetailsById>({} as GetNoticeDetailsById)
     const [updateNotice, setUpdateNotice] = useState<EditNotice>({} as EditNotice)
     const form = useForm<z.infer<typeof formSchema>>({
@@ -63,7 +63,7 @@ const EditNoticeDialog = ({ noticeId, open, setOpen }: EditNoticeDialogProps) =>
         try {
             setIsLoading(true)
             setUpdateNotice({
-                noticeId: noticeId,
+                noticeGuid: noticeGuid,
                 title: values.title,
                 description: values.description,
                 startDate: values.startDate,
@@ -82,15 +82,15 @@ const EditNoticeDialog = ({ noticeId, open, setOpen }: EditNoticeDialogProps) =>
     }
 
     useEffect(() => {
-        if (noticeId != '') {
-            getNotice(noticeId)
+        if (noticeGuid != '') {
+            getNotice(noticeGuid)
         }
-    }, [noticeId])
+    }, [noticeGuid])
 
-    const getNotice = async (noticeId: string) => {
+    const getNotice = async (noticeGuid: string) => {
         try {
             setIsLoading(true)
-            const response = await getNoticeById(noticeId)
+            const response = await getNoticeById(noticeGuid)
             console.log(response)
             setNotice(response.data)
             setIsLoading(false)
