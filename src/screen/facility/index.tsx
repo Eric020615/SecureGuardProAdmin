@@ -32,11 +32,13 @@ import { useApplication } from '@zustand/index'
 
 const FacilityManagementPage = () => {
     const { getBookingHistory } = useFacility()
-    const { setIsLoading } = useApplication()
+    const { isLoading, setIsLoading } = useApplication()
     const [bookingHistory, setBookingHistory] = useState<GetFacilityBooking[]>([])
     const [openCancelDialog, setOpenCancelDialog] = useState(false)
     const [selectedBookingId, setSelectedBookingId] = useState('')
     const router = useRouter()
+    const [page, setPage] = useState(0)
+    const [totalRecords, setTotalRecords] = useState(0)
 
     const columns: ColumnDef<GetFacilityBooking>[] = [
         {
@@ -196,40 +198,43 @@ const FacilityManagementPage = () => {
     }
 
     useEffect(() => {
-        getData()
-    }, [])
+        setBookingHistory([])
+        fetchFacilityBookingHistory()
+    }, [page])
 
-    const getData = async () => {
+    const fetchFacilityBookingHistory = async () => {
         try {
             setIsLoading(true)
-            const response = await getBookingHistory()
+            const response = await getBookingHistory(page, 10)
             if (response.success) {
-                console.log(response)
-                const bookingHistory = response.data.map((x: any) => {
-                    return {
-                        facilityId: FacilityName[x.facilityId as string],
-                        bookingId: x.bookingId,
-                        startDate: convertUTCStringToLocalDateString(
-                            x.startDate,
-                            ITimeFormat.dateTime
-                        ),
-                        endDate: convertUTCStringToLocalDateString(
-                            x.endDate,
-                            ITimeFormat.dateTime
-                        ),
-                        bookedBy: x.bookedBy,
-                        numOfGuest: x.numOfGuest,
-                        isCancelled: x.isCancelled,
-                    } as GetFacilityBooking
-                })
-                setBookingHistory(bookingHistory)
+                const data = response.data.list
+                    ? response.data.list.map((x: any) => {
+                          return {
+                              facilityId: FacilityName[x.facilityId as string],
+                              bookingId: x.bookingId,
+                              startDate: convertUTCStringToLocalDateString(
+                                  x.startDate,
+                                  ITimeFormat.dateTime
+                              ),
+                              endDate: convertUTCStringToLocalDateString(
+                                  x.endDate,
+                                  ITimeFormat.dateTime
+                              ),
+                              bookedBy: x.bookedBy,
+                              numOfGuest: x.numOfGuest,
+                              isCancelled: x.isCancelled,
+                          } as GetFacilityBooking
+                      })
+                    : []
+                setBookingHistory((prev) => [...prev, ...data])
+                setTotalRecords(response.data.count) // Update total records from response
             } else {
                 console.log(response.msg)
             }
         } catch (error) {
             console.log(error)
         } finally {
-          setIsLoading(false)
+            setIsLoading(false)
         }
     }
 
@@ -257,6 +262,10 @@ const FacilityManagementPage = () => {
                     data={bookingHistory}
                     columns={columns}
                     onView={(row: Row<any>) => {}}
+                    totalRecords={totalRecords}
+                    recordsPerPage={10}
+                    currentPage={page}
+                    setCurrentPage={setPage}
                 />
             </div>
         </>

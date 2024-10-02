@@ -7,7 +7,7 @@ interface facilityState {
     isLoading: boolean;
     error: string | null;
     submitBooking: (bookingForm: CreateFacilityBooking) => Promise<any>;
-    getBookingHistory: () => Promise<IResponse<any>>;
+    getBookingHistory: (page: number, limit: number) => Promise<IResponse<any>>;
     cancelBooking: (cancelBookingForm: CancelBooking) => Promise<any>;
     setLoading: (isLoading: boolean) => void;
     setError: (error: string | null) => void;
@@ -19,7 +19,6 @@ export const useFacility = create<facilityState>((set) => ({
     setLoading: (isLoading) => set({ isLoading }),
     setError: (error) => set({ error }),
     submitBooking: async (bookingForm : CreateFacilityBooking ) => {
-        console.log(bookingForm)
         try {
             set({ isLoading: true, error: null });
             const response = await createBooking(bookingForm);
@@ -31,11 +30,11 @@ export const useFacility = create<facilityState>((set) => ({
             set({ isLoading: false })
         }
     },
-    getBookingHistory: async () => {
+    getBookingHistory: async (page: number, limit: number) => {
         let response = {} as IResponse<any>;
         try {
             set({ isLoading: true, error: null });
-            response = await getBookingHistory();
+            response = await getBookingHistory(page, limit);
             return response;
         } catch (error: any) {
             set({ error: error.msg });

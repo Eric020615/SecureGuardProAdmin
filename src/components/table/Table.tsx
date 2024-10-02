@@ -36,17 +36,26 @@ interface CustomTableProps {
     data: any
     columns: ColumnDef<any>[]
     onView: (row: Row<any>) => void
-    lastId?: string
-    setCurrentPage?: (page: number) => void
-    onNextPage?: () => void
-    onPreviousPage?: () => void
+    totalRecords: number
+    recordsPerPage: number
+    currentPage: number
+    setCurrentPage: React.Dispatch<React.SetStateAction<number>>
 }
 
-const CustomTable = ({ data, columns, onView }: CustomTableProps) => {
+const CustomTable = ({
+    data,
+    columns,
+    onView,
+    totalRecords,
+    recordsPerPage,
+    currentPage,
+    setCurrentPage,
+}: CustomTableProps) => {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = useState({})
+    const totalPages = Math.ceil(totalRecords / recordsPerPage) // Calculate total pages
 
     const table = useReactTable({
         data,
@@ -121,19 +130,62 @@ const CustomTable = ({ data, columns, onView }: CustomTableProps) => {
                     )}
                 </TableBody>
             </Table>
-            <Pagination>
+            <Pagination className="justify-end mt-3">
                 <PaginationContent>
                     <PaginationItem>
-                        <PaginationPrevious href="#" />
+                        <PaginationPrevious
+                            aria-disabled={currentPage <= 0}
+                            tabIndex={currentPage <= 0 ? -1 : undefined}
+                            onClick={() =>
+                                setCurrentPage((prev) => Math.max(prev - 1, 0))
+                            }
+                            className={
+                                currentPage <= 0
+                                    ? 'pointer-events-none opacity-50'
+                                    : undefined
+                            }
+                        />
                     </PaginationItem>
+                    {Array.from(
+                        { length: totalPages > 5 ? 5 : totalPages },
+                        (_, index) => (
+                            <PaginationItem key={index}>
+                                <PaginationLink
+                                    aria-disabled={currentPage === index}
+                                    tabIndex={currentPage === index ? -1 : undefined}
+                                    className={
+                                        currentPage === index
+                                            ? 'pointer-events-none opacity-50'
+                                            : undefined
+                                    }
+                                    onClick={() => setCurrentPage(index)}
+                                >
+                                    {index + 1}
+                                </PaginationLink>
+                            </PaginationItem>
+                        )
+                    )}
+                    {/* Ellipsis for large numbers of pages */}
+                    {totalPages > 5 && currentPage < totalPages - 1 && (
+                        <PaginationItem>
+                            <PaginationEllipsis />
+                        </PaginationItem>
+                    )}
                     <PaginationItem>
-                        <PaginationLink href="#">1</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationEllipsis />
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationNext href="#" />
+                        <PaginationNext
+                            aria-disabled={currentPage + 1 >= totalPages}
+                            tabIndex={currentPage + 1 >= totalPages ? -1 : undefined}
+                            onClick={() =>
+                                setCurrentPage((prev) =>
+                                    Math.min(prev + 1, totalPages - 1)
+                                )
+                            }
+                            className={
+                                currentPage + 1 >= totalPages
+                                    ? 'pointer-events-none opacity-50'
+                                    : undefined
+                            }
+                        />
                     </PaginationItem>
                 </PaginationContent>
             </Pagination>

@@ -166,18 +166,21 @@ const NoticeManagementPage = () => {
     const router = useRouter()
     const [openEditNoticeDialog, setOpenEditNoticeDialog] = useState(false)
     const { setCustomConfirmModal } = useModal()
+    const [page, setPage] = useState(0)
+    const [totalRecords, setTotalRecords] = useState(0)
 
     useEffect(() => {
-        getData()
-    }, [])
+        setNoticeHistory([])
+        fetchNotice()
+    }, [page])
 
-    const getData = async () => {
+    const fetchNotice = async () => {
         try {
             setIsLoading(true)
-            const response = await getNotice()
+            const response = await getNotice(page, 10)
             if (response.success) {
-                console.log(response.data)
-                setNoticeHistory(response.data)
+                setNoticeHistory((prev) => [...prev, ...response.data.list])
+                setTotalRecords(response.data.count) // Update total records from response
             } else {
                 console.log(response.msg)
             }
@@ -238,6 +241,10 @@ const NoticeManagementPage = () => {
                     data={noticeHistory}
                     columns={columns}
                     onView={(row: Row<any>) => {}}
+                    totalRecords={totalRecords}
+                    recordsPerPage={10}
+                    currentPage={page}
+                    setCurrentPage={setPage}
                 />
             </div>
         </>

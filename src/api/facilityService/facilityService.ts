@@ -28,13 +28,17 @@ export const createBooking = async (bookingForm: CreateFacilityBooking): Promise
     }
 }
 
-export const getBookingHistory = async (): Promise<IResponse<any>> => {
+export const getBookingHistory = async (page: number, limit: number): Promise<IResponse<any>> => {
     try {
         const cookieValue = await getCookies('token')
         const [success, response] = await GlobalHandler({
             path: listUrl.facility.getBookingHistory.path,
             type: listUrl.facility.getBookingHistory.type,
             _token: cookieValue as string,
+            data: {
+                page,
+                limit,
+            }
         })
         const result: IResponse<any> = {
             success,

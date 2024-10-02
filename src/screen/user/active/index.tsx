@@ -33,6 +33,8 @@ const ActiveUserList = () => {
     const [openEditUserDialog, setOpenEditUserDialog] = useState(false)
     const [openCustomDialog, setOpenCustomDialog] = useState(false)
     const [userId, setUserId] = useState('')
+    const [page, setPage] = useState(0)
+    const [totalRecords, setTotalRecords] = useState(0)
 
     useEffect(() => {
         getData()
@@ -247,6 +249,10 @@ const ActiveUserList = () => {
             onView={(row: Row<any>) => {
                 router.push(`/user/${row.getValue('userId')}`)
             }}
+            totalRecords={totalRecords}
+            recordsPerPage={10}
+            currentPage={page}
+            setCurrentPage={setPage}
         />
     )
 }
