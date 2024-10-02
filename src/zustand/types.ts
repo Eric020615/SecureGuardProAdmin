@@ -167,14 +167,13 @@ export interface GetUserProfileByIdDto {
 }
 
 export interface EditUserDetailsByIdDto {
-    userId: string
-    firstName: string
-    lastName: string
-    userName: string
-    email: string
-    contactNumber: string
-    gender: string
-    dateOfBirth: string
+   firstName: string
+	lastName: string
+	userName: string
+	email: string
+	contactNumber: string
+	gender: string
+	dateOfBirth: string
 }
 
 export interface CreateUserFaceAuthDto {

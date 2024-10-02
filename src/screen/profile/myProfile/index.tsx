@@ -81,7 +81,6 @@ const MyProfilePage = () => {
         try {
             setIsLoading(true)
             const response = await editUserProfileByIdAction({
-                userId: profileDetails?.userId ? profileDetails.userId : '',
                 email: profileDetails?.email ? profileDetails.email : '',
                 firstName: values.firstName,
                 lastName: values.lastName,
