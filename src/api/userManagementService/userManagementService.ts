@@ -1,104 +1,106 @@
-import { getCookies } from "@lib/cookies"
-import GlobalHandler, { IResponse } from "../globalHandler"
-import { listUrl } from "../listUrl"
-import { GetUser, GetUserDetails } from "@zustand/types"
+import { getCookies } from '@lib/cookies'
+import GlobalHandler, { IResponse } from '../globalHandler'
+import { listUrl } from '../listUrl'
+import { GetUser, GetUserDetails } from '@zustand/types'
 
-export const getUserList = async (isActive: boolean): Promise<IResponse<GetUser[]>> => {
+export const getUserList = async (isActive: boolean, page: number, limit: number): Promise<IResponse<GetUser[]>> => {
     try {
-        const cookieValue = await getCookies("token")
+        const cookieValue = await getCookies('token')
         const [success, response] = await GlobalHandler({
             path: listUrl.userManagement.getUsers.path,
             type: listUrl.userManagement.getUsers.type,
             _token: cookieValue as string,
-            data: {isActive}
+            data: { isActive, page, limit },
         })
-        const result : IResponse<GetUser[]> = {
+        const result: IResponse<GetUser[]> = {
             success,
-            msg: success ? 'success': response?.message,
-            data: success ? response?.data : undefined
+            msg: success ? 'success' : response?.message,
+            data: success ? response?.data : undefined,
         }
-        return result;
+        return result
     } catch (error: any) {
-        const result : IResponse<any> = {
+        const result: IResponse<any> = {
             success: false,
             msg: error,
-            data: null
+            data: null,
         }
-        return result;
+        return result
     }
 }
 
-export const getUserDetailsById = async (userId: string): Promise<IResponse<GetUserDetails>> => {
+export const getUserDetailsById = async (
+    userGuid: string
+): Promise<IResponse<GetUserDetails>> => {
     try {
-        const cookieValue = await getCookies("token")
+        const cookieValue = await getCookies('token')
         const [success, response] = await GlobalHandler({
             path: listUrl.userManagement.getUserDetailsById.path,
             type: listUrl.userManagement.getUserDetailsById.type,
             _token: cookieValue as string,
-            data: {userId}
+            data: { userGuid },
         })
-        const result : IResponse<GetUserDetails> = {
+        const result: IResponse<GetUserDetails> = {
             success,
-            msg: success ? 'success': response?.message,
-            data: success ? response?.data : undefined
+            msg: success ? 'success' : response?.message,
+            data: success ? response?.data : undefined,
         }
-        return result;
+        return result
     } catch (error: any) {
-        const result : IResponse<any> = {
+        const result: IResponse<any> = {
             success: false,
             msg: error,
-            data: null
+            data: null,
         }
-        return result;
+        return result
     }
 }
 
-export const activateUserById = async (userId: string): Promise<IResponse<any>> => {
+export const activateUserById = async (userGuid: string): Promise<IResponse<any>> => {
     try {
-        const cookieValue = await getCookies("token")
+        const cookieValue = await getCookies('token')
         const [success, response] = await GlobalHandler({
             path: listUrl.userManagement.activateUserById.path,
             type: listUrl.userManagement.activateUserById.type,
             _token: cookieValue as string,
-            params: {userId}
+            params: { userGuid },
         })
-        const result : IResponse<any> = {
+        const result: IResponse<any> = {
             success,
-            msg: success ? 'success': response?.message,
-            data: success ? response?.data : undefined
+            msg: success ? 'success' : response?.message,
+            data: success ? response?.data : undefined,
         }
-        return result;
+        return result
     } catch (error: any) {
-        const result : IResponse<any> = {
+        const result: IResponse<any> = {
             success: false,
             msg: error,
-            data: null
+            data: null,
         }
-        return result;
+        return result
     }
 }
 
-export const deactivateUserById = async (userId: string): Promise<IResponse<any>> => {
+export const deactivateUserById = async (userGuid: string): Promise<IResponse<any>> => {
     try {
-        const cookieValue = await getCookies("token")
+        const cookieValue = await getCookies('token')
         const [success, response] = await GlobalHandler({
             path: listUrl.userManagement.deactivateUserById.path,
             type: listUrl.userManagement.deactivateUserById.type,
             _token: cookieValue as string,
-            params: {userId}
+            params: { userGuid },
         })
-        const result : IResponse<any> = {
+        const result: IResponse<any> = {
             success,
-            msg: success ? 'success': response?.message,
-            data: success ? response?.data : undefined
+            msg: success ? 'success' : response?.message,
+            data: success ? response?.data : undefined,
         }
-        return result;
+        return result
     } catch (error: any) {
-        const result : IResponse<any> = {
+        const result: IResponse<any> = {
             success: false,
             msg: error,
-            data: null
+            data: null,
         }
-        return result;
+        return result
     }
 }

@@ -73,7 +73,7 @@ const UserDetailsPage = () => {
     const activateUserById = async () => {
         try {
             setIsLoading(true)
-            const response = await activateUserByIdAction(userDetails.userId)
+            const response = await activateUserByIdAction(userDetails.userGuid)
             if (response.success) {
                 window.location.reload()
             } else {
@@ -88,7 +88,7 @@ const UserDetailsPage = () => {
     const deactivateUserById = async () => {
         try {
             setIsLoading(true)
-            const response = await deactivateUserByIdAction(userDetails.userId)
+            const response = await deactivateUserByIdAction(userDetails.userGuid)
             if (response.success) {
                 window.location.reload()
             } else {

@@ -35,6 +35,7 @@ export const useFacility = create<facilityState>((set) => ({
         try {
             set({ isLoading: true, error: null });
             response = await getBookingHistory(page, limit);
+            console.log(response)
             return response;
         } catch (error: any) {
             set({ error: error.msg });

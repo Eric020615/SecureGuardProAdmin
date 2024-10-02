@@ -18,7 +18,6 @@ import {
 import CustomTable from '@components/table/Table'
 import { GetUser } from '@zustand/types'
 import { useRouter } from 'next/navigation'
-import CustomDialog from '@components/dialog/CustomDialog'
 import { useUserManagement } from '@zustand/userManagement/useUserManagement'
 import { convertUTCStringToLocalDateString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
@@ -37,15 +36,17 @@ const ActiveUserList = () => {
     const [totalRecords, setTotalRecords] = useState(0)
 
     useEffect(() => {
-        getData()
-    }, [])
+        setUserList([])
+        fetchActiveUserList()
+    }, [page])
 
-    const getData = async () => {
+    const fetchActiveUserList = async () => {
         try {
             setIsLoading(true)
-            const response = await getUserList(true)
+            const response = await getUserList(true, page, 10)
             if (response.success) {
-                setUserList(response.data)
+                setUserList((prev) => [...prev, ...response.data.list])
+                setTotalRecords(response.data.count) // Update total records from response
             } else {
                 console.log(response.msg)
             }
@@ -91,8 +92,33 @@ const ActiveUserList = () => {
         },
         {
             accessorKey: 'userId',
-            header: 'User Id',
+            header: ({ column }) => {
+                return (
+                    <Button
+                        variant="ghost"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === 'asc')
+                        }
+                    >
+                        User Id
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                )
+            },
             cell: ({ row }) => <div>{row.getValue('userId') as string}</div>,
+        },
+        {
+            accessorKey: 'userGuid',
+            header: () => null,
+            cell: () => null,
+            enableHiding: true,
+        },
+        {
+            accessorKey: 'userName',
+            header: 'Username',
+            cell: ({ row }) => (
+                <div className="capitalize">{row.getValue('userName') as string}</div>
+            ),
         },
         {
             accessorKey: 'firstName',
@@ -247,7 +273,7 @@ const ActiveUserList = () => {
             data={userList}
             columns={columns}
             onView={(row: Row<any>) => {
-                router.push(`/user/${row.getValue('userId')}`)
+                router.push(`/user/${row.getValue('userGuid')}`)
             }}
             totalRecords={totalRecords}
             recordsPerPage={10}

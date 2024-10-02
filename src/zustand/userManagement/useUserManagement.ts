@@ -6,10 +6,10 @@ import { IResponse } from "@api/globalHandler";
 interface userManagementState {
     isLoading: boolean;
     error: string | null;
-    getUserList: (isActive: boolean) => Promise<IResponse<GetUser[]>>;
-    getUserDetails: (userId: string) => Promise<IResponse<GetUserDetails>>;
-    activateUserByIdAction: (userId: string) => Promise<IResponse<any>>;
-    deactivateUserByIdAction: (userId: string) => Promise<IResponse<any>>;
+    getUserList: (isActive: boolean, page: number, limit: number) => Promise<IResponse<any>>;
+    getUserDetails: (userGuid: string) => Promise<IResponse<GetUserDetails>>;
+    activateUserByIdAction: (userGuid: string) => Promise<IResponse<any>>;
+    deactivateUserByIdAction: (userGuid: string) => Promise<IResponse<any>>;
     setLoading: (isLoading: boolean) => void;
     setError: (error: string | null) => void;
 }
@@ -19,11 +19,11 @@ export const useUserManagement = create<userManagementState>((set) => ({
     error: null,
     setLoading: (isLoading) => set({ isLoading }),
     setError: (error) => set({ error }),
-    getUserList: async (isActive: boolean) => {
-        let response : IResponse<GetUser[]> = {} as IResponse<GetUser[]>;
+    getUserList: async (isActive: boolean, page: number, limit: number) => {
+        let response : IResponse<GetUser[]> = {} as IResponse<any>;
         try {
             set({ isLoading: true, error: null });
-            response = await getUserList(isActive);
+            response = await getUserList(isActive, page, limit);
         } catch (error: any) {
             console.log(error);
             set({ error: error.msg });
@@ -32,11 +32,11 @@ export const useUserManagement = create<userManagementState>((set) => ({
             return response;
         }
     },
-    getUserDetails: async (userId: string) => {
+    getUserDetails: async (userGuid: string) => {
         let response : IResponse<GetUserDetails> = {} as IResponse<GetUserDetails>;
         try {
             set({ isLoading: true, error: null });
-            response = await getUserDetailsById(userId);
+            response = await getUserDetailsById(userGuid);
         } catch (error: any) {
             console.log(error);
             set({ error: error.msg });
@@ -45,11 +45,11 @@ export const useUserManagement = create<userManagementState>((set) => ({
             return response;
         }
     },
-    activateUserByIdAction: async (userId: string) => {
+    activateUserByIdAction: async (userGuid: string) => {
         let response : IResponse<any> = {} as IResponse<any>;
         try {
             set({ isLoading: true, error: null });
-            response = await activateUserById(userId);
+            response = await activateUserById(userGuid);
         } catch (error: any) {
             console.log(error);
             set({ error: error.msg });
@@ -58,11 +58,11 @@ export const useUserManagement = create<userManagementState>((set) => ({
             return response;
         }
     },
-    deactivateUserByIdAction: async (userId: string) => {
+    deactivateUserByIdAction: async (userGuid: string) => {
         let response : IResponse<any> = {} as IResponse<any>;
         try {
             set({ isLoading: true, error: null });
-            response = await deactivateUserById(userId);
+            response = await deactivateUserById(userGuid);
         } catch (error: any) {
             console.log(error);
             set({ error: error.msg });
