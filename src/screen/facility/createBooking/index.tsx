@@ -23,6 +23,7 @@ import { useFacility } from '@zustand/facility/useFacility'
 import { getTodayDate, getUTCDateString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
 import { useApplication } from '@zustand/index'
+import { SpaceAvailabilityDto } from '@zustand/types'
 
 const formSchema = z
     .object({
@@ -42,6 +43,7 @@ const formSchema = z
         numOfGuest: z.string().min(1, {
             message: 'Number of Guests is required',
         }),
+        spaceId: z.string().min(1, { message: 'Slot selection is required' }), // Add slot selection
     })
     .refine((data) => data.endTime > data.startTime, {
         path: ['endTime'],
@@ -50,10 +52,12 @@ const formSchema = z
 
 const CreateBookingPage = () => {
     const router = useRouter()
-    const { submitBooking } = useFacility()
+    const { submitBooking, checkAvailabilitySlotAction } = useFacility()
     const { setIsLoading } = useApplication()
     const [facility, setFacility] = useState('')
     const [date, setDate] = useState<Date | undefined>(getTodayDate())
+    const [availableSlots, setAvailableSlots] = useState<SpaceAvailabilityDto[]>([]) // Store available slots/courts
+    const [slotId, setSlotId] = useState('') // Store selected slot
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -64,12 +68,17 @@ const CreateBookingPage = () => {
             endTime: '',
             user: '',
             numOfGuest: '',
+            spaceId: '',
         },
     })
 
     useEffect(() => {
         form.setValue('facilityId', facility)
     }, [facility])
+
+    useEffect(() => {
+        form.setValue('spaceId', slotId)
+    }, [slotId])
 
     useEffect(() => {
         form.setValue('date', date ? date : getTodayDate())
@@ -92,6 +101,7 @@ const CreateBookingPage = () => {
                 startDate: getUTCDateString(startDate.toDate(), ITimeFormat.dateTime),
                 endDate: getUTCDateString(endDate.toDate(), ITimeFormat.dateTime),
                 numOfGuest: parseInt(values.numOfGuest),
+                spaceId: values.spaceId,
             })
             if (response.success) {
                 router.push('/facility')
@@ -104,6 +114,46 @@ const CreateBookingPage = () => {
             setIsLoading(false)
         }
     }
+
+    useEffect(() => {
+        const startTime = form.getValues('startTime')
+        const endTime = form.getValues('endTime')
+        const facilityId = form.getValues('facilityId')
+
+        // Check if date, startTime, endTime, and facilityId are available
+        if (date && startTime && endTime && facilityId) {
+            const fetchAvailableSlots = async () => {
+                let startTimeSplit = startTime.split(':')
+                let endTimeSplit = endTime.split(':')
+                let startDate = moment(date)
+                    .hour(parseInt(startTimeSplit[0]))
+                    .minute(parseInt(startTimeSplit[1]))
+                let endDate = moment(date)
+                    .hour(parseInt(endTimeSplit[0]))
+                    .minute(parseInt(endTimeSplit[1]))
+
+                try {
+                    setIsLoading(true)
+                    const response = await checkAvailabilitySlotAction(
+                        facilityId,
+                        getUTCDateString(startDate.toDate(), ITimeFormat.dateTime),
+                        getUTCDateString(endDate.toDate(), ITimeFormat.dateTime)
+                    )
+                    if (response.success) {
+                        console.log(response)
+                        setAvailableSlots(response.data) // Set available slots
+                    } else {
+                        console.log(response.msg) // Log any error message from response
+                    }
+                } catch (error) {
+                    console.log('Error fetching available slots', error) // Catch and log any errors
+                } finally {
+                    setIsLoading(false)
+                }
+            }
+            fetchAvailableSlots()
+        }
+    }, [date, form.watch('startTime'), form.watch('endTime'), form.watch('facilityId')])
 
     return (
         <>
@@ -194,6 +244,31 @@ const CreateBookingPage = () => {
                                             type="time"
                                             placeholder="shadcn"
                                             {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="spaceId"
+                            render={() => (
+                                <FormItem>
+                                    <FormLabel>Booking Slot</FormLabel>
+                                    <FormControl>
+                                        <CustomSelect
+                                            title="Select a slot"
+                                            selectLabel="Slot"
+                                            selectItem={availableSlots.map((x) => {
+                                                return {
+                                                    label: x.spaceName,
+                                                    value: x.spaceId,
+                                                    disabled: x.isBooked,
+                                                }
+                                            })}
+                                            onDataChange={setSlotId}
+                                            value={slotId}
                                         />
                                     </FormControl>
                                     <FormMessage />

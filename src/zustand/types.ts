@@ -34,6 +34,7 @@ export interface CreateFacilityBooking {
     startDate: string
     endDate: string
     numOfGuest: number
+    spaceId: string
 }
 
 export interface CreateNotice {
@@ -84,6 +85,13 @@ export interface GetNoticeDetailsById {
 export interface CancelBooking {
     bookingGuid: string
     cancelRemark: string
+}
+
+export interface SpaceAvailabilityDto {
+    spaceId: string
+    spaceName: string
+    isBooked: boolean // Change to isBooked or any other name if required
+    capacity: number
 }
 
 export interface GetUser {
@@ -167,13 +175,13 @@ export interface GetUserProfileByIdDto {
 }
 
 export interface EditUserDetailsByIdDto {
-   firstName: string
-	lastName: string
-	userName: string
-	email: string
-	contactNumber: string
-	gender: string
-	dateOfBirth: string
+    firstName: string
+    lastName: string
+    userName: string
+    email: string
+    contactNumber: string
+    gender: string
+    dateOfBirth: string
 }
 
 export interface CreateUserFaceAuthDto {

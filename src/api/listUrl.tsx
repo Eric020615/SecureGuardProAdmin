@@ -48,6 +48,10 @@ export const listUrl = {
             path: 'facility/cancel',
             type: IType.put,
         },
+        checkAvailabilitySlot: {
+            path: 'facility/available-slot/check',
+            type: IType.get,
+        },
     },
     notice: {
         create: {
