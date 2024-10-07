@@ -3,7 +3,6 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { cn } from '@lib/utils'
 import LayoutWrapper from '@screen/layoutWrapper'
-import NextTopLoader from 'nextjs-toploader'
 
 const inter = Inter({
     subsets: ['latin'],
