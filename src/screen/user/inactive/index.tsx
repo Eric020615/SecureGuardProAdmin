@@ -19,40 +19,26 @@ import { useRouter } from 'next/navigation'
 import { useUserManagement } from '@zustand/userManagement/useUserManagement'
 import { convertUTCStringToLocalDateString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
-import { useApplication } from '@zustand/index'
+import { useApplication } from '@zustand/application/useApplication'
 
 const InactiveUserList = () => {
-    const { getUserList } = useUserManagement()
+    const { getUserListAction, userList, totalUserList, resetUserListAction } =
+        useUserManagement()
     const { setIsLoading } = useApplication()
     const [selectedUserId, setSelectedUserId] = useState('')
-    const [userList, setUserList] = useState<GetUser[]>([])
     const router = useRouter()
     const [openEditUserDialog, setOpenEditUserDialog] = useState(false)
     const [openCustomDialog, setOpenCustomDialog] = useState(false)
     const [userId, setUserId] = useState('')
     const [page, setPage] = useState(0)
-    const [totalRecords, setTotalRecords] = useState(0)
 
     useEffect(() => {
-        setUserList([])
+        resetUserListAction()
         fetchInactiveUserList()
     }, [page])
 
     const fetchInactiveUserList = async () => {
-        try {
-            setIsLoading(true)
-            const response = await getUserList(false, page, 10)
-            if (response.success) {
-                setUserList((prev) => [...prev, ...response.data.list])
-                setTotalRecords(response.data.count) // Update total records from response
-            } else {
-                console.log(response.msg)
-            }
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setIsLoading(false)
-        }
+        await getUserListAction(false, page, 10)
     }
 
     const openEditDialog = async (userId: string) => {
@@ -236,14 +222,14 @@ const InactiveUserList = () => {
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
                                 onClick={() => {
-                                    openEditDialog(row.getValue('userId'))
+                                    openEditDialog(row.getValue('userGuid'))
                                 }}
                             >
                                 Edit User
                             </DropdownMenuItem>
                             <DropdownMenuItem
                                 onClick={() => {
-                                    customDialog(row.getValue('userId'))
+                                    customDialog(row.getValue('userGuid'))
                                 }}
                             >
                                 Delete User
@@ -261,7 +247,7 @@ const InactiveUserList = () => {
             onView={(row: Row<any>) => {
                 router.push(`/user/${row.getValue('userGuid')}`)
             }}
-            totalRecords={totalRecords}
+            totalRecords={totalUserList}
             recordsPerPage={10}
             currentPage={page}
             setCurrentPage={setPage}

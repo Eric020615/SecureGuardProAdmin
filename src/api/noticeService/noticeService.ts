@@ -1,5 +1,5 @@
 import { getCookies } from '@lib/cookies'
-import { CreateNotice, DeleteNotice, EditNotice } from '../../zustand/types'
+import { CreateNotice, DeleteNotice, EditNotice, GetNotice } from '../../zustand/types'
 import GlobalHandler, { IResponse } from '../globalHandler'
 import { listUrl } from '../listUrl'
 
@@ -28,7 +28,7 @@ export const createNotice = async (notice: CreateNotice): Promise<any> => {
     }
 }
 
-export const getNotice = async (page: number, limit: number): Promise<any> => {
+export const getNotice = async (page: number, limit: number): Promise<IResponse<any>> => {
     try {
         const cookieValue = await getCookies('token')
         const [success, response] = await GlobalHandler({

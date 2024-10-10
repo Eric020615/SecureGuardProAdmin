@@ -14,6 +14,10 @@ export const listUrl = {
             path: 'auth/check-auth/',
             type: IType.get,
         },
+        checkSubUserAuth: {
+            path: 'auth/check-auth/sub-user',
+            type: IType.get,
+        },
     },
     faceAuth: {
         create: {

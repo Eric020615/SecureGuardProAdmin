@@ -1,60 +1,83 @@
 import { create } from "zustand"
 import { SignInFormDto, UserSignUpFormDto } from "../types"
-import { checkAuth, signIn, signUp } from "@api/authService/authService"
+import { checkAuth, checkSubUserAuth, signIn, signUp } from "@api/authService/authService"
+import { generalAction } from "@zustand/application/useApplication";
 
-interface authenticationState {
-    isLoading: boolean;
-    error: string | null;
-    signUp: (userSignUpForm: UserSignUpFormDto) => Promise<any>;
-    signIn: (userSignInForm: SignInFormDto) => Promise<any>;
-    tempToken: string;
-    setTempToken: (value: string) => void;
-    checkJwtAuth: (token: string) => Promise<any>;
-    setLoading: (isLoading: boolean) => void;
-    setError: (error: string | null) => void;
+interface State {
+	isLogged: boolean
+	tempToken: string
 }
 
-export const useAuth = create<authenticationState>((set) => ({
-    isLoading: false,
-    error: null,
-    setLoading: (isLoading) => set({ isLoading }),
-    setError: (error) => set({ error }),
-    tempToken: "",
-    setTempToken: (tempToken) => set({ tempToken }),
-    signUp: async (userSignUpForm: UserSignUpFormDto) => {
-        try {
-            set({ isLoading: true, error: null });
-            const response = await signUp(userSignUpForm);
-            return response;
-        } catch (error: any) {
-            console.log(error);
-            set({ error: error.msg });
-        } finally {
-            set({ isLoading: false })
-        }
+interface Actions {
+	signUpAction: (userSignUpForm: UserSignUpFormDto) => Promise<any>
+	signInAction: (userSignInForm: SignInFormDto) => Promise<any>
+	checkJwtAuthAction: (token: string) => Promise<any>
+    checkSubUserAuthAction: (token: string) => Promise<any>
+	setTempTokenAction: (token: string) => void
+}
+
+
+export const useAuth = create<State & Actions>((set) => ({
+	isLogged: false,
+	tempToken: '',
+	signUpAction: async (userSignUpForm: UserSignUpFormDto) => {
+		return generalAction(
+			async () => {
+				const response = await signUp(userSignUpForm)
+				if(!response.success){
+					throw new Error(response.msg)
+				}
+				set({ isLogged: true, tempToken: response.data })
+				return response
+			},
+			'', // Custom success message
+			'Account created failed. Please try again.', // Custom error message
+		)
+	},
+
+	signInAction: async (userSignInForm: SignInFormDto) => {
+		return generalAction(
+			async () => {
+				const response = await signIn(userSignInForm)
+				if (response.success) {
+					set({ isLogged: true })
+				} else {
+					throw new Error(response.msg)
+				}
+				return response
+			},
+			'', // Custom success message
+			'Sign-in failed. Please check your credentials and try again.', // Custom error message
+		)
+	},
+
+	checkJwtAuthAction: async (token: string) => {
+		return generalAction(
+			async () => {
+				const response = await checkAuth(token)
+				if(!response.success){
+					throw new Error(response.msg)
+				}
+				return response
+			},
+			'',
+			'Authentication failed. Please log in again.', // Custom error message
+		)
+	},
+
+    checkSubUserAuthAction: async (token: string) => {
+        return generalAction(
+			async () => {
+                const response = await checkSubUserAuth(token);
+				if(!response.success){
+					throw new Error(response.msg)
+				}
+				return response
+			},
+			'',
+			'Authentication failed. Please log in again.', // Custom error message
+		)
     },
-    signIn: async (userSignInForm: SignInFormDto) => {
-        try {
-            set({ isLoading: true, error: null });
-            const response = await signIn(userSignInForm);
-            return response;
-        } catch (error: any) {
-            console.log(error)
-            set({ error: error.msg });
-        } finally {
-            set({ isLoading: false })
-        }
-    },
-    checkJwtAuth: async (token: string) => {
-        try {
-            set({ isLoading: true, error: null });
-            const response = await checkAuth(token);
-            return response;
-        } catch (error: any) {
-            console.log(error)
-            set({ error: error.msg });
-        } finally {
-            set({ isLoading: false })
-        }
-    }
+
+	setTempTokenAction: (token: string) => set({ tempToken: token }),
 }))

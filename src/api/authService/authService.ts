@@ -75,3 +75,26 @@ export const checkAuth = async (token: string) : Promise<IResponse<any>> => {
         return result;
     }
 }
+
+export const checkSubUserAuth = async (token: string) : Promise<IResponse<any>> => {
+    try {
+        const [success, response] = await GlobalHandler({
+            path: listUrl.auth.checkSubUserAuth.path,
+            type: listUrl.auth.checkSubUserAuth.type,
+            _token: token
+        })
+        const result : IResponse<any> = {
+            success,
+            msg: success ? 'success': response?.message,
+            data: success ? response?.data : undefined
+        }
+        return result;
+    } catch (error: any) {
+        const result : IResponse<any> = {
+            success: false,
+            msg: error,
+            data: null
+        }
+        return result;
+    }
+}

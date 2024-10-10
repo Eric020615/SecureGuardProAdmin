@@ -16,13 +16,12 @@ import {
 } from '@components/ui/dropdown-menu'
 import CustomTable from '@components/table/Table'
 import { useNotice } from '@zustand/notice/useNotice'
-import { DeleteNotice, GetNotice } from '@zustand/types'
+import { GetNotice } from '@zustand/types'
 import { useRouter } from 'next/navigation'
 import EditNoticeDialog from '@components/dialog/EditNoticeDialog'
 import CustomDialog from '@components/dialog/CustomDialog'
 import { convertUTCStringToLocalDateString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
-import { useApplication } from '@zustand/index'
 import { useModal } from '@zustand/modal/useModal'
 
 const NoticeManagementPage = () => {
@@ -159,36 +158,20 @@ const NoticeManagementPage = () => {
         },
     ]
 
-    const { getNotice, deleteNoticeById } = useNotice()
-    const { setIsLoading } = useApplication()
+    const { notices, totalNotices, getNoticeAction, deleteNoticeByIdAction, resetNoticeAction } = useNotice()
     const [selectedNoticeGuid, setSelectedNoticeGuid] = useState('')
-    const [noticeHistory, setNoticeHistory] = useState<GetNotice[]>([])
     const router = useRouter()
     const [openEditNoticeDialog, setOpenEditNoticeDialog] = useState(false)
-    const { setCustomConfirmModal } = useModal()
+    const { setCustomConfirmModalAction } = useModal()
     const [page, setPage] = useState(0)
-    const [totalRecords, setTotalRecords] = useState(0)
 
     useEffect(() => {
-        setNoticeHistory([])
+        resetNoticeAction()
         fetchNotice()
     }, [page])
 
     const fetchNotice = async () => {
-        try {
-            setIsLoading(true)
-            const response = await getNotice(page, 10)
-            if (response.success) {
-                setNoticeHistory((prev) => [...prev, ...response.data.list])
-                setTotalRecords(response.data.count) // Update total records from response
-            } else {
-                console.log(response.msg)
-            }
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setIsLoading(false)
-        }
+        await getNoticeAction(page, 10)
     }
 
     const openEditDialog = async (noticeGuid: string) => {
@@ -198,21 +181,21 @@ const NoticeManagementPage = () => {
 
     const openCustomDialog = async (noticeGuid: string) => {
         setSelectedNoticeGuid(noticeGuid)
-        setCustomConfirmModal({
+        setCustomConfirmModalAction({
             title: 'Are you sure to delete this notice?',
             subtitle: 'Changes are irrevisible',
         })
     }
 
     const isConfirm = async () => {
-        let deleteNotice: DeleteNotice = {
-            noticeGuid: selectedNoticeGuid,
+        if(!selectedNoticeGuid) {
+            return
         }
-        const response = await deleteNoticeById(deleteNotice)
+        const response = await deleteNoticeByIdAction({
+            noticeGuid: selectedNoticeGuid,
+        })
         if (response.success) {
             window.location.reload()
-        } else {
-            console.log(response.msg)
         }
     }
 
@@ -238,10 +221,10 @@ const NoticeManagementPage = () => {
             </div>
             <div className="mt-5 w-full">
                 <CustomTable
-                    data={noticeHistory}
+                    data={notices}
                     columns={columns}
                     onView={(row: Row<any>) => {}}
-                    totalRecords={totalRecords}
+                    totalRecords={totalNotices}
                     recordsPerPage={10}
                     currentPage={page}
                     setCurrentPage={setPage}

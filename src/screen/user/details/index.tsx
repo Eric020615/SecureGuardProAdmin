@@ -7,7 +7,7 @@ import {
 import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
 import { GenderConst, RoleConst, RoleEnum } from '@config/constant/user'
-import { useApplication } from '@zustand/index'
+import { useApplication } from '@zustand/application/useApplication'
 import {
     GetUserDetails,
     ResidentInformation,
@@ -47,57 +47,29 @@ const RenderSystemAdminInformation = (roleInfo: SystemAdminInformation) => (
 const UserDetailsPage = () => {
     const params = useParams<{ userId: string }>()
     const router = useRouter()
-    const [userDetails, setUserDetails] = useState<GetUserDetails>({} as GetUserDetails)
-    const { getUserDetails, activateUserByIdAction, deactivateUserByIdAction } =
-        useUserManagement()
-    const { setIsLoading } = useApplication()
+    const {
+        userDetails,
+        getUserDetailsAction,
+        activateUserByIdAction,
+        deactivateUserByIdAction,
+    } = useUserManagement()
     const getUserDetailsById = async () => {
-        try {
-            setIsLoading(true)
-            const response = await getUserDetails(params.userId)
-            if (response.success) {
-                setUserDetails(response.data)
-            } else {
-                console.log(response.msg)
-            }
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setIsLoading(false)
-        }
+        await getUserDetailsAction(params.userId)
     }
     useEffect(() => {
         getUserDetailsById()
     }, [])
 
     const activateUserById = async () => {
-        try {
-            setIsLoading(true)
-            const response = await activateUserByIdAction(userDetails.userGuid)
-            if (response.success) {
-                window.location.reload()
-            } else {
-                console.log(response.msg)
-            }
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setIsLoading(false)
+        const response = await activateUserByIdAction(userDetails.userGuid)
+        if (response.success) {
+            window.location.reload()
         }
     }
     const deactivateUserById = async () => {
-        try {
-            setIsLoading(true)
-            const response = await deactivateUserByIdAction(userDetails.userGuid)
-            if (response.success) {
-                window.location.reload()
-            } else {
-                console.log(response.msg)
-            }
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setIsLoading(false)
+        const response = await deactivateUserByIdAction(userDetails.userGuid)
+        if (response.success) {
+            window.location.reload()
         }
     }
 

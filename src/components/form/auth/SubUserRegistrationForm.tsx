@@ -17,7 +17,7 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@zustand/auth/useAuth'
 import { UserSignUpFormDto } from '@zustand/types'
 
-const signUpSchema = z
+const subUserRegistrationSchema = z
     .object({
         email: z.string().email().min(1, { message: 'Email is required' }),
         password: z.string().min(1, { message: 'Password is required' }),
@@ -28,27 +28,31 @@ const signUpSchema = z
         path: ['confirmPassword'], // set the path of the error
     })
 
-const SignUpForm = () => {
+interface SubUserRegistrationFormProps {
+    email: string
+}
+
+const SubUserRegistrationForm = ({ email }: SubUserRegistrationFormProps) => {
     const router = useRouter()
-    const { signUpAction, setTempTokenAction } = useAuth()
-    const form = useForm<z.infer<typeof signUpSchema>>({
-        resolver: zodResolver(signUpSchema),
+    const { signUpAction } = useAuth()
+    const form = useForm<z.infer<typeof subUserRegistrationSchema>>({
+        resolver: zodResolver(subUserRegistrationSchema),
         defaultValues: {
-            email: '',
+            email: email,
             password: '',
             confirmPassword: '',
         },
     })
 
-    const onSubmit = async (values: z.infer<typeof signUpSchema>) => {
+    const onSubmit = async (values: z.infer<typeof subUserRegistrationSchema>) => {
         const response = await signUpAction({
             email: values.email,
             password: values.password,
             confirmPassword: values.confirmPassword,
         } as UserSignUpFormDto)
         if (response.success) {
-            setTempTokenAction(response.data)
-            router.replace('/user-information')
+            // setTempTokenAction(response.data)
+            // router.replace('/user-information')
         }
     }
 
@@ -58,7 +62,7 @@ const SignUpForm = () => {
                 <Link href="/" className="font-bold text-4xl">
                     Secure Guard Pro
                 </Link>
-                <h1 className="text-3xl">Sign Up</h1>
+                <h1 className="text-3xl">Sub-User Registration</h1>
             </header>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -69,7 +73,12 @@ const SignUpForm = () => {
                             <FormItem>
                                 <FormLabel>Email</FormLabel>
                                 <FormControl>
-                                    <Input type="email" placeholder="Email" {...field} />
+                                    <Input
+                                        type="email"
+                                        placeholder="Email"
+                                        {...field}
+                                        disabled={true}
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -118,4 +127,4 @@ const SignUpForm = () => {
     )
 }
 
-export default SignUpForm
+export default SubUserRegistrationForm

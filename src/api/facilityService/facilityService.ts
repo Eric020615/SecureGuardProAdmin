@@ -63,7 +63,7 @@ export const getBookingHistory = async (
     }
 }
 
-export const cancelBooking = async (cancelBookingForm: CancelBooking): Promise<any> => {
+export const cancelBooking = async (cancelBookingForm: CancelBooking): Promise<IResponse<any>> => {
     try {
         const cookieValue = await getCookies('token')
         const [success, response] = await GlobalHandler({

@@ -10,15 +10,14 @@ import {
 } from '@components/ui/dialog'
 import { useModal } from '@zustand/modal/useModal'
 
-
 interface CustomDialogProps {
-	customConfirmButtonPress: () => void
+	customConfirmButtonPress?: () => void
 }
 
 const CustomDialog = ({customConfirmButtonPress} : CustomDialogProps) => {
-    const {isOpen, toogleModal, content} = useModal();
+    const {isOpen, toogleModalAction, content} = useModal();
     return (
-        <Dialog open={isOpen} onOpenChange={toogleModal}>
+        <Dialog open={isOpen} onOpenChange={toogleModalAction}>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>{content.title}</DialogTitle>
@@ -28,8 +27,8 @@ const CustomDialog = ({customConfirmButtonPress} : CustomDialogProps) => {
                     <Button
                         className="flex justify-center items-center"
                         onClick={() => {
-                            customConfirmButtonPress()
-                            toogleModal()
+                            customConfirmButtonPress?.()
+                            toogleModalAction()
                         }}
                     >
                         Confirm

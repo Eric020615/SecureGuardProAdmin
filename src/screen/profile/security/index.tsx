@@ -8,7 +8,7 @@ import {
 } from '@components/ui/card'
 import { Button } from '@components/ui/button'
 import { Camera } from 'lucide-react'
-import FaceIDDialog from '@components/dialog/FaceIDDialog.tsx'
+import FaceIDDialog from '@components/dialog/FaceIdDialog'
 import CustomDialog from '@components/dialog/CustomDialog'
 
 const SecurityPage = () => {

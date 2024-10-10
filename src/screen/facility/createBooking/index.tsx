@@ -22,8 +22,7 @@ import CustomDatePicker from '@components/datePicker/DatePicker'
 import { useFacility } from '@zustand/facility/useFacility'
 import { getTodayDate, getUTCDateString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
-import { useApplication } from '@zustand/index'
-import { SpaceAvailabilityDto } from '@zustand/types'
+import CustomDialog from '@components/dialog/CustomDialog'
 
 const formSchema = z
     .object({
@@ -52,11 +51,9 @@ const formSchema = z
 
 const CreateBookingPage = () => {
     const router = useRouter()
-    const { submitBooking, checkAvailabilitySlotAction } = useFacility()
-    const { setIsLoading } = useApplication()
+    const { submitBookingAction, checkAvailabilitySlotAction, availabilitySlot } = useFacility()
     const [facility, setFacility] = useState('')
     const [date, setDate] = useState<Date | undefined>(getTodayDate())
-    const [availableSlots, setAvailableSlots] = useState<SpaceAvailabilityDto[]>([]) // Store available slots/courts
     const [slotId, setSlotId] = useState('') // Store selected slot
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -85,33 +82,24 @@ const CreateBookingPage = () => {
     }, [date])
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        try {
-            setIsLoading(true)
-            let startTimeSplit = values.startTime.split(':')
-            let endTimeSplit = values.endTime.split(':')
-            let startDate = moment(values.date)
-                .hour(parseInt(startTimeSplit[0]))
-                .minute(parseInt(startTimeSplit[1]))
-            let endDate = moment(values.date)
-                .hour(parseInt(endTimeSplit[0]))
-                .minute(parseInt(endTimeSplit[1]))
-            const response = await submitBooking({
-                facilityId: values.facilityId,
-                bookedBy: values.user,
-                startDate: getUTCDateString(startDate.toDate(), ITimeFormat.dateTime),
-                endDate: getUTCDateString(endDate.toDate(), ITimeFormat.dateTime),
-                numOfGuest: parseInt(values.numOfGuest),
-                spaceId: values.spaceId,
-            })
-            if (response.success) {
-                router.push('/facility')
-            } else {
-                console.log(response.msg)
-            }
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setIsLoading(false)
+        let startTimeSplit = values.startTime.split(':')
+        let endTimeSplit = values.endTime.split(':')
+        let startDate = moment(values.date)
+            .hour(parseInt(startTimeSplit[0]))
+            .minute(parseInt(startTimeSplit[1]))
+        let endDate = moment(values.date)
+            .hour(parseInt(endTimeSplit[0]))
+            .minute(parseInt(endTimeSplit[1]))
+        const response = await submitBookingAction({
+            facilityId: values.facilityId,
+            bookedBy: values.user,
+            startDate: getUTCDateString(startDate.toDate(), ITimeFormat.dateTime),
+            endDate: getUTCDateString(endDate.toDate(), ITimeFormat.dateTime),
+            numOfGuest: parseInt(values.numOfGuest),
+            spaceId: values.spaceId,
+        })
+        if (response.success) {
+            router.push('/facility')
         }
     }
 
@@ -131,25 +119,11 @@ const CreateBookingPage = () => {
                 let endDate = moment(date)
                     .hour(parseInt(endTimeSplit[0]))
                     .minute(parseInt(endTimeSplit[1]))
-
-                try {
-                    setIsLoading(true)
-                    const response = await checkAvailabilitySlotAction(
-                        facilityId,
-                        getUTCDateString(startDate.toDate(), ITimeFormat.dateTime),
-                        getUTCDateString(endDate.toDate(), ITimeFormat.dateTime)
-                    )
-                    if (response.success) {
-                        console.log(response)
-                        setAvailableSlots(response.data) // Set available slots
-                    } else {
-                        console.log(response.msg) // Log any error message from response
-                    }
-                } catch (error) {
-                    console.log('Error fetching available slots', error) // Catch and log any errors
-                } finally {
-                    setIsLoading(false)
-                }
+                await checkAvailabilitySlotAction(
+                    facilityId,
+                    getUTCDateString(startDate.toDate(), ITimeFormat.dateTime),
+                    getUTCDateString(endDate.toDate(), ITimeFormat.dateTime)
+                )
             }
             fetchAvailableSlots()
         }
@@ -157,6 +131,7 @@ const CreateBookingPage = () => {
 
     return (
         <>
+            <CustomDialog />
             <div className="flex flex-row justify-between">
                 <h3 className="text-3xl font-bold text-black">Create new booking</h3>
             </div>
@@ -260,7 +235,7 @@ const CreateBookingPage = () => {
                                         <CustomSelect
                                             title="Select a slot"
                                             selectLabel="Slot"
-                                            selectItem={availableSlots.map((x) => {
+                                            selectItem={availabilitySlot.map((x) => {
                                                 return {
                                                     label: x.spaceName,
                                                     value: x.spaceId,

@@ -1,6 +1,7 @@
 import { create } from "zustand"
 import { CreateUserFaceAuthDto } from "../types"
 import { uploadUserFaceAuth } from "@api/faceAuthService/faceAuthService";
+import { generalAction } from '@zustand/application/useApplication'
 
 interface faceAuthState {
     error: string | null;
@@ -8,17 +9,24 @@ interface faceAuthState {
     setError: (error: string | null) => void;
 }
 
-export const useFaceAuth = create<faceAuthState>((set) => ({
-    error: null,
-    setError: (error) => set({ error }),
-    uploadUserFaceAuthAction: async (createUserFaceAuthDto: CreateUserFaceAuthDto) => {
-        try {
-            set({ error: null });
-            const response = await uploadUserFaceAuth(createUserFaceAuthDto);
-            return response;
-        } catch (error: any) {
-            console.log(error);
-            set({ error: error.msg });
-        }
-    }
+interface State {}
+
+interface Actions {
+	uploadUserFaceAuthAction: (createUserFaceAuthDto: CreateUserFaceAuthDto) => Promise<any>
+}
+
+export const useFaceAuth = create<State & Actions>(() => ({
+	uploadUserFaceAuthAction: async (createUserFaceAuthDto: CreateUserFaceAuthDto) => {
+		return generalAction(
+			async () => {
+				const response = await uploadUserFaceAuth(createUserFaceAuthDto)
+				if(!response.success){
+					throw new Error(response.msg)
+				}
+				return response
+			},
+			'Face authentication successfully uploaded!', // Custom success message
+			'Failed to upload face authentication. Please try again.', // Custom error message
+		)
+	},
 }))

@@ -5,80 +5,92 @@ import {
     createBooking,
     getBookingHistory,
 } from '@api/facilityService/facilityService'
-import { CancelBooking, CreateFacilityBooking } from '../types'
+import { CancelBooking, CreateFacilityBooking, GetFacilityBooking, SpaceAvailabilityDto } from '../types'
+import { generalAction } from '@zustand/application/useApplication'
 import { IResponse } from '@api/globalHandler'
 
-interface facilityState {
-    isLoading: boolean
-    error: string | null
-    submitBooking: (bookingForm: CreateFacilityBooking) => Promise<any>
-    getBookingHistory: (page: number, limit: number) => Promise<IResponse<any>>
-    cancelBooking: (cancelBookingForm: CancelBooking) => Promise<any>
-    checkAvailabilitySlotAction: (
-        facilityId: string,
-        startDate: string,
-        endDate: string
-    ) => Promise<any>
-    setLoading: (isLoading: boolean) => void
-    setError: (error: string | null) => void
+
+interface State {
+	availabilitySlot: SpaceAvailabilityDto[]
+	facilityBookingHistory: GetFacilityBooking[]
+	totalFacilityBookingHistory: number
 }
 
-export const useFacility = create<facilityState>((set) => ({
-    isLoading: false,
-    error: null,
-    setLoading: (isLoading) => set({ isLoading }),
-    setError: (error) => set({ error }),
-    submitBooking: async (bookingForm: CreateFacilityBooking) => {
-        try {
-            set({ isLoading: true, error: null })
-            const response = await createBooking(bookingForm)
-            return response
-        } catch (error: any) {
-            console.log(error)
-            set({ error: error.msg })
-        } finally {
-            set({ isLoading: false })
-        }
-    },
-    getBookingHistory: async (page: number, limit: number) => {
-        let response = {} as IResponse<any>
-        try {
-            set({ isLoading: true, error: null })
-            response = await getBookingHistory(page, limit)
-            console.log(response)
-            return response
-        } catch (error: any) {
-            set({ error: error.msg })
-        } finally {
-            return response
-        }
-    },
-    cancelBooking: async (cancelBookingForm: CancelBooking) => {
-        try {
-            set({ isLoading: true, error: null })
-            const response = await cancelBooking(cancelBookingForm)
-            return response
-        } catch (error: any) {
-            console.log(error)
-            set({ error: error.msg })
-        } finally {
-            set({ isLoading: false })
-        }
-    },
-    checkAvailabilitySlotAction: async (
-        facilityId: string,
-        startDate: string,
-        endDate: string
-    ) => {
-        try {
-            set({ isLoading: true, error: null })
-            const response = await checkAvailabilitySlot(facilityId, startDate, endDate)
-            return response
-        } catch (error: any) {
-            console.log(error)
-            set({ error: error.msg })
-        } finally {
-            set({ isLoading: false })
-        }
-    },
+interface Actions {
+	submitBookingAction: (facilityBookingForm: CreateFacilityBooking) => Promise<any>
+	getFacilityBookingHistoryAction: (page: number, limit: number) => Promise<any>
+	resetFacilityBookingHistoryAction: () => void
+    cancelBookingAction: (cancelBookingForm: CancelBooking) => Promise<IResponse<any>>
+	checkAvailabilitySlotAction: (
+		facilityId: string,
+		startDate: string,
+		endDate: string,
+	) => Promise<any>
+}
+
+export const useFacility = create<State & Actions>((set) => ({
+	availabilitySlot: [],
+	facilityBookingHistory: [],
+	totalFacilityBookingHistory: 0,
+	submitBookingAction: async (facilityBookingForm: CreateFacilityBooking) => {
+		return generalAction(
+			async () => {
+				const response = await createBooking(facilityBookingForm)
+				if(!response.success){
+					throw new Error(response.msg)
+				}
+				return response
+			},
+			'Booking successfully submitted!',
+			'Failed to submit booking. Please try again.',
+		)
+	},
+	getFacilityBookingHistoryAction: async (page: number, limit: number) => {
+		return generalAction(
+			async () => {
+				const response = await getBookingHistory(page, limit)
+				if(!response.success){
+					throw new Error(response.msg)
+				}
+				set((state) => ({
+					facilityBookingHistory: [...state.facilityBookingHistory, ...response.data.list],
+				}))
+				set({ totalFacilityBookingHistory: response.data.count })
+				return response
+			},
+			'',
+			'Failed to retrieve booking history. Please try again.',
+		)
+	},
+	resetFacilityBookingHistoryAction() {
+		set({ facilityBookingHistory: [], totalFacilityBookingHistory: 0 })
+	},
+	cancelBookingAction: async (cancelBookingForm: CancelBooking) => {
+		return generalAction(
+			async () => {
+				const response = await cancelBooking(cancelBookingForm)
+				if(!response.success){
+					throw new Error(response.msg)
+				}
+				return response
+			},
+			'Booking successfully canceled!',
+			'Failed to cancel booking. Please try again.',
+		)
+	},
+
+	checkAvailabilitySlotAction: async (facilityId: string, startDate: string, endDate: string) => {
+		return generalAction(
+			async () => {
+				const response = await checkAvailabilitySlot(facilityId, startDate, endDate)
+				if(!response.success){
+					throw new Error(response.msg)
+				}
+				set({ availabilitySlot: response.data })
+				return response
+			},
+			'',
+			'Failed to check slot availability. Please try again.',
+		)
+	},
 }))

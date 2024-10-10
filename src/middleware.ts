@@ -11,7 +11,8 @@ export const middleware = async (request: NextRequest) => {
       !currentToken &&
       !request.nextUrl.pathname.startsWith("/sign-in") &&
       !request.nextUrl.pathname.startsWith("/sign-up") &&
-      !request.nextUrl.pathname.startsWith("/user-information")
+      !request.nextUrl.pathname.startsWith("/user-information") && 
+      !request.nextUrl.pathname.startsWith("/sub-user")
     ) {
       return Response.redirect(new URL("/sign-in", request.url));
     }

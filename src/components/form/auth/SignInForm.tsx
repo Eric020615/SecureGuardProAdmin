@@ -16,7 +16,6 @@ import { Input } from '@components/ui/input'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@zustand/auth/useAuth'
 import { SignInFormDto } from '@zustand/types'
-import { useApplication } from '@zustand/index'
 
 const signInSchema = z.object({
     email: z.string().email().min(1, { message: 'Email is required' }),
@@ -25,8 +24,7 @@ const signInSchema = z.object({
 
 const SignInForm = () => {
     const router = useRouter()
-    const { signIn } = useAuth()
-    const { setIsLoading } = useApplication()
+    const { signInAction } = useAuth()
 
     const form = useForm<z.infer<typeof signInSchema>>({
         resolver: zodResolver(signInSchema),
@@ -37,22 +35,12 @@ const SignInForm = () => {
     })
 
     const onSubmit = async (values: z.infer<typeof signInSchema>) => {
-        try {
-            setIsLoading(true)
-            const response = await signIn({
-                email: values.email,
-                password: values.password,
-            } as SignInFormDto)
-            if (response.success) {
-                router.replace('/')
-            } else {
-                console.log(response.msg)
-            }
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setIsLoading(false)
-        }
+        await signInAction({
+            email: values.email,
+            password: values.password,
+        } as SignInFormDto)
+        router.replace('/')
+        form.reset()
     }
 
     return (

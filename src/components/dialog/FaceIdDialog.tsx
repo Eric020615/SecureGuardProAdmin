@@ -18,9 +18,7 @@ import {
 } from '@components/ui/dialog'
 import { Camera, Repeat, Upload } from 'lucide-react'
 import { useFaceAuth } from '@zustand/faceAuth/useFaceAuth'
-import { useApplication } from '@zustand/index'
 import { getBase64FromImage } from '@lib/file'
-import { useModal } from '@zustand/modal/useModal'
 
 interface FaceIDDialogProps {
     open: boolean
@@ -32,8 +30,6 @@ const FaceIDDialog = ({ open, setOpen }: FaceIDDialogProps) => {
     const webcamRef = useRef<Webcam>(null)
     const [faceImage, setFaceImage] = useState<string>()
     const { uploadUserFaceAuthAction } = useFaceAuth()
-    const { setIsLoading } = useApplication()
-    const { setCustomConfirmModal } = useModal();
 
     const capture = useCallback(() => {
         if (!webcamRef.current) return
@@ -47,33 +43,12 @@ const FaceIDDialog = ({ open, setOpen }: FaceIDDialogProps) => {
     }
 
     const uploadImage = async () => {
-        try {
-            setIsLoading(true)
-            if (faceImage == null) return
-            let base64 = await getBase64FromImage(faceImage)
-            const response = await uploadUserFaceAuthAction({
-                faceData: base64
-            })
-            if (response.success) {
-                setCustomConfirmModal({
-                    title: 'Success',
-                    subtitle: 'Image uploaded successfully',
-                })
-            } else {
-                setCustomConfirmModal({
-                    title: 'Error',
-                    subtitle: 'Failed to upload image',
-                })
-            }
-        } catch (error) {
-            setCustomConfirmModal({
-                title: 'Error',
-                subtitle: 'Failed to upload image',
-            })
-        } finally {
-            setIsLoading(false)
-            setOpen(false)
-        }
+        if (faceImage == null) return
+        let base64 = await getBase64FromImage(faceImage)
+        await uploadUserFaceAuthAction({
+            faceData: base64
+        })
+        setOpen(false)
     }
 
     useEffect(() => {

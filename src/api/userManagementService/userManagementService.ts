@@ -3,7 +3,7 @@ import GlobalHandler, { IResponse } from '../globalHandler'
 import { listUrl } from '../listUrl'
 import { GetUser, GetUserDetails } from '@zustand/types'
 
-export const getUserList = async (isActive: boolean, page: number, limit: number): Promise<IResponse<GetUser[]>> => {
+export const getUserList = async (isActive: boolean, page: number, limit: number): Promise<IResponse<any>> => {
     try {
         const cookieValue = await getCookies('token')
         const [success, response] = await GlobalHandler({

@@ -12,8 +12,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useUser } from '@zustand/user/useUser'
-import { useApplication } from '@zustand/index'
-import { GetUserProfileByIdDto } from '@zustand/types'
 import Avatar from 'react-avatar'
 import { GenderConst, GenderEnum, RoleConst } from '@config/constant/user'
 import { Badge } from '@components/ui/badge'
@@ -44,107 +42,75 @@ const PhoneNumberInput = forwardRef<HTMLInputElement>((props, ref) => {
 })
 
 const MyProfilePage = () => {
-    const { getUserProfileByIdAction, editUserProfileByIdAction } = useUser()
-    const [profileDetails, setProfileDetails] = useState<GetUserProfileByIdDto>()
+    const { getUserProfileByIdAction, editUserProfileByIdAction, userProfile } = useUser()
     const [pageMode, setPageMode] = useState<'edit' | 'view'>('view')
-    const { setIsLoading } = useApplication()
     useEffect(() => {
         getData()
     }, [])
     const form = useForm<z.infer<typeof profileSchema>>({
         resolver: zodResolver(profileSchema),
         defaultValues: {
-            firstName: profileDetails?.firstName,
-            lastName: profileDetails?.lastName,
-            userName: profileDetails?.userName,
-            phoneNumber: profileDetails?.contactNumber,
-            gender: profileDetails?.gender,
-            dateOfBirth: profileDetails?.dateOfBirth,
+            firstName: userProfile?.firstName,
+            lastName: userProfile?.lastName,
+            userName: userProfile?.userName,
+            phoneNumber: userProfile?.contactNumber,
+            gender: userProfile?.gender,
+            dateOfBirth: userProfile?.dateOfBirth,
         },
     })
     const getData = async () => {
-        try {
-            setIsLoading(true)
-            const response = await getUserProfileByIdAction()
-            if (response.success) {
-                setProfileDetails(response.data)
-            } else {
-                console.log(response.msg)
-            }
-            setIsLoading(false)
-        } catch (error) {
-            setIsLoading(false)
-        }
+        await getUserProfileByIdAction()
     }
 
     const onSubmit = async (values: z.infer<typeof profileSchema>) => {
-        try {
-            setIsLoading(true)
-            const response = await editUserProfileByIdAction({
-                email: profileDetails?.email ? profileDetails.email : '',
-                firstName: values.firstName,
-                lastName: values.lastName,
-                userName: values.userName,
-                contactNumber: values.phoneNumber,
-                gender: values.gender as GenderEnum,
-                dateOfBirth: convertLocalDateStringToUTCString(
-                    values.dateOfBirth,
-                    ITimeFormat.date
-                ),
-            })
-            if (response.success) {
-                // setCustomFailedModal({
-                //     title: 'Account updated successfully',
-                //     subtitle: 'Please wait for system admin approval to log in',
-                // })
-            } else {
-                // setCustomFailedModal({
-                //     title: 'Account updated failed',
-                //     subtitle: 'Please contact our support team for assistance',
-                // })
-            }
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setIsLoading(false)
+        const response = await editUserProfileByIdAction({
+            email: userProfile?.email ? userProfile.email : '',
+            firstName: values.firstName,
+            lastName: values.lastName,
+            userName: values.userName,
+            contactNumber: values.phoneNumber,
+            gender: values.gender as GenderEnum,
+            dateOfBirth: convertLocalDateStringToUTCString(
+                values.dateOfBirth,
+                ITimeFormat.date
+            ),
+        })
+        if (response.success) {
             setPageMode('view')
             window.location.reload()
         }
     }
     useEffect(() => {
-        form.setValue(
-            'firstName',
-            profileDetails?.firstName ? profileDetails.firstName : ''
-        )
-        form.setValue('lastName', profileDetails?.lastName ? profileDetails.lastName : '')
-        form.setValue('userName', profileDetails?.userName ? profileDetails.userName : '')
+        form.setValue('firstName', userProfile?.firstName ? userProfile.firstName : '')
+        form.setValue('lastName', userProfile?.lastName ? userProfile.lastName : '')
+        form.setValue('userName', userProfile?.userName ? userProfile.userName : '')
         form.setValue(
             'phoneNumber',
-            profileDetails?.contactNumber ? profileDetails.contactNumber : ''
+            userProfile?.contactNumber ? userProfile.contactNumber : ''
         )
-        form.setValue('gender', profileDetails?.gender ? profileDetails.gender : '')
+        form.setValue('gender', userProfile?.gender ? userProfile.gender : '')
         form.setValue(
             'dateOfBirth',
-            profileDetails?.dateOfBirth
+            userProfile?.dateOfBirth
                 ? convertUTCStringToLocalDateString(
-                      profileDetails.dateOfBirth,
+                      userProfile.dateOfBirth,
                       ITimeFormat.date
                   )
                 : ''
         )
-    }, [profileDetails && pageMode === 'edit'])
+    }, [userProfile && pageMode === 'edit'])
 
     return (
-        <div className='h-full'>
+        <div className="h-full">
             <div className="grid gap-5">
                 {pageMode === 'view' ? (
                     <div className="grid gap-4 my-2">
                         <Card className="p-4 grid gap-2">
                             <div>
-                                {profileDetails?.userName ? (
+                                {userProfile?.userName ? (
                                     <Avatar
                                         className="text-[32px]"
-                                        name={profileDetails?.userName}
+                                        name={userProfile?.userName}
                                         round
                                         size="110"
                                         color="#7078C0"
@@ -162,11 +128,11 @@ const MyProfilePage = () => {
                             <div className="grid gap-1 px-2">
                                 <div className="flex items-center gap-3">
                                     <p className="text-2xl font-bold">
-                                        {profileDetails?.userName
-                                            ? profileDetails.userName
+                                        {userProfile?.userName
+                                            ? userProfile.userName
                                             : ''}
                                     </p>
-                                    {profileDetails?.isActive ? (
+                                    {userProfile?.isActive ? (
                                         <Badge className="w-[60px] bg-green-500 flex justify-center">
                                             Active
                                         </Badge>
@@ -177,9 +143,7 @@ const MyProfilePage = () => {
                                     )}
                                 </div>
                                 <p className="text-sm">
-                                    {profileDetails?.role
-                                        ? RoleConst[profileDetails.role]
-                                        : ''}
+                                    {userProfile?.role ? RoleConst[userProfile.role] : ''}
                                 </p>
                                 <Button
                                     type="button"
@@ -203,8 +167,8 @@ const MyProfilePage = () => {
                                         First Name:
                                     </span>
                                     <span className="text-sm">
-                                        {profileDetails?.firstName
-                                            ? profileDetails.firstName
+                                        {userProfile?.firstName
+                                            ? userProfile.firstName
                                             : ''}
                                     </span>
                                 </div>
@@ -213,17 +177,15 @@ const MyProfilePage = () => {
                                         Last Name:
                                     </span>
                                     <span className="text-sm">
-                                        {profileDetails?.lastName
-                                            ? profileDetails.lastName
+                                        {userProfile?.lastName
+                                            ? userProfile.lastName
                                             : ''}
                                     </span>
                                 </div>
                                 <div className="flex flex-col gap-1">
                                     <span className="text-sm font-semibold">Email:</span>
                                     <span className="text-sm">
-                                        {profileDetails?.email
-                                            ? profileDetails.email
-                                            : ''}
+                                        {userProfile?.email ? userProfile.email : ''}
                                     </span>
                                 </div>
                                 <div className="flex flex-col gap-1">
@@ -231,16 +193,16 @@ const MyProfilePage = () => {
                                         Contact Number:
                                     </span>
                                     <span className="text-sm">
-                                        {profileDetails?.contactNumber
-                                            ? profileDetails.contactNumber
+                                        {userProfile?.contactNumber
+                                            ? userProfile.contactNumber
                                             : ''}
                                     </span>
                                 </div>
                                 <div className="flex flex-col gap-1">
                                     <span className="text-sm font-semibold">Gender:</span>
                                     <span className="text-sm">
-                                        {profileDetails?.gender
-                                            ? GenderConst[profileDetails.gender]
+                                        {userProfile?.gender
+                                            ? GenderConst[userProfile.gender]
                                             : ''}
                                     </span>
                                 </div>
@@ -249,8 +211,11 @@ const MyProfilePage = () => {
                                         Birthday:
                                     </span>
                                     <span className="text-sm">
-                                        {profileDetails?.dateOfBirth
-                                            ? convertUTCStringToLocalDateString(profileDetails.dateOfBirth, ITimeFormat.date)
+                                        {userProfile?.dateOfBirth
+                                            ? convertUTCStringToLocalDateString(
+                                                  userProfile.dateOfBirth,
+                                                  ITimeFormat.date
+                                              )
                                             : ''}
                                     </span>
                                 </div>

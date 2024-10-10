@@ -1,74 +1,94 @@
-import { create } from "zustand"
-import { GetUser, GetUserDetails } from "../types";
-import { activateUserById, deactivateUserById, getUserDetailsById, getUserList } from "@api/userManagementService/userManagementService";
-import { IResponse } from "@api/globalHandler";
+import { create } from 'zustand'
+import { GetUser, GetUserDetails } from '../types'
+import {
+    activateUserById,
+    deactivateUserById,
+    getUserDetailsById,
+    getUserList,
+} from '@api/userManagementService/userManagementService'
+import { IResponse } from '@api/globalHandler'
+import { generalAction } from '@zustand/application/useApplication'
 
-interface userManagementState {
-    isLoading: boolean;
-    error: string | null;
-    getUserList: (isActive: boolean, page: number, limit: number) => Promise<IResponse<any>>;
-    getUserDetails: (userGuid: string) => Promise<IResponse<GetUserDetails>>;
-    activateUserByIdAction: (userGuid: string) => Promise<IResponse<any>>;
-    deactivateUserByIdAction: (userGuid: string) => Promise<IResponse<any>>;
-    setLoading: (isLoading: boolean) => void;
-    setError: (error: string | null) => void;
+interface State {
+    userDetails: GetUserDetails
+    userList: GetUser[]
+    totalUserList: number
 }
 
-export const useUserManagement = create<userManagementState>((set) => ({
-    isLoading: false,
-    error: null,
-    setLoading: (isLoading) => set({ isLoading }),
-    setError: (error) => set({ error }),
-    getUserList: async (isActive: boolean, page: number, limit: number) => {
-        let response : IResponse<GetUser[]> = {} as IResponse<any>;
-        try {
-            set({ isLoading: true, error: null });
-            response = await getUserList(isActive, page, limit);
-        } catch (error: any) {
-            console.log(error);
-            set({ error: error.msg });
-        } finally {
-            set({ isLoading: false })
-            return response;
-        }
+interface Actions {
+    getUserListAction: (
+        isActive: boolean,
+        page: number,
+        limit: number
+    ) => Promise<IResponse<any>>
+    resetUserListAction: () => void
+    getUserDetailsAction: (userGuid: string) => Promise<IResponse<GetUserDetails>>
+    activateUserByIdAction: (userGuid: string) => Promise<IResponse<any>>
+    deactivateUserByIdAction: (userGuid: string) => Promise<IResponse<any>>
+}
+
+export const useUserManagement = create<State & Actions>((set) => ({
+    userDetails: {} as GetUserDetails,
+    userList: [],
+    totalUserList: 0,
+    getUserListAction: async (isActive: boolean, page: number, limit: number) => {
+        return generalAction(
+            async () => {
+                const response = await getUserList(isActive, page, limit)
+                if (!response.success) {
+                    throw new Error(response.msg)
+                }
+                set((state) => ({
+                    userList: [...state.userList, ...response.data.list],
+                }))
+                set({ totalUserList: response.data.count })
+                return response
+            },
+            '',
+            'Failed to retrieve user list. Please try again.'
+        )
     },
-    getUserDetails: async (userGuid: string) => {
-        let response : IResponse<GetUserDetails> = {} as IResponse<GetUserDetails>;
-        try {
-            set({ isLoading: true, error: null });
-            response = await getUserDetailsById(userGuid);
-        } catch (error: any) {
-            console.log(error);
-            set({ error: error.msg });
-        } finally {
-            set({ isLoading: false })
-            return response;
-        }
+    resetUserListAction() {
+        set({ userList: [], totalUserList: 0 })
+    },
+    getUserDetailsAction: async (userGuid: string) => {
+        return generalAction(
+            async () => {
+                const response = await getUserDetailsById(userGuid)
+                if (!response.success) {
+                    throw new Error(response.msg)
+                }
+                set({ userDetails: response.data })
+                return response
+            },
+            '',
+            'Failed to retrieve user details. Please try again.'
+        )
     },
     activateUserByIdAction: async (userGuid: string) => {
-        let response : IResponse<any> = {} as IResponse<any>;
-        try {
-            set({ isLoading: true, error: null });
-            response = await activateUserById(userGuid);
-        } catch (error: any) {
-            console.log(error);
-            set({ error: error.msg });
-        } finally {
-            set({ isLoading: false })
-            return response;
-        }
+        return generalAction(
+            async () => {
+                const response = await activateUserById(userGuid)
+                if (!response.success) {
+                    throw new Error(response.msg)
+                }
+                return response
+            },
+            'User activated successfully!',
+            'Failed to activate user. Please try again.'
+        )
     },
     deactivateUserByIdAction: async (userGuid: string) => {
-        let response : IResponse<any> = {} as IResponse<any>;
-        try {
-            set({ isLoading: true, error: null });
-            response = await deactivateUserById(userGuid);
-        } catch (error: any) {
-            console.log(error);
-            set({ error: error.msg });
-        } finally {
-            set({ isLoading: false })
-            return response;
-        }
-    }
+        return generalAction(
+            async () => {
+                const response = await deactivateUserById(userGuid)
+                if (!response.success) {
+                    throw new Error(response.msg)
+                }
+                return response
+            },
+            'User deactivated successfully!',
+            'Failed to deactivate user. Please try again.'
+        )
+    },
 }))

@@ -20,7 +20,6 @@ import { useDropzone, FileWithPath } from 'react-dropzone'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 import { getBase64 } from '@lib/file'
-import { useApplication } from '@zustand/index'
 import { useUser } from '@zustand/user/useUser'
 import { getUTCDateString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
@@ -46,7 +45,6 @@ const PhoneNumberInput = forwardRef<HTMLInputElement>((props, ref) => {
 const UserInformationForm = () => {
     const router = useRouter()
     const { tempToken } = useAuth()
-    const { setIsLoading } = useApplication()
     const { createUserAction } = useUser()
     const form = useForm<z.infer<typeof userInformationSchema>>({
         resolver: zodResolver(userInformationSchema),
@@ -59,48 +57,36 @@ const UserInformationForm = () => {
     }, [tempToken])
 
     const onSubmit = async (values: z.infer<typeof userInformationSchema>) => {
-        try {
-            setIsLoading(true)
-            const response = await createUserAction(
-                {
-                    firstName: values.firstName,
-                    lastName: values.lastName,
-                    userName: values.userName,
-                    contactNumber: values.phoneNumber,
-                    gender: values.gender as GenderEnum,
-                    staffId: values.staffId,
-                    dateOfBirth: getUTCDateString(
-                        new Date(values.dateOfBirth),
-                        ITimeFormat.date
-                    ),
-                    supportedFiles:
-                        values.files.length > 0
-                            ? await Promise.all(
-                                  values.files.map(async (file) => {
-                                      const base64 = await getBase64(file)
-                                      return base64
-                                  })
-                              )
-                            : [],
-                },
-                tempToken
-            )
-            if (response.success) {
-                // setCustomFailedModal({
-                //     title: 'Account updated successfully',
-                //     subtitle: 'Please wait for system admin approval to log in',
-                // })
-                router.replace('/sign-up')
-            } else {
-                // setCustomFailedModal({
-                //     title: 'Account updated failed',
-                //     subtitle: 'Please contact our support team for assistance',
-                // })
-            }
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setIsLoading(false)
+        const response = await createUserAction(
+            {
+                firstName: values.firstName,
+                lastName: values.lastName,
+                userName: values.userName,
+                contactNumber: values.phoneNumber,
+                gender: values.gender as GenderEnum,
+                staffId: values.staffId,
+                dateOfBirth: getUTCDateString(
+                    new Date(values.dateOfBirth),
+                    ITimeFormat.date
+                ),
+                supportedFiles:
+                    values.files.length > 0
+                        ? await Promise.all(
+                              values.files.map(async (file) => {
+                                  const base64 = await getBase64(file)
+                                  return base64
+                              })
+                          )
+                        : [],
+            },
+            tempToken
+        )
+        if (response.success) {
+            // setCustomFailedModal({
+            //     title: 'Account updated successfully',
+            //     subtitle: 'Please wait for system admin approval to log in',
+            // })
+            router.replace('/sign-up')
         }
     }
 

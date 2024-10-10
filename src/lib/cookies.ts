@@ -3,7 +3,6 @@
 import { cookies } from "next/headers"
 import { SignJWT, jwtVerify } from "jose"
 import { checkAuth } from "@api/authService/authService"
-import { useApplication } from "@zustand/index"
 
 const MAX_AGE = 60 * 60 * 24 * 30 // 30 days
 const ALGORITHM = 'HS256'

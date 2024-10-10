@@ -21,7 +21,6 @@ import {
     FormMessage,
 } from '@components/ui/form'
 import { useFacility } from '@zustand/facility/useFacility'
-import { useApplication } from '@zustand/index'
 
 interface CancelBookingDialogProps {
     bookingGuid: string
@@ -35,31 +34,25 @@ const formSchema = z.object({
     }),
 })
 
-const CancelBookingDialog = ({ bookingGuid, open, setOpen }: CancelBookingDialogProps) => {
+const CancelBookingDialog = ({
+    bookingGuid,
+    open,
+    setOpen,
+}: CancelBookingDialogProps) => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             cancelRemark: '',
         },
     })
-    const cancelBooking = useFacility((state) => state.cancelBooking)
-    const { setIsLoading } = useApplication()
+    const cancelBooking = useFacility((state) => state.cancelBookingAction)
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        try {
-            setIsLoading(true)
-            const response = await cancelBooking({
-                bookingGuid: bookingGuid,
-                cancelRemark: values.cancelRemark,
-            })
-            if (response.success) {
-                window.location.reload()
-            } else {
-                // add custom failed modal msg
-                console.log(response.msg)
-            }
-            setIsLoading(false)
-        } catch (error) {
-            setIsLoading(false)
+        const response = await cancelBooking({
+            bookingGuid: bookingGuid,
+            cancelRemark: values.cancelRemark,
+        })
+        if (response.success) {
+            window.location.reload()
         }
     }
 

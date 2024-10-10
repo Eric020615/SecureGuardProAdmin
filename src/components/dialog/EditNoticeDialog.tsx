@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect } from 'react'
 import { Button } from '@components/ui/button'
 import {
     Dialog,
@@ -21,8 +21,11 @@ import {
     FormMessage,
 } from '@components/ui/form'
 import { useNotice } from '@zustand/notice/useNotice'
-import { EditNotice, GetNoticeDetailsById } from '@zustand/types'
-import { useApplication } from '@zustand/index'
+import {
+    convertLocalDateStringToUTCString,
+    convertUTCStringToLocalDateString,
+} from '@lib/time'
+import { ITimeFormat } from '@config/constant'
 
 interface EditNoticeDialogProps {
     noticeGuid: string
@@ -46,8 +49,6 @@ const formSchema = z.object({
 })
 
 const EditNoticeDialog = ({ noticeGuid, open, setOpen }: EditNoticeDialogProps) => {
-    const [notice, setNotice] = useState<GetNoticeDetailsById>({} as GetNoticeDetailsById)
-    const [updateNotice, setUpdateNotice] = useState<EditNotice>({} as EditNotice)
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -57,27 +58,23 @@ const EditNoticeDialog = ({ noticeGuid, open, setOpen }: EditNoticeDialogProps) 
             endDate: '',
         },
     })
-    const { getNoticeById, updateNoticeById } = useNotice()
-    const { setIsLoading } = useApplication()
+    const { notice, getNoticeByIdAction, updateNoticeByIdAction } = useNotice()
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        try {
-            setIsLoading(true)
-            setUpdateNotice({
-                noticeGuid: noticeGuid,
-                title: values.title,
-                description: values.description,
-                startDate: values.startDate,
-                endDate: values.endDate,
-            })
-            const response = await updateNoticeById(updateNotice)
-            if (response.success) {
-                window.location.reload()
-            } else {
-                console.log(response.msg)
-            }
-            setIsLoading(false)
-        } catch (error) {
-            setIsLoading(false)
+        const response = await updateNoticeByIdAction({
+            noticeGuid: noticeGuid,
+            title: values.title,
+            description: values.description,
+            startDate: convertLocalDateStringToUTCString(
+                values.startDate,
+                ITimeFormat.dateTime
+            ),
+            endDate: convertLocalDateStringToUTCString(
+                values.endDate,
+                ITimeFormat.dateTime
+            ),
+        })
+        if (response.success) {
+            window.location.reload()
         }
     }
 
@@ -88,22 +85,27 @@ const EditNoticeDialog = ({ noticeGuid, open, setOpen }: EditNoticeDialogProps) 
     }, [noticeGuid])
 
     const getNotice = async (noticeGuid: string) => {
-        try {
-            setIsLoading(true)
-            const response = await getNoticeById(noticeGuid)
-            console.log(response)
-            setNotice(response.data)
-            setIsLoading(false)
-        } catch (error) {
-            setIsLoading(false)
-        }
+        await getNoticeByIdAction(noticeGuid)
     }
 
     useEffect(() => {
         form.setValue('title', notice.title ? notice.title : '')
         form.setValue('description', notice.description ? notice.description : '')
-        form.setValue('startDate', notice.startDate ? notice.startDate : '')
-        form.setValue('endDate', notice.endDate ? notice.endDate : '')
+        form.setValue(
+            'startDate',
+            notice.startDate
+                ? convertUTCStringToLocalDateString(
+                      notice.startDate,
+                      ITimeFormat.dateTime
+                  )
+                : ''
+        )
+        form.setValue(
+            'endDate',
+            notice.endDate
+                ? convertUTCStringToLocalDateString(notice.endDate, ITimeFormat.dateTime)
+                : ''
+        )
     }, [notice])
 
     return (

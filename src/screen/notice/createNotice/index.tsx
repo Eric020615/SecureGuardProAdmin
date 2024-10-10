@@ -18,7 +18,7 @@ import React from 'react'
 import { useNotice } from '@zustand/notice/useNotice'
 import { convertLocalDateStringToUTCString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
-import { useApplication } from '@zustand/index'
+import CustomDialog from '@components/dialog/CustomDialog'
 
 const formSchema = z
     .object({
@@ -42,8 +42,7 @@ const formSchema = z
 
 const CreateNoticePage = () => {
     const router = useRouter()
-    const { createNotice } = useNotice()
-    const { setIsLoading } = useApplication()
+    const { createNoticeAction } = useNotice()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -55,34 +54,26 @@ const CreateNoticePage = () => {
     })
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        try {
-            setIsLoading(true)
-            const response = await createNotice({
-                title: values.title,
-                description: values.description,
-                startDate: convertLocalDateStringToUTCString(
-                    values.startDate,
-                    ITimeFormat.dateTime
-                ),
-                endDate: convertLocalDateStringToUTCString(
-                    values.endDate,
-                    ITimeFormat.dateTime
-                ),
-            })
-            if (response.success) {
-                router.push('/notice')
-            } else {
-                console.log(response.msg)
-            }
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setIsLoading(false)
+        const response = await createNoticeAction({
+            title: values.title,
+            description: values.description,
+            startDate: convertLocalDateStringToUTCString(
+                values.startDate,
+                ITimeFormat.dateTime
+            ),
+            endDate: convertLocalDateStringToUTCString(
+                values.endDate,
+                ITimeFormat.dateTime
+            ),
+        })
+        if (response.success) {
+            router.push('/notice')
         }
     }
 
     return (
         <>
+            <CustomDialog />
             <div className="flex flex-row justify-between">
                 <h3 className="text-3xl font-bold text-black">Create new notice</h3>
             </div>

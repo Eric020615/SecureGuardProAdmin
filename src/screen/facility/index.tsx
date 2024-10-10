@@ -8,7 +8,6 @@ import { ArrowUpDown, MoreHorizontal } from 'lucide-react'
 import { Checkbox } from '@components/ui/checkbox'
 import {
     DropdownMenu,
-    DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
@@ -18,7 +17,6 @@ import {
 import CustomTable from '@components/table/Table'
 import { useFacility } from '@zustand/facility/useFacility'
 import { GetFacilityBooking } from '@zustand/types'
-import { FacilityName } from '@config/constant/facility'
 import { useRouter } from 'next/navigation'
 import CancelBookingDialog from '@components/dialog/CancelBookingDialog'
 import { Badge } from '@components/ui/badge'
@@ -28,17 +26,19 @@ import {
     getTodayDate,
 } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
-import { useApplication } from '@zustand/index'
+import CustomDialog from '@components/dialog/CustomDialog'
 
 const FacilityManagementPage = () => {
-    const { getBookingHistory } = useFacility()
-    const { isLoading, setIsLoading } = useApplication()
-    const [bookingHistory, setBookingHistory] = useState<GetFacilityBooking[]>([])
+    const {
+        facilityBookingHistory,
+        totalFacilityBookingHistory,
+        getFacilityBookingHistoryAction,
+        resetFacilityBookingHistoryAction,
+    } = useFacility()
     const [openCancelDialog, setOpenCancelDialog] = useState(false)
-    const [selectedBookingId, setSelectedBookingId] = useState('')
+    const [selectedBookingGuid, setSelectedBookingGuid] = useState('')
     const router = useRouter()
     const [page, setPage] = useState(0)
-    const [totalRecords, setTotalRecords] = useState(0)
 
     const columns: ColumnDef<GetFacilityBooking>[] = [
         {
@@ -69,6 +69,12 @@ const FacilityManagementPage = () => {
             cell: ({ row }) => <div>{row.getValue('bookingId')}</div>,
         },
         {
+            accessorKey: 'bookingGuid',
+            header: () => null,
+            cell: () => null,
+            enableHiding: true,
+        },
+        {
             accessorKey: 'facilityId',
             header: 'Facility',
             cell: ({ row }) => (
@@ -91,7 +97,12 @@ const FacilityManagementPage = () => {
                 )
             },
             cell: ({ row }) => (
-                <div className="capitalize">{row.getValue('startDate')}</div>
+                <div className="capitalize">
+                    {convertUTCStringToLocalDateString(
+                        row.getValue('startDate'),
+                        ITimeFormat.dateTime
+                    )}
+                </div>
             ),
         },
         {
@@ -110,7 +121,12 @@ const FacilityManagementPage = () => {
                 )
             },
             cell: ({ row }) => (
-                <div className="capitalize">{row.getValue('endDate')}</div>
+                <div className="capitalize">
+                    {convertUTCStringToLocalDateString(
+                        row.getValue('endDate'),
+                        ITimeFormat.dateTime
+                    )}
+                </div>
             ),
         },
         {
@@ -171,7 +187,7 @@ const FacilityManagementPage = () => {
                                         <DropdownMenuItem
                                             onClick={() => {
                                                 openCancelBookingDialog(
-                                                    row.getValue('bookingId')
+                                                    row.getValue('bookingGuid')
                                                 )
                                             }}
                                         >
@@ -192,58 +208,27 @@ const FacilityManagementPage = () => {
         },
     ]
 
-    const openCancelBookingDialog = (bookingId: string) => {
+    const openCancelBookingDialog = (bookingGuid: string) => {
         setOpenCancelDialog(true)
-        setSelectedBookingId(bookingId)
+        setSelectedBookingGuid(bookingGuid)
     }
 
     useEffect(() => {
-        setBookingHistory([])
+        resetFacilityBookingHistoryAction()
         fetchFacilityBookingHistory()
     }, [page])
 
     const fetchFacilityBookingHistory = async () => {
-        try {
-            setIsLoading(true)
-            const response = await getBookingHistory(page, 10)
-            if (response.success) {
-                const data = response.data.list
-                    ? response.data.list.map((x: any) => {
-                          return {
-                              facilityId: FacilityName[x.facilityId as string],
-                              bookingId: x.bookingId,
-                              startDate: convertUTCStringToLocalDateString(
-                                  x.startDate,
-                                  ITimeFormat.dateTime
-                              ),
-                              endDate: convertUTCStringToLocalDateString(
-                                  x.endDate,
-                                  ITimeFormat.dateTime
-                              ),
-                              bookedBy: x.bookedBy,
-                              numOfGuest: x.numOfGuest,
-                              isCancelled: x.isCancelled,
-                          } as GetFacilityBooking
-                      })
-                    : []
-                setBookingHistory((prev) => [...prev, ...data])
-                setTotalRecords(response.data.count) // Update total records from response
-            } else {
-                console.log(response.msg)
-            }
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setIsLoading(false)
-        }
+        await getFacilityBookingHistoryAction(page, 10)
     }
 
     return (
         <>
+            <CustomDialog />
             <CancelBookingDialog
                 open={openCancelDialog}
                 setOpen={setOpenCancelDialog}
-                bookingGuid={selectedBookingId}
+                bookingGuid={selectedBookingGuid}
             />
             <div className="flex flex-row justify-between">
                 <h3 className="text-3xl font-bold text-black">Facility</h3>
@@ -259,10 +244,10 @@ const FacilityManagementPage = () => {
             </div>
             <div className="mt-5 w-full">
                 <CustomTable
-                    data={bookingHistory}
+                    data={facilityBookingHistory}
                     columns={columns}
                     onView={(row: Row<any>) => {}}
-                    totalRecords={totalRecords}
+                    totalRecords={totalFacilityBookingHistory}
                     recordsPerPage={10}
                     currentPage={page}
                     setCurrentPage={setPage}
