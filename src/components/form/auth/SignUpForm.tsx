@@ -14,8 +14,8 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Input } from '@components/ui/input'
 import { useRouter } from 'next/navigation'
-import { useAuth } from '@zustand/auth/useAuth'
-import { UserSignUpFormDto } from '@zustand/types'
+import { useAuth } from '@store/auth/useAuth'
+import { UserSignUpFormDto } from '@dtos/auth/auth.dto'
 
 const signUpSchema = z
     .object({

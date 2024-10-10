@@ -20,7 +20,7 @@ import {
     FormLabel,
     FormMessage,
 } from '@components/ui/form'
-import { useNotice } from '@zustand/notice/useNotice'
+import { useNotice } from '@store/notice/useNotice'
 import {
     convertLocalDateStringToUTCString,
     convertUTCStringToLocalDateString,

@@ -15,8 +15,7 @@ import {
     DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu'
 import CustomTable from '@components/table/Table'
-import { useFacility } from '@zustand/facility/useFacility'
-import { GetFacilityBooking } from '@zustand/types'
+import { useFacility } from '@store/facility/useFacility'
 import { useRouter } from 'next/navigation'
 import CancelBookingDialog from '@components/dialog/CancelBookingDialog'
 import { Badge } from '@components/ui/badge'
@@ -27,6 +26,7 @@ import {
 } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
 import CustomDialog from '@components/dialog/CustomDialog'
+import { GetFacilityBookingHistoryDto } from '@dtos/facility/facility.dto'
 
 const FacilityManagementPage = () => {
     const {
@@ -40,7 +40,7 @@ const FacilityManagementPage = () => {
     const router = useRouter()
     const [page, setPage] = useState(0)
 
-    const columns: ColumnDef<GetFacilityBooking>[] = [
+    const columns: ColumnDef<GetFacilityBookingHistoryDto>[] = [
         {
             id: 'select',
             header: ({ table }) => (

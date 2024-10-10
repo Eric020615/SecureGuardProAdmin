@@ -1,5 +1,4 @@
 import { create } from 'zustand'
-import { GetUser, GetUserDetails } from '../types'
 import {
     activateUserById,
     deactivateUserById,
@@ -7,11 +6,12 @@ import {
     getUserList,
 } from '@api/userManagementService/userManagementService'
 import { IResponse } from '@api/globalHandler'
-import { generalAction } from '@zustand/application/useApplication'
+import { generalAction } from '@store/application/useApplication'
+import { GetUserDetailsByUserGuidDto, GetUserDto } from '@dtos/user-management/userManagement.dto'
 
 interface State {
-    userDetails: GetUserDetails
-    userList: GetUser[]
+    userDetails: GetUserDetailsByUserGuidDto
+    userList: GetUserDto[]
     totalUserList: number
 }
 
@@ -22,13 +22,13 @@ interface Actions {
         limit: number
     ) => Promise<IResponse<any>>
     resetUserListAction: () => void
-    getUserDetailsAction: (userGuid: string) => Promise<IResponse<GetUserDetails>>
+    getUserDetailsAction: (userGuid: string) => Promise<IResponse<GetUserDetailsByUserGuidDto>>
     activateUserByIdAction: (userGuid: string) => Promise<IResponse<any>>
     deactivateUserByIdAction: (userGuid: string) => Promise<IResponse<any>>
 }
 
 export const useUserManagement = create<State & Actions>((set) => ({
-    userDetails: {} as GetUserDetails,
+    userDetails: {} as GetUserDetailsByUserGuidDto,
     userList: [],
     totalUserList: 0,
     getUserListAction: async (isActive: boolean, page: number, limit: number) => {

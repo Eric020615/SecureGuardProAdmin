@@ -14,12 +14,12 @@ import {
     DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu'
 import CustomTable from '@components/table/Table'
-import { GetUser } from '@zustand/types'
 import { useRouter } from 'next/navigation'
-import { useUserManagement } from '@zustand/userManagement/useUserManagement'
+import { useUserManagement } from '@store/userManagement/useUserManagement'
 import { convertUTCStringToLocalDateString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
-import { useApplication } from '@zustand/application/useApplication'
+import { useApplication } from '@store/application/useApplication'
+import { GetUserDto } from '@dtos/user-management/userManagement.dto'
 
 const InactiveUserList = () => {
     const { getUserListAction, userList, totalUserList, resetUserListAction } =
@@ -51,7 +51,7 @@ const InactiveUserList = () => {
         setSelectedUserId(userId)
     }
 
-    const columns: ColumnDef<GetUser>[] = [
+    const columns: ColumnDef<GetUserDto>[] = [
         {
             id: 'select',
             header: ({ table }) => (

@@ -11,7 +11,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { useUser } from '@zustand/user/useUser'
+import { useUser } from '@store/user/useUser'
 import Avatar from 'react-avatar'
 import { GenderConst, GenderEnum, RoleConst } from '@config/constant/user'
 import { Badge } from '@components/ui/badge'

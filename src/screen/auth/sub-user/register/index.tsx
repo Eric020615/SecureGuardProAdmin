@@ -1,7 +1,7 @@
 'use client'
 
 import SubUserRegistrationForm from '@components/form/auth/SubUserRegistrationForm'
-import { useAuth } from '@zustand/auth/useAuth'
+import { useAuth } from '@store/auth/useAuth'
 import { useSearchParams } from 'next/navigation'
 import React, { useEffect } from 'react'
 

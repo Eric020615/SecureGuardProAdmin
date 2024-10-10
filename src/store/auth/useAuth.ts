@@ -1,7 +1,7 @@
 import { create } from "zustand"
 import { SignInFormDto, UserSignUpFormDto } from "../types"
 import { checkAuth, checkSubUserAuth, signIn, signUp } from "@api/authService/authService"
-import { generalAction } from "@zustand/application/useApplication";
+import { generalAction } from "@store/application/useApplication";
 
 interface State {
 	isLogged: boolean

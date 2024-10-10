@@ -4,7 +4,7 @@ import Navbar from '@components/navbar/Navbar'
 import Sidebar from '@components/sidebar/Sidebar'
 import React, { useState } from 'react'
 import { LayoutDashboard, Newspaper, Building, CircleUser } from 'lucide-react'
-import { useApplication } from '@zustand/application/useApplication'
+import { useApplication } from '@store/application/useApplication'
 import CustomLoader from '@components/loader/Loader'
 import TopLoader from '@components/loadingBar/LoadingBar'
 

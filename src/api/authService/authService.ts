@@ -1,8 +1,8 @@
 import GlobalHandler, { IResponse } from "../globalHandler"
 import { listUrl } from "../listUrl"
-import { SignInFormDto, UserSignUpFormDto } from "../../zustand/types"
 import { setCookies } from "@lib/cookies"
 import { RoleEnum } from "@config/constant/user"
+import { SignInFormDto, UserSignUpFormDto } from "@dtos/auth/auth.dto"
 
 export const signUp = async (ISignUp: UserSignUpFormDto) : Promise<any> => {
     try {

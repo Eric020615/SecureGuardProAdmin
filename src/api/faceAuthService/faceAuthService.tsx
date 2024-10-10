@@ -1,7 +1,7 @@
-import { CreateUserFaceAuthDto } from '@zustand/types'
 import { getCookies } from '@lib/cookies'
 import GlobalHandler, { IResponse } from '../globalHandler'
 import { listUrl } from '../listUrl'
+import { CreateUserFaceAuthDto } from '@dtos/faceAuth/faceAuth.dto'
 
 export const uploadUserFaceAuth = async (
 	createUserFaceAuthDto: CreateUserFaceAuthDto,

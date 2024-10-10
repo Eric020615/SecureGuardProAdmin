@@ -20,7 +20,7 @@ import {
     FormLabel,
     FormMessage,
 } from '@components/ui/form'
-import { useFacility } from '@zustand/facility/useFacility'
+import { useFacility } from '@store/facility/useFacility'
 
 interface CancelBookingDialogProps {
     bookingGuid: string

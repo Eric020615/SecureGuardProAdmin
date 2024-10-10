@@ -17,7 +17,7 @@ import {
     DialogTitle,
 } from '@components/ui/dialog'
 import { Camera, Repeat, Upload } from 'lucide-react'
-import { useFaceAuth } from '@zustand/faceAuth/useFaceAuth'
+import { useFaceAuth } from '@store/faceAuth/useFaceAuth'
 import { getBase64FromImage } from '@lib/file'
 
 interface FaceIDDialogProps {

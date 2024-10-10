@@ -1,9 +1,9 @@
 import { getCookies } from '@lib/cookies'
-import { CreateNotice, DeleteNotice, EditNotice, GetNotice } from '../../zustand/types'
 import GlobalHandler, { IResponse } from '../globalHandler'
 import { listUrl } from '../listUrl'
+import { CreateNoticeDto, DeleteNoticeDto, EditNoticeDto } from '@dtos/notice/notice.dto'
 
-export const createNotice = async (notice: CreateNotice): Promise<any> => {
+export const createNotice = async (notice: CreateNoticeDto): Promise<any> => {
     try {
         const cookieValue = await getCookies('token')
         const [success, response] = await GlobalHandler({
@@ -78,7 +78,7 @@ export const getNoticeById = async (noticeGuid: string): Promise<any> => {
     }
 }
 
-export const updateNoticeById = async (editNotice: EditNotice): Promise<any> => {
+export const updateNoticeById = async (editNotice: EditNoticeDto): Promise<any> => {
     try {
         const cookieValue = await getCookies('token')
         const [success, response] = await GlobalHandler({
@@ -104,7 +104,7 @@ export const updateNoticeById = async (editNotice: EditNotice): Promise<any> => 
     }
 }
 
-export const deleteNoticeById = async (deleteNotice: DeleteNotice): Promise<any> => {
+export const deleteNoticeById = async (deleteNotice: DeleteNoticeDto): Promise<any> => {
     try {
         const cookieValue = await getCookies('token')
         const [success, response] = await GlobalHandler({

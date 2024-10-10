@@ -8,7 +8,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@components/ui/dialog'
-import { useModal } from '@zustand/modal/useModal'
+import { useModal } from '@store/modal/useModal'
 
 interface CustomDialogProps {
 	customConfirmButtonPress?: () => void

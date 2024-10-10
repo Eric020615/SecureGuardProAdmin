@@ -14,8 +14,8 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Input } from '@components/ui/input'
 import { useRouter } from 'next/navigation'
-import { useAuth } from '@zustand/auth/useAuth'
-import { SignInFormDto } from '@zustand/types'
+import { useAuth } from '@store/auth/useAuth'
+import { SignInFormDto } from '@dtos/auth/auth.dto'
 
 const signInSchema = z.object({
     email: z.string().email().min(1, { message: 'Email is required' }),

@@ -1,4 +1,4 @@
-import { EditUserDetailsByIdDto, UserInformationFormDto } from "@zustand/types"
+import { EditUserDetailsByIdDto, UserInformationFormDto } from "@dtos/user/user.dto"
 import GlobalHandler, { IResponse } from "../globalHandler"
 import { listUrl } from "../listUrl"
 import { getCookies } from "@lib/cookies"

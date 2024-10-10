@@ -1,7 +1,7 @@
 import { create } from "zustand"
 import { EditUserDetailsByIdDto, GetUserDetails, UserInformationFormDto } from "../types"
 import { createUser, editUserProfileById, getUserProfileById } from "@api/userService/userService";
-import { generalAction } from "@zustand/application/useApplication";
+import { generalAction } from "@store/application/useApplication";
 
 interface State {
 	userProfile: GetUserDetails

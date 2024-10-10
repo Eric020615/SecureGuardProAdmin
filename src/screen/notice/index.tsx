@@ -15,17 +15,17 @@ import {
     DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu'
 import CustomTable from '@components/table/Table'
-import { useNotice } from '@zustand/notice/useNotice'
-import { GetNotice } from '@zustand/types'
+import { useNotice } from '@store/notice/useNotice'
 import { useRouter } from 'next/navigation'
 import EditNoticeDialog from '@components/dialog/EditNoticeDialog'
 import CustomDialog from '@components/dialog/CustomDialog'
 import { convertUTCStringToLocalDateString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
-import { useModal } from '@zustand/modal/useModal'
+import { useModal } from '@store/modal/useModal'
+import { GetNoticeDto } from '@dtos/notice/notice.dto'
 
 const NoticeManagementPage = () => {
-    const columns: ColumnDef<GetNotice>[] = [
+    const columns: ColumnDef<GetNoticeDto>[] = [
         {
             id: 'select',
             header: ({ table }) => (

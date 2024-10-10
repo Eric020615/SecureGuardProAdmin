@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { useModal } from '@zustand/modal/useModal'
+import { useModal } from '@store/modal/useModal'
 import { IResponse } from '@api/globalHandler'
 
 interface State {

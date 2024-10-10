@@ -7,7 +7,7 @@ import {
     getNoticeById,
     updateNoticeById,
 } from '@api/noticeService/noticeService'
-import { generalAction } from '@zustand/application/useApplication'
+import { generalAction } from '@store/application/useApplication'
 import { IResponse } from '@api/globalHandler'
 
 interface State {

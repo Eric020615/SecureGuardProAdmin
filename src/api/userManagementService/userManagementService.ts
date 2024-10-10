@@ -1,7 +1,7 @@
 import { getCookies } from '@lib/cookies'
 import GlobalHandler, { IResponse } from '../globalHandler'
 import { listUrl } from '../listUrl'
-import { GetUser, GetUserDetails } from '@zustand/types'
+import { GetUserDetailsByUserGuidDto, GetUserDto } from '@dtos/user-management/userManagement.dto'
 
 export const getUserList = async (isActive: boolean, page: number, limit: number): Promise<IResponse<any>> => {
     try {
@@ -12,7 +12,7 @@ export const getUserList = async (isActive: boolean, page: number, limit: number
             _token: cookieValue as string,
             data: { isActive, page, limit },
         })
-        const result: IResponse<GetUser[]> = {
+        const result: IResponse<GetUserDto[]> = {
             success,
             msg: success ? 'success' : response?.message,
             data: success ? response?.data : undefined,
@@ -30,7 +30,7 @@ export const getUserList = async (isActive: boolean, page: number, limit: number
 
 export const getUserDetailsById = async (
     userGuid: string
-): Promise<IResponse<GetUserDetails>> => {
+): Promise<IResponse<GetUserDetailsByUserGuidDto>> => {
     try {
         const cookieValue = await getCookies('token')
         const [success, response] = await GlobalHandler({
@@ -39,7 +39,7 @@ export const getUserDetailsById = async (
             _token: cookieValue as string,
             data: { userGuid },
         })
-        const result: IResponse<GetUserDetails> = {
+        const result: IResponse<GetUserDetailsByUserGuidDto> = {
             success,
             msg: success ? 'success' : response?.message,
             data: success ? response?.data : undefined,

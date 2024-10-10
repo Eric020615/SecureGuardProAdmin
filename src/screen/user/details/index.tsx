@@ -7,13 +7,9 @@ import {
 import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
 import { GenderConst, RoleConst, RoleEnum } from '@config/constant/user'
-import { useApplication } from '@zustand/application/useApplication'
-import {
-    GetUserDetails,
-    ResidentInformation,
-    SystemAdminInformation,
-} from '@zustand/types'
-import { useUserManagement } from '@zustand/userManagement/useUserManagement'
+import { ResidentInformationDto, SystemAdminInformationDto } from '@dtos/user-management/userManagement.dto'
+import { useApplication } from '@store/application/useApplication'
+import { useUserManagement } from '@store/userManagement/useUserManagement'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
@@ -21,7 +17,7 @@ import React, { useEffect, useState } from 'react'
 import Avatar from 'react-avatar'
 
 // Method to render Resident Role Information
-const RenderResidentRoleInformation = (roleInfo: ResidentInformation) => (
+const RenderResidentRoleInformation = (roleInfo: ResidentInformationDto) => (
     <>
         <div className="flex flex-col gap-1">
             <span className="text-sm font-semibold">Floor:</span>
@@ -35,7 +31,7 @@ const RenderResidentRoleInformation = (roleInfo: ResidentInformation) => (
 )
 
 // Method to render System Admin Information
-const RenderSystemAdminInformation = (roleInfo: SystemAdminInformation) => (
+const RenderSystemAdminInformation = (roleInfo: SystemAdminInformationDto) => (
     <>
         <div className="flex flex-col gap-1">
             <span className="text-sm font-semibold">Staff Id:</span>
@@ -244,14 +240,14 @@ const UserDetailsPage = () => {
                                     userDetails.role == RoleEnum.RESIDENT ? (
                                         <>
                                             {RenderResidentRoleInformation(
-                                                userDetails.roleInformation as ResidentInformation
+                                                userDetails.roleInformation as ResidentInformationDto
                                             )}
                                         </>
                                     ) : userDetails.roleInformation &&
                                       userDetails.role == RoleEnum.SYSTEM_ADMIN ? (
                                         <>
                                             {RenderSystemAdminInformation(
-                                                userDetails.roleInformation as SystemAdminInformation
+                                                userDetails.roleInformation as SystemAdminInformationDto
                                             )}
                                         </>
                                     ) : (

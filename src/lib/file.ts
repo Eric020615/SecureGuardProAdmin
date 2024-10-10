@@ -1,4 +1,4 @@
-import { GeneralFile } from '@zustand/types'
+import { GeneralFile } from "@dtos/application/application.dto"
 
 export const getBase64 = (file: File): Promise<GeneralFile> =>
     new Promise((resolve, reject) => {

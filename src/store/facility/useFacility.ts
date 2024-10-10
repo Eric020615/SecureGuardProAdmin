@@ -6,7 +6,7 @@ import {
     getBookingHistory,
 } from '@api/facilityService/facilityService'
 import { CancelBooking, CreateFacilityBooking, GetFacilityBooking, SpaceAvailabilityDto } from '../types'
-import { generalAction } from '@zustand/application/useApplication'
+import { generalAction } from '@store/application/useApplication'
 import { IResponse } from '@api/globalHandler'
 
 

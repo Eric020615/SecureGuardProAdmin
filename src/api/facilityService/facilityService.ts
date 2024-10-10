@@ -1,13 +1,9 @@
 import { getCookies } from '@lib/cookies'
-import {
-    CancelBooking,
-    CreateFacilityBooking,
-    SpaceAvailabilityDto,
-} from '../../zustand/types'
 import GlobalHandler, { IResponse } from '../globalHandler'
 import { listUrl } from '../listUrl'
+import { CancelFacilityBookingDto, FacilityBookingFormDto, SpaceAvailabilityDto } from '@dtos/facility/facility.dto'
 
-export const createBooking = async (bookingForm: CreateFacilityBooking): Promise<any> => {
+export const createBooking = async (bookingForm: FacilityBookingFormDto): Promise<any> => {
     try {
         const cookieValue = await getCookies('token')
         const [success, response] = await GlobalHandler({
@@ -63,7 +59,7 @@ export const getBookingHistory = async (
     }
 }
 
-export const cancelBooking = async (cancelBookingForm: CancelBooking): Promise<IResponse<any>> => {
+export const cancelBooking = async (cancelBookingForm: CancelFacilityBookingDto): Promise<IResponse<any>> => {
     try {
         const cookieValue = await getCookies('token')
         const [success, response] = await GlobalHandler({

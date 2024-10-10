@@ -1,7 +1,7 @@
 import { create } from "zustand"
 import { CreateUserFaceAuthDto } from "../types"
 import { uploadUserFaceAuth } from "@api/faceAuthService/faceAuthService";
-import { generalAction } from '@zustand/application/useApplication'
+import { generalAction } from '@store/application/useApplication'
 
 interface faceAuthState {
     error: string | null;
