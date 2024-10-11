@@ -1,10 +1,15 @@
 export interface UserSignUpFormDto {
-	email: string
-	password: string
-	confirmPassword: string
+    email: string
+    password: string
+    confirmPassword: string
 }
 
 export interface SignInFormDto {
-	email: string
-	password: string
+    email: string
+    password: string
+}
+
+export interface SubUserAuthTokenPayloadDto {
+    subUserEmail: string
+    parentUserGuid: string
 }

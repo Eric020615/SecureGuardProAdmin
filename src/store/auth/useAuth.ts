@@ -1,18 +1,20 @@
 import { create } from "zustand"
-import { SignInFormDto, UserSignUpFormDto } from "../types"
 import { checkAuth, checkSubUserAuth, signIn, signUp } from "@api/authService/authService"
 import { generalAction } from "@store/application/useApplication";
+import { SignInFormDto, SubUserAuthTokenPayloadDto, UserSignUpFormDto } from "@dtos/auth/auth.dto";
+import { IResponse } from "@api/globalHandler";
 
 interface State {
 	isLogged: boolean
 	tempToken: string
+	subUserPayload: SubUserAuthTokenPayloadDto
 }
 
 interface Actions {
 	signUpAction: (userSignUpForm: UserSignUpFormDto) => Promise<any>
 	signInAction: (userSignInForm: SignInFormDto) => Promise<any>
 	checkJwtAuthAction: (token: string) => Promise<any>
-    checkSubUserAuthAction: (token: string) => Promise<any>
+    checkSubUserAuthAction: (token: string) => Promise<IResponse<SubUserAuthTokenPayloadDto>>
 	setTempTokenAction: (token: string) => void
 }
 
@@ -20,6 +22,7 @@ interface Actions {
 export const useAuth = create<State & Actions>((set) => ({
 	isLogged: false,
 	tempToken: '',
+	subUserPayload: {} as SubUserAuthTokenPayloadDto,
 	signUpAction: async (userSignUpForm: UserSignUpFormDto) => {
 		return generalAction(
 			async () => {
@@ -72,6 +75,7 @@ export const useAuth = create<State & Actions>((set) => ({
 				if(!response.success){
 					throw new Error(response.msg)
 				}
+				set({ subUserPayload: response.data })
 				return response
 			},
 			'',

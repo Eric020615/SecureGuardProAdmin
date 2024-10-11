@@ -1,10 +1,10 @@
 import { create } from "zustand"
-import { EditUserDetailsByIdDto, GetUserDetails, UserInformationFormDto } from "../types"
 import { createUser, editUserProfileById, getUserProfileById } from "@api/userService/userService";
 import { generalAction } from "@store/application/useApplication";
+import { EditUserDetailsByIdDto, GetUserProfileByIdDto, UserInformationFormDto } from "@dtos/user/user.dto";
 
 interface State {
-	userProfile: GetUserDetails
+	userProfile: GetUserProfileByIdDto
 }
 
 interface Actions {
@@ -18,7 +18,7 @@ interface Actions {
 
 
 export const useUser = create<State & Actions>((set) => ({
-	userProfile: {} as GetUserDetails,
+	userProfile: {} as GetUserProfileByIdDto,
 
 	createUserAction: async (IUserInformationFormDto: UserInformationFormDto, tempToken: string) => {
 		return generalAction(

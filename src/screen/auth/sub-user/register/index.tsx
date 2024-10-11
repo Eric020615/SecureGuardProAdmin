@@ -7,23 +7,22 @@ import React, { useEffect } from 'react'
 
 const SubUserRegistrationPage = () => {
     const searchParams = useSearchParams()
-    const checkSubUserAuth = useAuth((state) => state.checkSubUserAuthAction)
+    const { checkSubUserAuthAction, subUserPayload } = useAuth()
 
     const token = searchParams.get('token')
-    useEffect(() => {}, [token])
+    useEffect(() => {
+        if (token) {
+            fetchSubUserAuthPayload()
+        }
+    }, [token])
 
     const fetchSubUserAuthPayload = async () => {
-        const response = await checkSubUserAuth(token as string)
-        if (response.success) {
-            console.log(response.data)
-        } else {
-            console.log(response.msg)
-        }
+        await checkSubUserAuthAction(token as string)
     }
 
     return (
         <section className="flex flex-col items-center md:w-[40%] w-[80%]">
-            <SubUserRegistrationForm email={token as string} />
+            <SubUserRegistrationForm email={subUserPayload.subUserEmail} />
         </section>
     )
 }

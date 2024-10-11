@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button } from '@components/ui/button'
 import {
     Form,
@@ -38,11 +38,18 @@ const SubUserRegistrationForm = ({ email }: SubUserRegistrationFormProps) => {
     const form = useForm<z.infer<typeof subUserRegistrationSchema>>({
         resolver: zodResolver(subUserRegistrationSchema),
         defaultValues: {
-            email: email,
+            email: email ? email : '',
             password: '',
             confirmPassword: '',
         },
     })
+    useEffect(() => {
+        form.reset({
+            email: email,
+            password: '',
+            confirmPassword: '',
+        })
+    }, [email])
 
     const onSubmit = async (values: z.infer<typeof subUserRegistrationSchema>) => {
         const response = await signUpAction({

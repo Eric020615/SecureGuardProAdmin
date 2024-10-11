@@ -1,5 +1,4 @@
 import { create } from 'zustand'
-import { CreateNotice, DeleteNotice, EditNotice, GetNotice } from '../types'
 import {
     createNotice,
     deleteNoticeById,
@@ -9,24 +8,25 @@ import {
 } from '@api/noticeService/noticeService'
 import { generalAction } from '@store/application/useApplication'
 import { IResponse } from '@api/globalHandler'
+import { CreateNoticeDto, DeleteNoticeDto, EditNoticeDto, GetNoticeDto } from '@dtos/notice/notice.dto'
 
 interface State {
-    notice: GetNotice
-    notices: GetNotice[]
+    notice: GetNoticeDto
+    notices: GetNoticeDto[]
     totalNotices: number
 }
 
 interface Actions {
-    createNoticeAction: (notice: CreateNotice) => Promise<any>
+    createNoticeAction: (notice: CreateNoticeDto) => Promise<any>
     getNoticeByIdAction: (noticeGuid: string) => Promise<any>
-    updateNoticeByIdAction: (noticeForm: EditNotice) => Promise<any>
-    deleteNoticeByIdAction: (deleteNotice: DeleteNotice) => Promise<any>
+    updateNoticeByIdAction: (noticeForm: EditNoticeDto) => Promise<any>
+    deleteNoticeByIdAction: (deleteNotice: DeleteNoticeDto) => Promise<any>
     getNoticeAction: (page: number, limit: number) => Promise<IResponse<any>>
     resetNoticeAction: () => void
 }
 
 export const useNotice = create<State & Actions>((set) => ({
-    notice: {} as GetNotice,
+    notice: {} as GetNoticeDto,
     notices: [],
     totalNotices: 0,
     getNoticeAction: async (page: number, limit: number) => {
@@ -49,7 +49,7 @@ export const useNotice = create<State & Actions>((set) => ({
     resetNoticeAction() {
         set({ notices: [], totalNotices: 0 })
     },
-    createNoticeAction: async (notice: CreateNotice) => {
+    createNoticeAction: async (notice: CreateNoticeDto) => {
         return generalAction(
             async () => {
                 const response = await createNotice(notice)
@@ -76,7 +76,7 @@ export const useNotice = create<State & Actions>((set) => ({
             'Failed to retrieve notice. Please try again.'
         )
     },
-    updateNoticeByIdAction: async (noticeForm: EditNotice) => {
+    updateNoticeByIdAction: async (noticeForm: EditNoticeDto) => {
         return generalAction(
             async () => {
                 const response = await updateNoticeById(noticeForm)
@@ -89,7 +89,7 @@ export const useNotice = create<State & Actions>((set) => ({
             'Failed to update notice. Please try again.'
         )
     },
-    deleteNoticeByIdAction: async (deleteNotice: DeleteNotice) => {
+    deleteNoticeByIdAction: async (deleteNotice: DeleteNoticeDto) => {
         return generalAction(
             async () => {
                 const response = await deleteNoticeById(deleteNotice)

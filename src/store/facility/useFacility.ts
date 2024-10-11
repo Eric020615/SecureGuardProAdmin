@@ -5,22 +5,22 @@ import {
     createBooking,
     getBookingHistory,
 } from '@api/facilityService/facilityService'
-import { CancelBooking, CreateFacilityBooking, GetFacilityBooking, SpaceAvailabilityDto } from '../types'
 import { generalAction } from '@store/application/useApplication'
 import { IResponse } from '@api/globalHandler'
+import { CancelFacilityBookingDto, FacilityBookingFormDto, GetFacilityBookingHistoryDto, SpaceAvailabilityDto } from '@dtos/facility/facility.dto'
 
 
 interface State {
 	availabilitySlot: SpaceAvailabilityDto[]
-	facilityBookingHistory: GetFacilityBooking[]
+	facilityBookingHistory: GetFacilityBookingHistoryDto[]
 	totalFacilityBookingHistory: number
 }
 
 interface Actions {
-	submitBookingAction: (facilityBookingForm: CreateFacilityBooking) => Promise<any>
+	submitBookingAction: (facilityBookingForm: FacilityBookingFormDto) => Promise<any>
 	getFacilityBookingHistoryAction: (page: number, limit: number) => Promise<any>
 	resetFacilityBookingHistoryAction: () => void
-    cancelBookingAction: (cancelBookingForm: CancelBooking) => Promise<IResponse<any>>
+    cancelBookingAction: (cancelBookingForm: CancelFacilityBookingDto) => Promise<IResponse<any>>
 	checkAvailabilitySlotAction: (
 		facilityId: string,
 		startDate: string,
@@ -32,7 +32,7 @@ export const useFacility = create<State & Actions>((set) => ({
 	availabilitySlot: [],
 	facilityBookingHistory: [],
 	totalFacilityBookingHistory: 0,
-	submitBookingAction: async (facilityBookingForm: CreateFacilityBooking) => {
+	submitBookingAction: async (facilityBookingForm: FacilityBookingFormDto) => {
 		return generalAction(
 			async () => {
 				const response = await createBooking(facilityBookingForm)
@@ -65,7 +65,7 @@ export const useFacility = create<State & Actions>((set) => ({
 	resetFacilityBookingHistoryAction() {
 		set({ facilityBookingHistory: [], totalFacilityBookingHistory: 0 })
 	},
-	cancelBookingAction: async (cancelBookingForm: CancelBooking) => {
+	cancelBookingAction: async (cancelBookingForm: CancelFacilityBookingDto) => {
 		return generalAction(
 			async () => {
 				const response = await cancelBooking(cancelBookingForm)
