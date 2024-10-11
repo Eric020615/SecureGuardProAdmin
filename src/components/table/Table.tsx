@@ -142,7 +142,7 @@ const CustomTable = ({
                             className={
                                 currentPage <= 0
                                     ? 'pointer-events-none opacity-50'
-                                    : undefined
+                                    : 'cursor-pointer'
                             }
                         />
                     </PaginationItem>
@@ -156,7 +156,7 @@ const CustomTable = ({
                                     className={
                                         currentPage === index
                                             ? 'pointer-events-none opacity-50'
-                                            : undefined
+                                            : 'cursor-pointer'
                                     }
                                     onClick={() => setCurrentPage(index)}
                                 >
@@ -183,7 +183,7 @@ const CustomTable = ({
                             className={
                                 currentPage + 1 >= totalPages
                                     ? 'pointer-events-none opacity-50'
-                                    : undefined
+                                    : 'cursor-pointer'
                             }
                         />
                     </PaginationItem>
