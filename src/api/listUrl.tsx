@@ -11,7 +11,7 @@ export const listUrl = {
             type: IType.post,
         },
         checkJwtAuth: {
-            path: 'auth/check-auth/',
+            path: 'auth/check-auth',
             type: IType.get,
         },
         checkSubUserAuth: {

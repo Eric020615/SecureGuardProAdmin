@@ -9,8 +9,16 @@ export interface UserInformationFormDto {
     contactNumber: string
     gender: GenderEnum
     dateOfBirth: string
+}
+
+export interface SystemAdminInformationFormDto extends UserInformationFormDto {
     staffId: string
     supportedFiles: GeneralFile[]
+}
+
+export interface SubUserInformationFormDto extends UserInformationFormDto {
+    parentUserGuid: string,
+    subUserRequestGuid: string
 }
 
 export interface GetUserProfileByIdDto {

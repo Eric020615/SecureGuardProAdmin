@@ -1,19 +1,21 @@
 import { create } from "zustand"
 import { checkAuth, checkSubUserAuth, signIn, signUp } from "@api/authService/authService"
 import { generalAction } from "@store/application/useApplication";
-import { SignInFormDto, SubUserAuthTokenPayloadDto, UserSignUpFormDto } from "@dtos/auth/auth.dto";
+import { AuthTokenPayloadDto, SignInFormDto, SubUserAuthTokenPayloadDto, UserSignUpFormDto } from "@dtos/auth/auth.dto";
 import { IResponse } from "@api/globalHandler";
+import { RoleEnum } from "@config/constant/user";
 
 interface State {
 	isLogged: boolean
 	tempToken: string
+	authTokenPayload: AuthTokenPayloadDto
 	subUserPayload: SubUserAuthTokenPayloadDto
 }
 
 interface Actions {
-	signUpAction: (userSignUpForm: UserSignUpFormDto) => Promise<any>
+	signUpAction: (userSignUpForm: UserSignUpFormDto, role?: RoleEnum) => Promise<any>
 	signInAction: (userSignInForm: SignInFormDto) => Promise<any>
-	checkJwtAuthAction: (token: string) => Promise<any>
+	checkJwtAuthAction: (token: string, check?: boolean) => Promise<any>
     checkSubUserAuthAction: (token: string) => Promise<IResponse<SubUserAuthTokenPayloadDto>>
 	setTempTokenAction: (token: string) => void
 }
@@ -23,10 +25,11 @@ export const useAuth = create<State & Actions>((set) => ({
 	isLogged: false,
 	tempToken: '',
 	subUserPayload: {} as SubUserAuthTokenPayloadDto,
-	signUpAction: async (userSignUpForm: UserSignUpFormDto) => {
+	authTokenPayload: {} as AuthTokenPayloadDto,
+	signUpAction: async (userSignUpForm: UserSignUpFormDto, role = RoleEnum.SYSTEM_ADMIN) => {
 		return generalAction(
 			async () => {
-				const response = await signUp(userSignUpForm)
+				const response = await signUp(userSignUpForm, role)
 				if(!response.success){
 					throw new Error(response.msg)
 				}
@@ -54,13 +57,14 @@ export const useAuth = create<State & Actions>((set) => ({
 		)
 	},
 
-	checkJwtAuthAction: async (token: string) => {
+	checkJwtAuthAction: async (token: string, check = false) => {
 		return generalAction(
 			async () => {
-				const response = await checkAuth(token)
+				const response = await checkAuth(token, check)
 				if(!response.success){
 					throw new Error(response.msg)
 				}
+				set({ authTokenPayload: response.data })
 				return response
 			},
 			'',

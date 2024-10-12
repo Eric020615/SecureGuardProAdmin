@@ -16,6 +16,7 @@ import { Input } from '@components/ui/input'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@store/auth/useAuth'
 import { UserSignUpFormDto } from '@dtos/auth/auth.dto'
+import { RoleEnum } from '@config/constant/user'
 
 const subUserRegistrationSchema = z
     .object({
@@ -34,7 +35,7 @@ interface SubUserRegistrationFormProps {
 
 const SubUserRegistrationForm = ({ email }: SubUserRegistrationFormProps) => {
     const router = useRouter()
-    const { signUpAction } = useAuth()
+    const { signUpAction, setTempTokenAction } = useAuth()
     const form = useForm<z.infer<typeof subUserRegistrationSchema>>({
         resolver: zodResolver(subUserRegistrationSchema),
         defaultValues: {
@@ -52,14 +53,17 @@ const SubUserRegistrationForm = ({ email }: SubUserRegistrationFormProps) => {
     }, [email])
 
     const onSubmit = async (values: z.infer<typeof subUserRegistrationSchema>) => {
-        const response = await signUpAction({
-            email: values.email,
-            password: values.password,
-            confirmPassword: values.confirmPassword,
-        } as UserSignUpFormDto)
+        const response = await signUpAction(
+            {
+                email: values.email,
+                password: values.password,
+                confirmPassword: values.confirmPassword,
+            } as UserSignUpFormDto,
+            RoleEnum.RESIDENT_SUBUSER
+        )
         if (response.success) {
-            // setTempTokenAction(response.data)
-            // router.replace('/user-information')
+            setTempTokenAction(response.data)
+            router.replace('/user-information')
         }
     }
 

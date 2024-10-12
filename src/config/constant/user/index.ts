@@ -1,6 +1,7 @@
 export enum RoleEnum {
     'SYSTEM_ADMIN' = 'SA',
     'RESIDENT' = 'RES',
+    'RESIDENT_SUBUSER' = 'SUB'
 }
 
 export enum GenderEnum {
@@ -10,6 +11,7 @@ export enum GenderEnum {
 
 export const RoleConst = {
     "RES": "Resident",
+    "SUB": "Resident Sub User",
     "SA": "System Admin",
 }
 

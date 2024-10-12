@@ -16,10 +16,8 @@ import { Input } from '@components/ui/input'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@store/auth/useAuth'
 import { GenderEnum, userInformationConst } from '@config/constant/user'
-import { useDropzone, FileWithPath } from 'react-dropzone'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
-import { getBase64 } from '@lib/file'
 import { useUser } from '@store/user/useUser'
 import { getUTCDateString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
@@ -30,21 +28,18 @@ const userInformationSchema = z.object({
     firstName: z.string().min(1, { message: 'First Name is required' }),
     lastName: z.string().min(1, { message: 'Last Name is required' }),
     userName: z.string().min(1, { message: 'User Name is required' }),
-    staffId: z.string().min(1, { message: 'Staff Id is required' }),
     phoneNumber: z.string().min(1, { message: 'Phone Number is required' }),
     gender: z.string().min(1, { message: 'Gender is required' }),
     dateOfBirth: z.string().min(1, { message: 'Date of Birth is required' }),
-    files: z.array(z.any()),
-    // .nonempty({ message: 'Please upload at least one file.' }),
 })
 
 const PhoneNumberInput = forwardRef<HTMLInputElement>((props, ref) => {
     return <input {...props} ref={ref} className="h-full w-full rounded-md px-2" />
 })
 
-const UserInformationForm = () => {
+const SubUserInformationForm = () => {
     const router = useRouter()
-    const { tempToken } = useAuth()
+    const { tempToken, subUserPayload } = useAuth()
     const { createUserAction } = useUser()
     const form = useForm<z.infer<typeof userInformationSchema>>({
         resolver: zodResolver(userInformationSchema),
@@ -59,20 +54,12 @@ const UserInformationForm = () => {
                 userName: values.userName,
                 contactNumber: values.phoneNumber,
                 gender: values.gender as GenderEnum,
-                staffId: values.staffId,
                 dateOfBirth: getUTCDateString(
                     new Date(values.dateOfBirth),
                     ITimeFormat.date
                 ),
-                supportedFiles:
-                    values.files.length > 0
-                        ? await Promise.all(
-                              values.files.map(async (file) => {
-                                  const base64 = await getBase64(file)
-                                  return base64
-                              })
-                          )
-                        : [],
+                parentUserGuid: subUserPayload.parentUserGuid,
+                subUserRequestGuid: subUserPayload.subUserRequestGuid,
             },
             tempToken
         )
@@ -87,7 +74,7 @@ const UserInformationForm = () => {
                 <Link href="/" className="font-bold text-4xl">
                     Secure Guard Pro
                 </Link>
-                <h1 className="text-3xl">User Information</h1>
+                <h1 className="text-3xl">Sub-User Information</h1>
             </header>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -135,23 +122,6 @@ const UserInformationForm = () => {
                                     <Input
                                         type="text"
                                         placeholder="Choose a username"
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="staffId"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Staff ID</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        type="text"
-                                        placeholder="Enter your staff ID"
                                         {...field}
                                     />
                                 </FormControl>
@@ -215,19 +185,6 @@ const UserInformationForm = () => {
                             </FormItem>
                         )}
                     />
-                    <FormField
-                        control={form.control}
-                        name="files"
-                        render={({ field: { onChange, value } }) => (
-                            <FormItem>
-                                <FormLabel>Supported Documents</FormLabel>
-                                <FormControl>
-                                    <FileDropzone onChange={onChange} value={value} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
                     <Button type="submit" className="w-[30%]">
                         Submit
                     </Button>
@@ -237,39 +194,4 @@ const UserInformationForm = () => {
     )
 }
 
-interface FileDropzoneProps {
-    onChange: (event: any[]) => void
-    value: FileWithPath[]
-}
-
-const FileDropzone = ({ onChange, value }: FileDropzoneProps) => {
-    const { getRootProps, getInputProps } = useDropzone({
-        onDrop: (acceptedFiles: FileWithPath[]) => {
-            onChange(acceptedFiles)
-        },
-    })
-    return (
-        <>
-            <div
-                {...getRootProps({
-                    className:
-                        'dropzone flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400',
-                })}
-            >
-                <input {...getInputProps()} />
-                <p className="text-gray-500">
-                    Drag 'n' drop some files here, or click to select files
-                </p>
-            </div>
-            <aside className="mt-4">
-                <ul className="list-disc list-inside mt-2 text-gray-600 text-sm">
-                    {value &&
-                        value.length > 0 &&
-                        value.map((file, index) => <li key={index}>{file.name}</li>)}
-                </ul>
-            </aside>
-        </>
-    )
-}
-
-export default UserInformationForm
+export default SubUserInformationForm

@@ -19,7 +19,7 @@ const SubUserRegistrationPage = () => {
     const fetchSubUserAuthPayload = async () => {
         await checkSubUserAuthAction(token as string)
     }
-
+    
     return (
         <section className="flex flex-col items-center md:w-[40%] w-[80%]">
             <SubUserRegistrationForm email={subUserPayload.subUserEmail} />

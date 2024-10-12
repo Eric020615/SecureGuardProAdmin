@@ -1,7 +1,7 @@
 import { create } from "zustand"
 import { createUser, editUserProfileById, getUserProfileById } from "@api/userService/userService";
 import { generalAction } from "@store/application/useApplication";
-import { EditUserDetailsByIdDto, GetUserProfileByIdDto, UserInformationFormDto } from "@dtos/user/user.dto";
+import { EditUserDetailsByIdDto, GetUserProfileByIdDto, SubUserInformationFormDto, SystemAdminInformationFormDto, UserInformationFormDto } from "@dtos/user/user.dto";
 
 interface State {
 	userProfile: GetUserProfileByIdDto
@@ -9,7 +9,7 @@ interface State {
 
 interface Actions {
 	createUserAction: (
-		IUserInformationFormDto: UserInformationFormDto,
+		IUserInformationFormDto: SystemAdminInformationFormDto | SubUserInformationFormDto,
 		tempToken: string,
 	) => Promise<any>
 	getUserProfileByIdAction: () => Promise<any>
@@ -20,7 +20,7 @@ interface Actions {
 export const useUser = create<State & Actions>((set) => ({
 	userProfile: {} as GetUserProfileByIdDto,
 
-	createUserAction: async (IUserInformationFormDto: UserInformationFormDto, tempToken: string) => {
+	createUserAction: async (IUserInformationFormDto: SystemAdminInformationFormDto | SubUserInformationFormDto, tempToken: string) => {
 		return generalAction(
 			async () => {
 				const response = await createUser(IUserInformationFormDto, tempToken)

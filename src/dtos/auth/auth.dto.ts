@@ -1,3 +1,5 @@
+import { RoleEnum } from "@config/constant/user"
+
 export interface UserSignUpFormDto {
     email: string
     password: string
@@ -9,7 +11,13 @@ export interface SignInFormDto {
     password: string
 }
 
+export interface AuthTokenPayloadDto {
+    userGuid: string
+    role: RoleEnum
+}
+
 export interface SubUserAuthTokenPayloadDto {
+    subUserRequestGuid: string
     subUserEmail: string
     parentUserGuid: string
 }
