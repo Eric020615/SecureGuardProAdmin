@@ -39,7 +39,6 @@ export const signIn = async (ISignIn: SignInFormDto): Promise<any> => {
             path: listUrl.auth.logIn.path,
             type: listUrl.auth.logIn.type,
             data: ISignIn,
-            params: { role: RoleEnum.SYSTEM_ADMIN },
         })
         const result: IResponse<any> = {
             success,
