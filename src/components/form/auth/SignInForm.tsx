@@ -16,6 +16,7 @@ import { Input } from '@components/ui/input'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@store/auth/useAuth'
 import { SignInFormDto } from '@dtos/auth/auth.dto'
+import { RoleEnum } from '@config/constant/user'
 
 const signInSchema = z.object({
     email: z.string().email().min(1, { message: 'Email is required' }),
@@ -38,6 +39,7 @@ const SignInForm = () => {
         await signInAction({
             email: values.email,
             password: values.password,
+            role: [RoleEnum.SYSTEM_ADMIN],
         } as SignInFormDto)
         router.replace('/')
         form.reset()
