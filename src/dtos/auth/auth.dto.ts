@@ -21,3 +21,7 @@ export interface SubUserAuthTokenPayloadDto {
     subUserEmail: string
     parentUserGuid: string
 }
+
+export interface ResetPasswordDto {
+	email: string
+}

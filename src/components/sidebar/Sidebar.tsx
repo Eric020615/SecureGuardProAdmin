@@ -18,7 +18,9 @@ import {
     SheetHeader,
     SheetTitle,
 } from '../ui/sheet'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { LogOut } from 'lucide-react'
+import { useAuth } from '@store/auth/useAuth'
 
 interface SidebarProps {
     menuList: any
@@ -30,6 +32,13 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, menuList }: SidebarProps) => {
     const [isClient, setIsClient] = useState(false)
     const isMobileView = useMediaQuery('(max-width: 768px)')
     const path = usePathname()
+    const logOutAction = useAuth((state) => state.logOutAction)
+    const router = useRouter()
+
+    const handleLogout = () => {
+        logOutAction()
+        router.replace('/sign-up')
+    }
 
     useEffect(() => {
         setIsClient(true)
@@ -81,6 +90,15 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, menuList }: SidebarProps) => {
                                         ))}
                                     </CommandGroup>
                                 ))}
+                                <hr className="my-2 border-t border-gray-300" />{' '}
+                                {/* Horizontal Line */}
+                                <CommandItem
+                                    onSelect={handleLogout}
+                                    className="text-base text-red-600 hover:bg-red-50 cursor-pointer flex items-center pl-3"
+                                >
+                                    <LogOut className="mr-2 h-5 w-5" />
+                                    Log Out
+                                </CommandItem>
                             </CommandList>
                         </Command>
                     </SheetContent>
@@ -118,6 +136,15 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, menuList }: SidebarProps) => {
                                     ))}
                                 </CommandGroup>
                             ))}
+                            <hr className="m-2 border-t border-gray-300" />{' '}
+                            {/* Horizontal Line */}
+                            <CommandItem
+                                onSelect={handleLogout}
+                                className="text-base text-red-600 hover:bg-red-50 cursor-pointer flex items-center pl-3"
+                            >
+                                <LogOut className="mr-2 h-5 w-5" />
+                                Log Out
+                            </CommandItem>
                         </CommandList>
                     </Command>
                 </div>

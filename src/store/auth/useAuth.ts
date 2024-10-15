@@ -1,9 +1,10 @@
 import { create } from "zustand"
-import { checkAuth, checkSubUserAuth, signIn, signUp } from "@api/authService/authService"
-import { generalAction } from "@store/application/useApplication";
-import { AuthTokenPayloadDto, SignInFormDto, SubUserAuthTokenPayloadDto, UserSignUpFormDto } from "@dtos/auth/auth.dto";
+import { checkAuth, checkSubUserAuth, requestResetPassword, signIn, signUp } from "@api/authService/authService"
+import { generalAction, internalGeneralAction } from "@store/application/useApplication";
+import { AuthTokenPayloadDto, ResetPasswordDto, SignInFormDto, SubUserAuthTokenPayloadDto, UserSignUpFormDto } from "@dtos/auth/auth.dto";
 import { IResponse } from "@api/globalHandler";
 import { RoleEnum } from "@config/constant/user";
+import { deleteCookies } from "@lib/cookies";
 
 interface State {
 	isLogged: boolean
@@ -15,6 +16,8 @@ interface State {
 interface Actions {
 	signUpAction: (userSignUpForm: UserSignUpFormDto, role?: RoleEnum) => Promise<any>
 	signInAction: (userSignInForm: SignInFormDto) => Promise<any>
+	requestResetPasswordAction: (resetPasswordDto: ResetPasswordDto) => Promise<any>
+	logOutAction: () => void
 	checkJwtAuthAction: (token: string, check?: boolean) => Promise<any>
     checkSubUserAuthAction: (token: string) => Promise<IResponse<SubUserAuthTokenPayloadDto>>
 	setTempTokenAction: (token: string) => void
@@ -54,6 +57,32 @@ export const useAuth = create<State & Actions>((set) => ({
 			},
 			'', // Custom success message
 			'Sign-in failed. Please check your credentials and try again.', // Custom error message
+		)
+	},
+
+	logOutAction: () => {
+		return internalGeneralAction(
+			async () => {
+				set({ isLogged: false, authTokenPayload: {} as AuthTokenPayloadDto })
+				deleteCookies('token')
+				return null
+			},
+			'', // Custom success message
+			'Logout failed. Please try again.', // Custom error message
+		)
+	},
+
+	requestResetPasswordAction: async (resetPasswordDto: ResetPasswordDto) => {
+		return generalAction(
+			async () => {
+				const response = await requestResetPassword(resetPasswordDto)
+				if(!response?.success){
+					throw new Error(response.msg)
+				}
+				return response
+			},
+			'Password reset email sent! Please check your email', // Custom success message
+			'Failed to send password reset email. Please try again.', // Custom error message
 		)
 	},
 

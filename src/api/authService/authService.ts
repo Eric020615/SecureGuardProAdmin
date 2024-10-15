@@ -4,6 +4,7 @@ import { setCookies } from '@lib/cookies'
 import { RoleEnum } from '@config/constant/user'
 import {
     AuthTokenPayloadDto,
+    ResetPasswordDto,
     SignInFormDto,
     SubUserAuthTokenPayloadDto,
     UserSignUpFormDto,
@@ -55,6 +56,29 @@ export const signIn = async (ISignIn: SignInFormDto): Promise<any> => {
         }
         return result
     }
+}
+
+export const requestResetPassword = async (resetPasswordDto: ResetPasswordDto): Promise<IResponse<any>> => {
+	try {
+		const [success, response] = await GlobalHandler({
+			path: listUrl.auth.requestResetPasswordEmail.path,
+			type: listUrl.auth.requestResetPasswordEmail.type,
+			data: resetPasswordDto,
+		})
+		const result: IResponse<any> = {
+			success,
+			msg: success ? 'success' : response?.message,
+			data: success ? response?.data : undefined,
+		}
+		return result
+	} catch (error: any) {
+		const result: IResponse<any> = {
+			success: false,
+			msg: error,
+			data: null,
+		}
+		return result
+	}
 }
 
 export const checkAuth = async (token: string, check: boolean): Promise<IResponse<AuthTokenPayloadDto>> => {

@@ -49,7 +49,7 @@ const SignInForm = () => {
                 <Link href="/" className="font-bold text-4xl">
                     Secure Guard Pro
                 </Link>
-                <h1 className='text-3xl'>Sign In</h1>
+                <h1 className="text-3xl">Sign In</h1>
             </header>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -70,22 +70,29 @@ const SignInForm = () => {
                         control={form.control}
                         name="password"
                         render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Password</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        type="password"
-                                        placeholder="Password"
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
+                            <>
+                                <FormItem>
+                                    <FormLabel>Password</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            type="password"
+                                            placeholder="Password"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            </>
                         )}
                     />
-                    <Button type="submit" className="w-[30%]">
-                        Submit
-                    </Button>
+                    <div className="flex justify-between items-center">
+                        <Button type="submit" className="w-[30%]">
+                            Submit
+                        </Button>
+                        <Link href="/reset-password" className="text-primary font-bold">
+                            Forgot Password?
+                        </Link>
+                    </div>
                 </form>
             </Form>
         </section>
