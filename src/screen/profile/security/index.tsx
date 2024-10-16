@@ -7,15 +7,18 @@ import {
     CardTitle,
 } from '@components/ui/card'
 import { Button } from '@components/ui/button'
-import { Camera } from 'lucide-react'
+import { Camera, Key } from 'lucide-react'
 import FaceIDDialog from '@components/dialog/FaceIdDialog'
 import CustomDialog from '@components/dialog/CustomDialog'
+import ResetPasswordDialog from '@components/dialog/auth/ResetPasswordDialog'
 
 const SecurityPage = () => {
     const [openFaceIDDialog, setOpenFaceIDDialog] = useState(false)
+    const [openResetPasswordDialog, setOpenResetPasswordDialog] = useState(false)
     return (
         <>
             <FaceIDDialog open={openFaceIDDialog} setOpen={setOpenFaceIDDialog}/>
+            <ResetPasswordDialog open={openResetPasswordDialog} setOpen={setOpenResetPasswordDialog}/>
             <CustomDialog customConfirmButtonPress={() => {}}/>
             <div className="h-full">
                 <div className="grid gap-5">
@@ -38,6 +41,26 @@ const SecurityPage = () => {
                                 >
                                     <Camera className="mr-2 h-5 w-5" />
                                     Activate Camera
+                                </Button>
+                            </CardContent>
+                        </Card>
+                        <Card>
+                            <CardHeader className="border-b">
+                                <CardTitle>Reset Password</CardTitle>
+                                <CardDescription>
+                                    You can reset your password here if needed.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="mt-5">
+                                <Button
+                                    type="button"
+                                    className="w-fit h-fit"
+                                    onClick={() => {
+                                        setOpenResetPasswordDialog(true)
+                                    }}
+                                >
+                                    <Key className="mr-2 h-5 w-5" />
+                                    Reset Password
                                 </Button>
                             </CardContent>
                         </Card>

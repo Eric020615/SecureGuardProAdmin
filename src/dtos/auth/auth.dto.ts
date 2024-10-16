@@ -24,5 +24,10 @@ export interface SubUserAuthTokenPayloadDto {
 }
 
 export interface ResetPasswordDto {
+    currentPassword: string
+	newPassword: string
+}
+
+export interface RequestResetPasswordDto {
 	email: string
 }

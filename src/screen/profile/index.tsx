@@ -1,14 +1,4 @@
 'use client'
-
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from '@components/ui/card'
-import { Label } from '@components/ui/label'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import MyProfilePage from './myProfile'
