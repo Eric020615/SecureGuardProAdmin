@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react'
+import React from 'react'
 import { Button } from '@components/ui/button'
 import {
     Dialog,
@@ -10,12 +10,16 @@ import {
 } from '@components/ui/dialog'
 import { useModal } from '@store/modal/useModal'
 
-interface CustomDialogProps {
-	customConfirmButtonPress?: () => void
+interface ActionConfirmationDialogProps {
+    onSuccessConfirm?: () => void
+    onFailedConfirm?: () => void
 }
 
-const CustomDialog = ({customConfirmButtonPress} : CustomDialogProps) => {
-    const {isOpen, toogleModalAction, content} = useModal();
+const ActionConfirmationDialog = ({
+    onSuccessConfirm = () => {},
+    onFailedConfirm = () => {},
+}: ActionConfirmationDialogProps) => {
+    const { isOpen, toogleModalAction, content } = useModal()
     return (
         <Dialog open={isOpen} onOpenChange={toogleModalAction}>
             <DialogContent className="sm:max-w-[425px]">
@@ -27,7 +31,12 @@ const CustomDialog = ({customConfirmButtonPress} : CustomDialogProps) => {
                     <Button
                         className="flex justify-center items-center"
                         onClick={() => {
-                            customConfirmButtonPress?.()
+                            if(content.isError){
+                                onFailedConfirm()
+                            }
+                            else{
+                                onSuccessConfirm()
+                            }
                             toogleModalAction()
                         }}
                     >
@@ -39,4 +48,4 @@ const CustomDialog = ({customConfirmButtonPress} : CustomDialogProps) => {
     )
 }
 
-export default CustomDialog
+export default ActionConfirmationDialog

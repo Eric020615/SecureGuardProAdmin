@@ -18,11 +18,12 @@ import CustomTable from '@components/table/Table'
 import { useNotice } from '@store/notice/useNotice'
 import { useRouter } from 'next/navigation'
 import EditNoticeDialog from '@components/dialog/EditNoticeDialog'
-import CustomDialog from '@components/dialog/CustomDialog'
 import { convertUTCStringToLocalDateString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
 import { useModal } from '@store/modal/useModal'
 import { GetNoticeDto } from '@dtos/notice/notice.dto'
+import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
+import CustomConfirmDialog from '@components/dialog/CustomConfirmDialog'
 
 const NoticeManagementPage = () => {
     const columns: ColumnDef<GetNoticeDto>[] = [
@@ -158,12 +159,18 @@ const NoticeManagementPage = () => {
         },
     ]
 
-    const { notices, totalNotices, getNoticeAction, deleteNoticeByIdAction, resetNoticeAction } = useNotice()
+    const {
+        notices,
+        totalNotices,
+        getNoticeAction,
+        deleteNoticeByIdAction,
+        resetNoticeAction,
+    } = useNotice()
     const [selectedNoticeGuid, setSelectedNoticeGuid] = useState('')
     const router = useRouter()
     const [openEditNoticeDialog, setOpenEditNoticeDialog] = useState(false)
-    const { setCustomConfirmModalAction } = useModal()
     const [page, setPage] = useState(0)
+    const [openConfirmModal, setOpenConfirmModal] = useState(false)
 
     useEffect(() => {
         resetNoticeAction()
@@ -181,22 +188,16 @@ const NoticeManagementPage = () => {
 
     const openCustomDialog = async (noticeGuid: string) => {
         setSelectedNoticeGuid(noticeGuid)
-        setCustomConfirmModalAction({
-            title: 'Are you sure to delete this notice?',
-            subtitle: 'Changes are irrevisible',
-        })
+        setOpenConfirmModal(true)
     }
 
     const isConfirm = async () => {
-        if(!selectedNoticeGuid) {
+        if (!selectedNoticeGuid) {
             return
         }
-        const response = await deleteNoticeByIdAction({
+        await deleteNoticeByIdAction({
             noticeGuid: selectedNoticeGuid,
         })
-        if (response.success) {
-            window.location.reload()
-        }
     }
 
     return (
@@ -206,7 +207,20 @@ const NoticeManagementPage = () => {
                 setOpen={setOpenEditNoticeDialog}
                 noticeGuid={selectedNoticeGuid}
             />
-            <CustomDialog customConfirmButtonPress={isConfirm} />
+            <ActionConfirmationDialog
+                onSuccessConfirm={() => {
+                    window.location.reload()
+                }}
+            />
+            <CustomConfirmDialog
+                onConfirm={isConfirm}
+                content={{
+                    title: 'Delete Notice',
+                    subtitle: 'Are you sure you want to delete this notice?',
+                }}
+                isOpen={openConfirmModal}
+                setOpen={setOpenConfirmModal}
+            />
             <div className="flex flex-row justify-between">
                 <h3 className="text-3xl font-bold text-black">Notice</h3>
                 <Button

@@ -22,7 +22,7 @@ import CustomDatePicker from '@components/datePicker/DatePicker'
 import { useFacility } from '@store/facility/useFacility'
 import { getTodayDate, getUTCDateString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
-import CustomDialog from '@components/dialog/CustomDialog'
+import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 
 const formSchema = z
     .object({
@@ -131,7 +131,7 @@ const CreateBookingPage = () => {
 
     return (
         <>
-            <CustomDialog />
+            <ActionConfirmationDialog />
             <div className="flex flex-row justify-between">
                 <h3 className="text-3xl font-bold text-black">Create new booking</h3>
             </div>

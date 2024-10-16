@@ -18,7 +18,7 @@ import React from 'react'
 import { useNotice } from '@store/notice/useNotice'
 import { convertLocalDateStringToUTCString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
-import CustomDialog from '@components/dialog/CustomDialog'
+import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 
 const formSchema = z
     .object({
@@ -66,14 +66,15 @@ const CreateNoticePage = () => {
                 ITimeFormat.dateTime
             ),
         })
-        if (response.success) {
-            router.push('/notice')
-        }
     }
 
     return (
         <>
-            <CustomDialog />
+            <ActionConfirmationDialog
+                onSuccessConfirm={() => {
+                    router.push('/notice')
+                }}
+            />
             <div className="flex flex-row justify-between">
                 <h3 className="text-3xl font-bold text-black">Create new notice</h3>
             </div>

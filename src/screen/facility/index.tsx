@@ -25,8 +25,8 @@ import {
     getTodayDate,
 } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
-import CustomDialog from '@components/dialog/CustomDialog'
 import { GetFacilityBookingHistoryDto } from '@dtos/facility/facility.dto'
+import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 
 const FacilityManagementPage = () => {
     const {
@@ -224,7 +224,7 @@ const FacilityManagementPage = () => {
 
     return (
         <>
-            <CustomDialog />
+            <ActionConfirmationDialog />
             <CancelBookingDialog
                 open={openCancelDialog}
                 setOpen={setOpenCancelDialog}

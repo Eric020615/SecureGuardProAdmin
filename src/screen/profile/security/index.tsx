@@ -9,7 +9,6 @@ import {
 import { Button } from '@components/ui/button'
 import { Camera, Key } from 'lucide-react'
 import FaceIDDialog from '@components/dialog/FaceIdDialog'
-import CustomDialog from '@components/dialog/CustomDialog'
 import ResetPasswordDialog from '@components/dialog/auth/ResetPasswordDialog'
 
 const SecurityPage = () => {
@@ -19,7 +18,6 @@ const SecurityPage = () => {
         <>
             <FaceIDDialog open={openFaceIDDialog} setOpen={setOpenFaceIDDialog}/>
             <ResetPasswordDialog open={openResetPasswordDialog} setOpen={setOpenResetPasswordDialog}/>
-            <CustomDialog customConfirmButtonPress={() => {}}/>
             <div className="h-full">
                 <div className="grid gap-5">
                     <div className="grid gap-4 my-2">

@@ -1,6 +1,5 @@
 'use client'
 
-import CustomDialog from '@components/dialog/CustomDialog'
 import CustomLoader from '@components/loader/Loader'
 import TopLoader from '@components/loadingBar/LoadingBar'
 import { useApplication } from '@store/application/useApplication'
@@ -16,7 +15,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 </div>
             )}
             <TopLoader />
-            <CustomDialog />
             {children}
         </main>
     )
