@@ -3,7 +3,7 @@
 import Navbar from '@components/navbar/Navbar'
 import Sidebar from '@components/sidebar/Sidebar'
 import React, { useState } from 'react'
-import { LayoutDashboard, Newspaper, Building, CircleUser } from 'lucide-react'
+import { LayoutDashboard, Newspaper, Building, CircleUser, Users } from 'lucide-react'
 import { useApplication } from '@store/application/useApplication'
 import CustomLoader from '@components/loader/Loader'
 import TopLoader from '@components/loadingBar/LoadingBar'
@@ -31,6 +31,11 @@ const menuList = [
                 link: '/user',
                 text: 'User Management',
                 icon: <CircleUser className="mr-2 h-5 w-5" />,
+            },
+            {
+                link: '/visitor',
+                text: 'Visitor Management',  // Changed name for clarity
+                icon: <Users className="mr-2 h-5 w-5" />,
             },
         ],
     },
