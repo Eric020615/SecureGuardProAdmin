@@ -8,6 +8,7 @@ import {
     AccordionTrigger,
 } from '@components/ui/accordion'
 import { Button } from '@components/ui/button'
+import { getDocumentStatusLabel } from '@config/constant'
 import { useVisitor } from '@store/visitor/useVisitor'
 import { ArrowLeft } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
@@ -97,6 +98,11 @@ const VisitorDetailsPage = () => {
                                     <div className="flex flex-col gap-1">
                                         <span className="text-sm font-semibold">
                                             Status:
+                                        </span>
+                                        <span className="text-sm">
+                                            {getDocumentStatusLabel(
+                                                visitorDetails.status
+                                            )}
                                         </span>
                                     </div>
                                     <div className="flex flex-col gap-1">

@@ -31,3 +31,31 @@ export const ITimeFormat = {
     weekOfYear: 'YYYY [Week] WW',             // 2024 Week 35
     dayOfYear: 'YYYY [Day] DDD',              // 2024 Day 243
 }
+
+export enum DocumentStatus {
+    Active = 1,
+    SoftDeleted = 0,
+    Archived = -1,
+    Pending = 2,
+    Draft = 3,
+    Suspended = 4,
+}
+
+export function getDocumentStatusLabel(status: DocumentStatus): string {
+    switch (status) {
+        case DocumentStatus.Active:
+            return "Active";
+        case DocumentStatus.SoftDeleted:
+            return "Deleted";
+        case DocumentStatus.Archived:
+            return "Archived";
+        case DocumentStatus.Pending:
+            return "Pending Approval";
+        case DocumentStatus.Draft:
+            return "Draft";
+        case DocumentStatus.Suspended:
+            return "Suspended";
+        default:
+            return "Unknown Status";
+    }
+}
