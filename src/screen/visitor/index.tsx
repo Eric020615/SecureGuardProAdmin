@@ -198,7 +198,9 @@ const VisitorManagementPage = () => {
                 <CustomTable
                     data={visitorHistory}
                     columns={columns}
-                    onView={(row: Row<any>) => {}} // Implement view logic if needed
+                    onView={(row: Row<GetVisitorDto>) => {
+                        router.push(`/visitor/${row.getValue('visitorGuid')}`) // Adjust route as necessary
+                    }} // Implement view logic if needed
                     totalRecords={totalVisitorHistory}
                     recordsPerPage={10}
                     currentPage={page}

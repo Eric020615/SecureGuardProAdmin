@@ -19,10 +19,12 @@ export interface IResponse<T> {
 }
 
 export interface IPaginatedResponse<T> {
-    message?: string
-    data?: T | T[] | null
-    status?: string
-    count: number
+    success: boolean
+    msg: string
+    data: {
+        list: T[]
+        count: number
+    }
 }
 
 const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {

@@ -1,4 +1,5 @@
 import { IType } from '@config/index'
+import { getVisitorDetailsById } from './visitorService/visitorService'
 
 export const listUrl = {
     auth: {
@@ -105,4 +106,14 @@ export const listUrl = {
             type: IType.put,
         },
     },
+    vistorManagement: {
+        getVisitors: {
+            path: 'visitor/admin',
+            type: IType.get,
+        },
+        getVisitorDetailsById: {
+            path: 'visitor/details',
+            type: IType.get,
+        }
+    }
 }
