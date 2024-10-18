@@ -8,12 +8,11 @@ import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
 import { GenderConst, RoleConst, RoleEnum } from '@config/constant/user'
 import { ResidentInformationDto, SystemAdminInformationDto } from '@dtos/user-management/userManagement.dto'
-import { useApplication } from '@store/application/useApplication'
 import { useUserManagement } from '@store/userManagement/useUserManagement'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import Avatar from 'react-avatar'
 
 // Method to render Resident Role Information
