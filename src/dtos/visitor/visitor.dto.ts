@@ -27,3 +27,8 @@ export interface GetVisitorDto {
     createdDateTime: string;
     updatedDateTime: string;
 }
+
+export interface GetVisitorByDateDto {
+	date: string
+	count: number
+}

@@ -114,6 +114,10 @@ export const listUrl = {
         getVisitorDetailsById: {
             path: 'visitor/details',
             type: IType.get,
+        },
+        getVisitorAnalytics: {
+            path: 'visitor/admin/analytics',
+            type: IType.get,
         }
     }
 }

@@ -1,6 +1,6 @@
 import GlobalHandler, { IPaginatedResponse, IResponse } from "@api/globalHandler"
 import { listUrl } from "@api/listUrl"
-import { GetVisitorDto } from "@dtos/visitor/visitor.dto"
+import { GetVisitorByDateDto, GetVisitorDto } from "@dtos/visitor/visitor.dto"
 import { getCookies } from "@lib/cookies"
 
 export const getVisitors = async (page: number, limit: number): Promise<IPaginatedResponse<GetVisitorDto>> => {
@@ -43,6 +43,34 @@ export const getVisitorDetailsById = async (
 			_token: cookieValue as string,
 		})
 		const result: IResponse<GetVisitorDto> = {
+			success,
+			msg: success ? 'success' : response?.message,
+			data: success ? response?.data : undefined,
+		}
+		return result
+	} catch (error: any) {
+		const result: IResponse<any> = {
+			success: false,
+			msg: error,
+			data: null,
+		}
+		return result
+	}
+}
+
+export const getVisitorAnalytics = async (startDate: string, endDate: string): Promise<IResponse<GetVisitorByDateDto[]>> => {
+	try {
+        const cookieValue = await getCookies('token')
+		const [success, response] = await GlobalHandler({
+			path: listUrl.vistorManagement.getVisitorAnalytics.path,
+			type: listUrl.vistorManagement.getVisitorAnalytics.type,
+			data: {
+				startDate,
+				endDate,
+			},
+			_token: cookieValue as string,
+		})
+		const result: IResponse<GetVisitorByDateDto[]> = {
 			success,
 			msg: success ? 'success' : response?.message,
 			data: success ? response?.data : undefined,

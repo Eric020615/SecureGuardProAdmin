@@ -4,7 +4,8 @@ import CustomDatePicker from '@components/datePicker/DatePicker'
 import LineChart from '@components/graph/line'
 import { Button } from '@components/ui/button'
 import { ITimeFormat } from '@config/constant'
-import { getLocalDateString, getTodayDate } from '@lib/time'
+import { getLocalDateString, getTodayDate, getUTCDateString } from '@lib/time'
+import { useVisitor } from '@store/visitor/useVisitor'
 import React, { useState } from 'react'
 import { CSVLink } from 'react-csv'
 
@@ -26,34 +27,31 @@ const mockVisitorData: VisitorData[] = [
 const DashboardPage = () => {
     const [startDate, setStartDate] = useState<Date | undefined>(getTodayDate())
     const [endDate, setEndDate] = useState<Date | undefined>(getTodayDate())
-    const [filteredData, setFilteredData] = useState<VisitorData[]>(mockVisitorData)
+    const { visitorAnalytics, getVisitorAnalyticsAction } = useVisitor()
 
     // Function to handle date validation and filtering
-    const filterData = () => {
+    const filterData = async () => {
         if (startDate && endDate && startDate > endDate) {
             alert('End date cannot be before start date')
             return
         }
 
-        // Filter data based on selected dates
-        const filtered = mockVisitorData.filter((data) => {
-            const date = new Date(data.date)
-            return startDate && endDate && date >= startDate && date <= endDate
-        })
-
-        setFilteredData(filtered)
+        await getVisitorAnalyticsAction(
+            getUTCDateString(startDate ? startDate : getTodayDate(), ITimeFormat.date),
+            getUTCDateString(endDate ? endDate : getTodayDate(), ITimeFormat.date)
+        )
     }
 
     // Prepare data for the chart
-    const chartLabels = filteredData.map((data) =>
+    const chartLabels = visitorAnalytics.map((data) =>
         getLocalDateString(new Date(data.date), ITimeFormat.date)
     )
-    const chartDataPoints = filteredData.map((data) => data.visitors)
+    const chartDataPoints = visitorAnalytics.map((data) => data.count)
 
     // CSV data
     const csvData = [
         ['Date', 'Visitors'],
-        ...filteredData.map((data) => [data.date, data.visitors.toString()]),
+        ...visitorAnalytics.map((data) => [data.date, data.count.toString()]),
     ]
 
     return (
