@@ -21,11 +21,10 @@ import {
     FormMessage,
 } from '@components/ui/form'
 import { useNotice } from '@store/notice/useNotice'
-import {
-    convertLocalDateStringToUTCString,
-    convertUTCStringToLocalDateString,
-} from '@lib/time'
 import { ITimeFormat } from '@config/constant'
+import {
+    convertDateStringToFormattedString,
+} from '@lib/time'
 
 interface EditNoticeDialogProps {
     noticeGuid: string
@@ -64,11 +63,11 @@ const EditNoticeDialog = ({ noticeGuid, open, setOpen }: EditNoticeDialogProps) 
             noticeGuid: noticeGuid,
             title: values.title,
             description: values.description,
-            startDate: convertLocalDateStringToUTCString(
+            startDate: convertDateStringToFormattedString(
                 values.startDate,
                 ITimeFormat.dateTime
             ),
-            endDate: convertLocalDateStringToUTCString(
+            endDate: convertDateStringToFormattedString(
                 values.endDate,
                 ITimeFormat.dateTime
             ),
@@ -94,7 +93,7 @@ const EditNoticeDialog = ({ noticeGuid, open, setOpen }: EditNoticeDialogProps) 
         form.setValue(
             'startDate',
             notice.startDate
-                ? convertUTCStringToLocalDateString(
+                ? convertDateStringToFormattedString(
                       notice.startDate,
                       ITimeFormat.dateTime
                   )
@@ -103,7 +102,7 @@ const EditNoticeDialog = ({ noticeGuid, open, setOpen }: EditNoticeDialogProps) 
         form.setValue(
             'endDate',
             notice.endDate
-                ? convertUTCStringToLocalDateString(notice.endDate, ITimeFormat.dateTime)
+                ? convertDateStringToFormattedString(notice.endDate, ITimeFormat.dateTime)
                 : ''
         )
     }, [notice])

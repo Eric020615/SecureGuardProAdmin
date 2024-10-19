@@ -17,11 +17,11 @@ import {
 import CustomTable from '@components/table/Table'
 import { useRouter } from 'next/navigation'
 import { Badge } from '@components/ui/badge'
-import { convertUTCStringToLocalDateString, getTodayDate } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import { useVisitor } from '@store/visitor/useVisitor'
 import { GetVisitorDto } from '@dtos/visitor/visitor.dto'
+import { convertDateStringToFormattedString } from '@lib/time'
 
 const VisitorManagementPage = () => {
     const {
@@ -105,7 +105,7 @@ const VisitorManagementPage = () => {
             },
             cell: ({ row }) => (
                 <div className="capitalize">
-                    {convertUTCStringToLocalDateString(
+                    {convertDateStringToFormattedString(
                         row.getValue('visitDateTime'),
                         ITimeFormat.dateTime
                     )}

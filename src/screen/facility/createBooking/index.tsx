@@ -20,9 +20,9 @@ import { FacilitySelect } from '@config/listOption/facility'
 import moment from 'moment'
 import CustomDatePicker from '@components/datePicker/DatePicker'
 import { useFacility } from '@store/facility/useFacility'
-import { getTodayDate, getUTCDateString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
+import { convertDateToDateString, getCurrentDate } from '@lib/time'
 
 const formSchema = z
     .object({
@@ -53,7 +53,7 @@ const CreateBookingPage = () => {
     const router = useRouter()
     const { submitBookingAction, checkAvailabilitySlotAction, availabilitySlot } = useFacility()
     const [facility, setFacility] = useState('')
-    const [date, setDate] = useState<Date | undefined>(getTodayDate())
+    const [date, setDate] = useState<Date | undefined>(getCurrentDate())
     const [slotId, setSlotId] = useState('') // Store selected slot
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -78,7 +78,7 @@ const CreateBookingPage = () => {
     }, [slotId])
 
     useEffect(() => {
-        form.setValue('date', date ? date : getTodayDate())
+        form.setValue('date', date ? date : getCurrentDate())
     }, [date])
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -93,8 +93,8 @@ const CreateBookingPage = () => {
         const response = await submitBookingAction({
             facilityId: values.facilityId,
             bookedBy: values.user,
-            startDate: getUTCDateString(startDate.toDate(), ITimeFormat.dateTime),
-            endDate: getUTCDateString(endDate.toDate(), ITimeFormat.dateTime),
+            startDate: convertDateToDateString(startDate.toDate(), ITimeFormat.isoDateTime),
+            endDate: convertDateToDateString(endDate.toDate(), ITimeFormat.isoDateTime),
             numOfGuest: parseInt(values.numOfGuest),
             spaceId: values.spaceId,
         })
@@ -121,8 +121,8 @@ const CreateBookingPage = () => {
                     .minute(parseInt(endTimeSplit[1]))
                 await checkAvailabilitySlotAction(
                     facilityId,
-                    getUTCDateString(startDate.toDate(), ITimeFormat.dateTime),
-                    getUTCDateString(endDate.toDate(), ITimeFormat.dateTime)
+                    convertDateToDateString(startDate.toDate(), ITimeFormat.isoDateTime),
+                    convertDateToDateString(endDate.toDate(), ITimeFormat.isoDateTime)
                 )
             }
             fetchAvailableSlots()

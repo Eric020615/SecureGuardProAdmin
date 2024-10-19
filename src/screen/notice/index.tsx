@@ -18,12 +18,11 @@ import CustomTable from '@components/table/Table'
 import { useNotice } from '@store/notice/useNotice'
 import { useRouter } from 'next/navigation'
 import EditNoticeDialog from '@components/dialog/EditNoticeDialog'
-import { convertUTCStringToLocalDateString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
-import { useModal } from '@store/modal/useModal'
 import { GetNoticeDto } from '@dtos/notice/notice.dto'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import CustomConfirmDialog from '@components/dialog/CustomConfirmDialog'
+import { convertDateStringToFormattedString } from '@lib/time'
 
 const NoticeManagementPage = () => {
     const columns: ColumnDef<GetNoticeDto>[] = [
@@ -92,7 +91,7 @@ const NoticeManagementPage = () => {
             },
             cell: ({ row }) => (
                 <div className="capitalize">
-                    {convertUTCStringToLocalDateString(
+                    {convertDateStringToFormattedString(
                         row.getValue('startDate'),
                         ITimeFormat.dateTime
                     )}
@@ -116,7 +115,7 @@ const NoticeManagementPage = () => {
             },
             cell: ({ row }) => (
                 <div className="capitalize">
-                    {convertUTCStringToLocalDateString(
+                    {convertDateStringToFormattedString(
                         row.getValue('endDate'),
                         ITimeFormat.dateTime
                     )}

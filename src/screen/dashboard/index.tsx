@@ -4,29 +4,14 @@ import CustomDatePicker from '@components/datePicker/DatePicker'
 import LineChart from '@components/graph/line'
 import { Button } from '@components/ui/button'
 import { ITimeFormat } from '@config/constant'
-import { getLocalDateString, getTodayDate, getUTCDateString } from '@lib/time'
+import { convertDateStringToFormattedString, convertDateToDateString, getCurrentDate, getCurrentDateString } from '@lib/time'
 import { useVisitor } from '@store/visitor/useVisitor'
 import React, { useState } from 'react'
 import { CSVLink } from 'react-csv'
 
-type VisitorData = {
-    date: string
-    visitors: number
-}
-
-const mockVisitorData: VisitorData[] = [
-    { date: '2024-10-17', visitors: 20 },
-    { date: '2024-10-18', visitors: 30 },
-    { date: '2024-10-19', visitors: 25 },
-    { date: '2024-10-20', visitors: 40 },
-    { date: '2024-10-21', visitors: 35 },
-    { date: '2024-10-22', visitors: 50 },
-    { date: '2024-10-23', visitors: 45 },
-]
-
 const DashboardPage = () => {
-    const [startDate, setStartDate] = useState<Date | undefined>(getTodayDate())
-    const [endDate, setEndDate] = useState<Date | undefined>(getTodayDate())
+    const [startDate, setStartDate] = useState<Date | undefined>(getCurrentDate())
+    const [endDate, setEndDate] = useState<Date | undefined>(getCurrentDate())
     const { visitorAnalytics, getVisitorAnalyticsAction } = useVisitor()
 
     // Function to handle date validation and filtering
@@ -37,14 +22,20 @@ const DashboardPage = () => {
         }
 
         await getVisitorAnalyticsAction(
-            getUTCDateString(startDate ? startDate : getTodayDate(), ITimeFormat.date),
-            getUTCDateString(endDate ? endDate : getTodayDate(), ITimeFormat.date)
+            convertDateToDateString(
+                startDate ? startDate : getCurrentDate(),
+                ITimeFormat.isoDateTime
+            ),
+            convertDateToDateString(
+                endDate ? endDate : getCurrentDate(),
+                ITimeFormat.isoDateTime
+            )
         )
     }
 
     // Prepare data for the chart
     const chartLabels = visitorAnalytics.map((data) =>
-        getLocalDateString(new Date(data.date), ITimeFormat.date)
+        convertDateStringToFormattedString(data.date, ITimeFormat.date)
     )
     const chartDataPoints = visitorAnalytics.map((data) => data.count)
 
@@ -61,7 +52,7 @@ const DashboardPage = () => {
                 <Button className="flex items-center gap-1" onClick={() => {}}>
                     <CSVLink
                         data={csvData}
-                        filename={`visitor_trends_${getLocalDateString(new Date(), 'yyyy-MM-dd')}.csv`}
+                        filename={`visitor_trends_${getCurrentDateString(ITimeFormat.date)}.csv`}
                     >
                         Export as CSV
                     </CSVLink>

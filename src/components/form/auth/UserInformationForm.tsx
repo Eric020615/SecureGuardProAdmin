@@ -21,10 +21,10 @@ import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 import { getBase64 } from '@lib/file'
 import { useUser } from '@store/user/useUser'
-import { getUTCDateString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
 import CustomSelect from '@components/select/Select'
 import { GenderList } from '@config/listOption/user'
+import { convertDateStringToFormattedString } from '@lib/time'
 
 const userInformationSchema = z.object({
     firstName: z.string().min(1, { message: 'First Name is required' }),
@@ -60,8 +60,8 @@ const UserInformationForm = () => {
                 contactNumber: values.phoneNumber,
                 gender: values.gender as GenderEnum,
                 staffId: values.staffId,
-                dateOfBirth: getUTCDateString(
-                    new Date(values.dateOfBirth),
+                dateOfBirth: convertDateStringToFormattedString(
+                    values.dateOfBirth,
                     ITimeFormat.date
                 ),
                 supportedFiles:

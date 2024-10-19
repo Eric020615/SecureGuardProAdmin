@@ -22,11 +22,8 @@ import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 import CustomSelect from '@components/select/Select'
 import { GenderList } from '@config/listOption/user'
-import {
-    convertLocalDateStringToUTCString,
-    convertUTCStringToLocalDateString,
-} from '@lib/time'
 import { ITimeFormat } from '@config/constant'
+import { convertDateStringToFormattedString } from '@lib/time'
 
 const profileSchema = z.object({
     firstName: z.string().min(1, { message: 'First Name is required' }),
@@ -70,7 +67,7 @@ const MyProfilePage = () => {
             userName: values.userName,
             contactNumber: values.phoneNumber,
             gender: values.gender as GenderEnum,
-            dateOfBirth: convertLocalDateStringToUTCString(
+            dateOfBirth: convertDateStringToFormattedString(
                 values.dateOfBirth,
                 ITimeFormat.date
             ),
@@ -92,7 +89,7 @@ const MyProfilePage = () => {
         form.setValue(
             'dateOfBirth',
             userProfile?.dateOfBirth
-                ? convertUTCStringToLocalDateString(
+                ? convertDateStringToFormattedString(
                       userProfile.dateOfBirth,
                       ITimeFormat.date
                   )
@@ -212,7 +209,7 @@ const MyProfilePage = () => {
                                     </span>
                                     <span className="text-sm">
                                         {userProfile?.dateOfBirth
-                                            ? convertUTCStringToLocalDateString(
+                                            ? convertDateStringToFormattedString(
                                                   userProfile.dateOfBirth,
                                                   ITimeFormat.date
                                               )

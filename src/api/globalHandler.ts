@@ -43,6 +43,8 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
                     try {
                         // Perform the API request
                         if (type === 'get') {
+                            console.log('hihi555666')
+                            console.log(data)
                             response = await Axios.get(baseURL, {
                                 params: data,
                                 responseType: isBloob ? 'blob' : 'json',
@@ -113,7 +115,7 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
                                 data: data,
                             })
                         } else {
-                            response = await Axios.post(baseURL, data, {
+                            response = await Axios.post(baseURL, JSON.stringify(data), {
                                 headers: {
                                     'Content-Type': payload.isFormData
                                         ? 'multipart/form-data'
@@ -126,7 +128,7 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
                                           }
                                         : {}),
                                 },
-                                params: payload.params,
+                                params: encodeURIComponent(payload.params),
                                 paramsSerializer: (params) => parseParams(params),
                             })
                         }
@@ -160,18 +162,21 @@ const parseParams = (params: any) => {
                 if (Array.isArray(element)) {
                     // If the element is also an array, iterate over its elements
                     element.forEach((subElement) => {
-                        options += `${key}=${subElement}&`
+                        options += `${encodeURIComponent(key)}=${encodeURIComponent(subElement)}&`
                     })
                 } else {
                     // If the element is not an array, simply append it with the key
-                    options += `${key}=${element}&`
+                    options += `${encodeURIComponent(key)}=${encodeURIComponent(element)}&`
                 }
             })
         } else {
             // If the value is not an array, append it with the key
-            options += `${key}=${value}&`
+            console.log("aaaa")
+            options += `${encodeURIComponent(key)}=${encodeURIComponent(value)}&`
         }
     })
+    console.log('alola')
+    console.log(options)
     // Remove the trailing '&' and return the result
     return options ? options.slice(0, -1) : options
 }

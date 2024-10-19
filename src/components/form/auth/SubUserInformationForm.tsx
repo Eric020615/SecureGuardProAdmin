@@ -19,10 +19,10 @@ import { GenderEnum, userInformationConst } from '@config/constant/user'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 import { useUser } from '@store/user/useUser'
-import { getUTCDateString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
 import CustomSelect from '@components/select/Select'
 import { GenderList } from '@config/listOption/user'
+import { convertDateStringToFormattedString } from '@lib/time'
 
 const userInformationSchema = z.object({
     firstName: z.string().min(1, { message: 'First Name is required' }),
@@ -54,8 +54,8 @@ const SubUserInformationForm = () => {
                 userName: values.userName,
                 contactNumber: values.phoneNumber,
                 gender: values.gender as GenderEnum,
-                dateOfBirth: getUTCDateString(
-                    new Date(values.dateOfBirth),
+                dateOfBirth: convertDateStringToFormattedString(
+                    values.dateOfBirth,
                     ITimeFormat.date
                 ),
                 parentUserGuid: subUserPayload.parentUserGuid,

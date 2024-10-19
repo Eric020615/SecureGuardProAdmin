@@ -60,7 +60,6 @@ export const useVisitor = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await getVisitorAnalytics(startDate, endDate)
-				console.log(response)
 				if(!response.success){
 					throw new Error(response.msg)
 				}

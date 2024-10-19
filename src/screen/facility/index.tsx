@@ -19,14 +19,14 @@ import { useFacility } from '@store/facility/useFacility'
 import { useRouter } from 'next/navigation'
 import CancelBookingDialog from '@components/dialog/CancelBookingDialog'
 import { Badge } from '@components/ui/badge'
-import {
-    convertUTCStringToLocalDate,
-    convertUTCStringToLocalDateString,
-    getTodayDate,
-} from '@lib/time'
 import { ITimeFormat } from '@config/constant'
 import { GetFacilityBookingHistoryDto } from '@dtos/facility/facility.dto'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
+import {
+    convertDateStringToDate,
+    convertDateStringToFormattedString,
+    getCurrentDate,
+} from '@lib/time'
 
 const FacilityManagementPage = () => {
     const {
@@ -98,7 +98,7 @@ const FacilityManagementPage = () => {
             },
             cell: ({ row }) => (
                 <div className="capitalize">
-                    {convertUTCStringToLocalDateString(
+                    {convertDateStringToFormattedString(
                         row.getValue('startDate'),
                         ITimeFormat.dateTime
                     )}
@@ -122,7 +122,7 @@ const FacilityManagementPage = () => {
             },
             cell: ({ row }) => (
                 <div className="capitalize">
-                    {convertUTCStringToLocalDateString(
+                    {convertDateStringToFormattedString(
                         row.getValue('endDate'),
                         ITimeFormat.dateTime
                     )}
@@ -139,32 +139,39 @@ const FacilityManagementPage = () => {
         {
             accessorKey: 'isCancelled',
             header: 'Status',
-            cell: ({ row }) => (
-                <div className="w-[100px]">
-                    {row.getValue('startDate') != '' &&
-                        (convertUTCStringToLocalDate(row.getValue('startDate')) >
-                        getTodayDate() ? (
-                            row.getValue('isCancelled') ? (
-                                <Badge className="w-full bg-red-500 flex justify-center">
-                                    <span>Cancelled</span>
-                                </Badge>
+            cell: ({ row }) => {
+                const startDate = row.getValue('startDate')
+                    ? convertDateStringToDate(row.getValue('startDate'))
+                    : null
+                return (
+                    <div className="w-[100px]">
+                        {startDate &&
+                            (startDate > getCurrentDate() ? (
+                                row.getValue('isCancelled') ? (
+                                    <Badge className="w-full bg-red-500 flex justify-center">
+                                        <span>Cancelled</span>
+                                    </Badge>
+                                ) : (
+                                    <Badge className="w-full bg-green-500 flex justify-center">
+                                        <span>Active</span>
+                                    </Badge>
+                                )
                             ) : (
-                                <Badge className="w-full bg-green-500 flex justify-center">
-                                    <span>Active</span>
+                                <Badge className="w-full bg-red-500 flex justify-center">
+                                    <span>Expired</span>
                                 </Badge>
-                            )
-                        ) : (
-                            <Badge className="w-full bg-red-500 flex justify-center">
-                                <span>Expired</span>
-                            </Badge>
-                        ))}
-                </div>
-            ),
+                            ))}
+                    </div>
+                )
+            },
         },
         {
             id: 'actions',
             enableHiding: false,
             cell: ({ row }) => {
+                const startDate = row.getValue('startDate')
+                    ? convertDateStringToDate(row.getValue('startDate'))
+                    : null
                 return (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -176,9 +183,8 @@ const FacilityManagementPage = () => {
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            {row.getValue('startDate') != '' &&
-                                (convertUTCStringToLocalDate(row.getValue('startDate')) >
-                                getTodayDate() ? (
+                            {startDate &&
+                                (startDate > getCurrentDate() ? (
                                     row.getValue('isCancelled') ? (
                                         <Badge className="w-full bg-red-500 text-center">
                                             Cancelled

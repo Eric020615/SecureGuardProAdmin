@@ -18,10 +18,9 @@ import {
 import CustomTable from '@components/table/Table'
 import { useRouter } from 'next/navigation'
 import { useUserManagement } from '@store/userManagement/useUserManagement'
-import { convertUTCStringToLocalDateString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
-import { useApplication } from '@store/application/useApplication'
 import { GetUserDto } from '@dtos/user-management/userManagement.dto'
+import { convertDateStringToFormattedString } from '@lib/time'
 
 const ActiveUserList = () => {
     const { getUserListAction, userList, totalUserList, resetUserListAction } =
@@ -153,7 +152,7 @@ const ActiveUserList = () => {
             },
             cell: ({ row }) => (
                 <div className="capitalize">
-                    {convertUTCStringToLocalDateString(
+                    {convertDateStringToFormattedString(
                         row.getValue('dateOfBirth'),
                         ITimeFormat.date
                     )}
@@ -182,7 +181,7 @@ const ActiveUserList = () => {
             },
             cell: ({ row }) => (
                 <div className="capitalize">
-                    {convertUTCStringToLocalDateString(
+                    {convertDateStringToFormattedString(
                         row.getValue('createdDateTime'),
                         ITimeFormat.dateTime
                     )}
@@ -211,7 +210,7 @@ const ActiveUserList = () => {
             },
             cell: ({ row }) => (
                 <div className="capitalize">
-                    {convertUTCStringToLocalDateString(
+                    {convertDateStringToFormattedString(
                         row.getValue('updatedDateTime'),
                         ITimeFormat.dateTime
                     )}

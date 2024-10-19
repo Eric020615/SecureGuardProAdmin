@@ -16,9 +16,9 @@ import { Input } from '@components/ui/input'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import { useNotice } from '@store/notice/useNotice'
-import { convertLocalDateStringToUTCString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
+import { convertDateStringToFormattedString } from '@lib/time'
 
 const formSchema = z
     .object({
@@ -57,11 +57,11 @@ const CreateNoticePage = () => {
         const response = await createNoticeAction({
             title: values.title,
             description: values.description,
-            startDate: convertLocalDateStringToUTCString(
+            startDate: convertDateStringToFormattedString(
                 values.startDate,
                 ITimeFormat.dateTime
             ),
-            endDate: convertLocalDateStringToUTCString(
+            endDate: convertDateStringToFormattedString(
                 values.endDate,
                 ITimeFormat.dateTime
             ),
