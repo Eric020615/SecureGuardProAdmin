@@ -69,7 +69,7 @@ const MyProfilePage = () => {
             gender: values.gender as GenderEnum,
             dateOfBirth: convertDateStringToFormattedString(
                 values.dateOfBirth,
-                ITimeFormat.date
+                ITimeFormat.isoDateTime
             ),
         })
         if (response.success) {
@@ -319,14 +319,15 @@ const MyProfilePage = () => {
                                 <FormField
                                     control={form.control}
                                     name="dateOfBirth"
-                                    render={({ field }) => (
+                                    render={({ field: { value, onChange } }) => (
                                         <FormItem>
                                             <FormLabel>Date of Birth</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     type="date"
                                                     placeholder="Select your date of birth"
-                                                    {...field}
+                                                    value={value}
+                                                    onChange={onChange}
                                                 />
                                             </FormControl>
                                             <FormMessage />

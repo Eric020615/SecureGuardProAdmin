@@ -43,8 +43,6 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
                     try {
                         // Perform the API request
                         if (type === 'get') {
-                            console.log('hihi555666')
-                            console.log(data)
                             response = await Axios.get(baseURL, {
                                 params: data,
                                 responseType: isBloob ? 'blob' : 'json',
@@ -171,12 +169,9 @@ const parseParams = (params: any) => {
             })
         } else {
             // If the value is not an array, append it with the key
-            console.log("aaaa")
             options += `${encodeURIComponent(key)}=${encodeURIComponent(value)}&`
         }
     })
-    console.log('alola')
-    console.log(options)
     // Remove the trailing '&' and return the result
     return options ? options.slice(0, -1) : options
 }

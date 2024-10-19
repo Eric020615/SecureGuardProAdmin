@@ -39,3 +39,8 @@ export const getRelativeTimeFromNow = (date: Date) => {
     if (!date) return '';
     return moment(date).fromNow();
 };
+
+export const initializeDate = (date: Date) => {
+	if(!date) return null
+	return moment(date).startOf("day").toDate()
+}

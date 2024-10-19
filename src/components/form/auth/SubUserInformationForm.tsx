@@ -56,7 +56,7 @@ const SubUserInformationForm = () => {
                 gender: values.gender as GenderEnum,
                 dateOfBirth: convertDateStringToFormattedString(
                     values.dateOfBirth,
-                    ITimeFormat.date
+                    ITimeFormat.isoDateTime
                 ),
                 parentUserGuid: subUserPayload.parentUserGuid,
                 subUserRequestGuid: subUserPayload.subUserRequestGuid,

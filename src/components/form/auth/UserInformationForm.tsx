@@ -62,7 +62,7 @@ const UserInformationForm = () => {
                 staffId: values.staffId,
                 dateOfBirth: convertDateStringToFormattedString(
                     values.dateOfBirth,
-                    ITimeFormat.date
+                    ITimeFormat.isoDateTime
                 ),
                 supportedFiles:
                     values.files.length > 0
