@@ -4,7 +4,7 @@ import CustomDatePicker from '@components/datePicker/DatePicker'
 import LineChart from '@components/graph/line'
 import { Button } from '@components/ui/button'
 import { ITimeFormat } from '@config/constant'
-import { convertDateStringToFormattedString, convertDateToDateString, getCurrentDate, getCurrentDateString } from '@lib/time'
+import { convertDateStringToFormattedString, convertDateToDateString, getCurrentDate, getCurrentDateString, initializeDateAtBoundary } from '@lib/time'
 import { useVisitor } from '@store/visitor/useVisitor'
 import React, { useState } from 'react'
 import { CSVLink } from 'react-csv'
@@ -27,7 +27,7 @@ const DashboardPage = () => {
                 ITimeFormat.isoDateTime
             ),
             convertDateToDateString(
-                endDate ? endDate : getCurrentDate(),
+                endDate ? initializeDateAtBoundary(endDate, "end") : getCurrentDate(),
                 ITimeFormat.isoDateTime
             )
         )
