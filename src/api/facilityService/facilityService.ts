@@ -2,6 +2,7 @@ import { getCookies } from '@lib/cookies'
 import GlobalHandler, { IResponse } from '../globalHandler'
 import { listUrl } from '../listUrl'
 import { CancelFacilityBookingDto, FacilityBookingFormDto, SpaceAvailabilityDto } from '@dtos/facility/facility.dto'
+import { PaginationDirection } from '@config/constant'
 
 export const createBooking = async (bookingForm: FacilityBookingFormDto): Promise<any> => {
     try {
@@ -29,7 +30,8 @@ export const createBooking = async (bookingForm: FacilityBookingFormDto): Promis
 }
 
 export const getBookingHistory = async (
-    page: number,
+    direction: PaginationDirection,
+    id: number,
     limit: number
 ): Promise<IResponse<any>> => {
     try {
@@ -39,7 +41,8 @@ export const getBookingHistory = async (
             type: listUrl.facility.getBookingHistory.type,
             _token: cookieValue as string,
             data: {
-                page,
+                direction,
+                id,
                 limit,
             },
         })

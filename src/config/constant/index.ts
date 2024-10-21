@@ -59,3 +59,8 @@ export function getDocumentStatusLabel(status: DocumentStatus): string {
             return "Unknown Status";
     }
 }
+
+export enum PaginationDirection {
+	Next = 'next',
+	Previous = 'prev',
+}

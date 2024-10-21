@@ -19,7 +19,7 @@ import { useFacility } from '@store/facility/useFacility'
 import { useRouter } from 'next/navigation'
 import CancelBookingDialog from '@components/dialog/CancelBookingDialog'
 import { Badge } from '@components/ui/badge'
-import { ITimeFormat } from '@config/constant'
+import { ITimeFormat, PaginationDirection } from '@config/constant'
 import { GetFacilityBookingHistoryDto } from '@dtos/facility/facility.dto'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import {
@@ -31,6 +31,7 @@ import {
 const FacilityManagementPage = () => {
     const {
         facilityBookingHistory,
+        currentPage,
         totalFacilityBookingHistory,
         getFacilityBookingHistoryAction,
         resetFacilityBookingHistoryAction,
@@ -38,7 +39,6 @@ const FacilityManagementPage = () => {
     const [openCancelDialog, setOpenCancelDialog] = useState(false)
     const [selectedBookingGuid, setSelectedBookingGuid] = useState('')
     const router = useRouter()
-    const [page, setPage] = useState(0)
 
     const columns: ColumnDef<GetFacilityBookingHistoryDto>[] = [
         {
@@ -214,18 +214,20 @@ const FacilityManagementPage = () => {
         },
     ]
 
+    useEffect(() => {
+        resetFacilityBookingHistoryAction()
+        fetchFacilityBookingHistory()
+    }, [])
+
     const openCancelBookingDialog = (bookingGuid: string) => {
         setOpenCancelDialog(true)
         setSelectedBookingGuid(bookingGuid)
     }
 
-    useEffect(() => {
-        resetFacilityBookingHistoryAction()
-        fetchFacilityBookingHistory()
-    }, [page])
-
-    const fetchFacilityBookingHistory = async () => {
-        await getFacilityBookingHistoryAction(page, 10)
+    const fetchFacilityBookingHistory = async (
+        direction: PaginationDirection = PaginationDirection.Next
+    ) => {
+        await getFacilityBookingHistoryAction(direction, 10)
     }
 
     return (
@@ -253,10 +255,15 @@ const FacilityManagementPage = () => {
                     data={facilityBookingHistory}
                     columns={columns}
                     onView={(row: Row<any>) => {}}
+                    currentPage={currentPage}
                     totalRecords={totalFacilityBookingHistory}
                     recordsPerPage={10}
-                    currentPage={page}
-                    setCurrentPage={setPage}
+                    fetchNext={() => {
+                        fetchFacilityBookingHistory(PaginationDirection.Next)
+                    }}
+                    fetchPrev={() => {
+                        fetchFacilityBookingHistory(PaginationDirection.Previous)
+                    }}
                 />
             </div>
         </>

@@ -7,41 +7,68 @@ import {
 } from '@api/userManagementService/userManagementService'
 import { IResponse } from '@api/globalHandler'
 import { generalAction } from '@store/application/useApplication'
-import { GetUserDetailsByUserGuidDto, GetUserDto } from '@dtos/user-management/userManagement.dto'
+import {
+    GetUserDetailsByUserGuidDto,
+    GetUserDto,
+} from '@dtos/user-management/userManagement.dto'
+import { PaginationDirection } from '@config/constant'
 
 interface State {
     userDetails: GetUserDetailsByUserGuidDto
     userList: GetUserDto[]
+    currentPage: number
     totalUserList: number
 }
 
 interface Actions {
     getUserListAction: (
         isActive: boolean,
-        page: number,
+        direction: PaginationDirection,
         limit: number
     ) => Promise<IResponse<any>>
     resetUserListAction: () => void
-    getUserDetailsAction: (userGuid: string) => Promise<IResponse<GetUserDetailsByUserGuidDto>>
+    getUserDetailsAction: (
+        userGuid: string
+    ) => Promise<IResponse<GetUserDetailsByUserGuidDto>>
     activateUserByIdAction: (userGuid: string) => Promise<IResponse<any>>
     deactivateUserByIdAction: (userGuid: string) => Promise<IResponse<any>>
 }
 
-export const useUserManagement = create<State & Actions>((set) => ({
+export const useUserManagement = create<State & Actions>((set, get) => ({
     userDetails: {} as GetUserDetailsByUserGuidDto,
     userList: [],
+    currentPage: 0,
     totalUserList: 0,
-    getUserListAction: async (isActive: boolean, page: number, limit: number) => {
+    getUserListAction: async (
+        isActive: boolean,
+        direction: PaginationDirection,
+        limit: number
+    ) => {
         return generalAction(
             async () => {
-                const response = await getUserList(isActive, page, limit)
+                let response: any
+                const { userList, currentPage } = get()
+                if (direction === PaginationDirection.Next) {
+                    // Pass the last booking ID from the current list for next pagination
+                    const lastId =
+                        userList.length > 0 ? userList[userList.length - 1].userId : 0 // If no history, pass 0 or handle accordingly
+
+                    response = await getUserList(isActive, direction, lastId, limit)
+                    set({ currentPage: currentPage + 1 })
+                } else {
+                    // Pass the first booking ID from the current list for previous pagination
+                    const firstId = userList.length > 0 ? userList[0].userId : 0 // If no history, pass 0 or handle accordingly
+
+                    response = await getUserList(isActive, direction, firstId, limit)
+                    set({ currentPage: Math.max(currentPage - 1, 1) })
+                }
                 if (!response.success) {
                     throw new Error(response.msg)
                 }
-                set((state) => ({
-                    userList: [...state.userList, ...response.data.list],
-                }))
-                set({ totalUserList: response.data.count })
+                set({ 
+                    userList: response.data.list,
+                    totalUserList: response.data.count 
+                })
                 return response
             },
             '',
@@ -49,7 +76,7 @@ export const useUserManagement = create<State & Actions>((set) => ({
         )
     },
     resetUserListAction() {
-        set({ userList: [], totalUserList: 0 })
+        set({ userList: [], currentPage: 0, totalUserList: 0 })
     },
     getUserDetailsAction: async (userGuid: string) => {
         return generalAction(

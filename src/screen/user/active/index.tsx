@@ -8,7 +8,6 @@ import { ArrowUpDown, MoreHorizontal } from 'lucide-react'
 import { Checkbox } from '@components/ui/checkbox'
 import {
     DropdownMenu,
-    DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
@@ -18,27 +17,26 @@ import {
 import CustomTable from '@components/table/Table'
 import { useRouter } from 'next/navigation'
 import { useUserManagement } from '@store/userManagement/useUserManagement'
-import { ITimeFormat } from '@config/constant'
+import { ITimeFormat, PaginationDirection } from '@config/constant'
 import { GetUserDto } from '@dtos/user-management/userManagement.dto'
 import { convertDateStringToFormattedString } from '@lib/time'
 
 const ActiveUserList = () => {
-    const { getUserListAction, userList, totalUserList, resetUserListAction } =
+    const { getUserListAction, userList, currentPage, totalUserList, resetUserListAction } =
         useUserManagement()
     const [selectedUserId, setSelectedUserId] = useState('')
     const router = useRouter()
     const [openEditUserDialog, setOpenEditUserDialog] = useState(false)
     const [openCustomDialog, setOpenCustomDialog] = useState(false)
     const [userId, setUserId] = useState('')
-    const [page, setPage] = useState(0)
 
     useEffect(() => {
         resetUserListAction()
         fetchActiveUserList()
-    }, [page])
+    }, [])
 
-    const fetchActiveUserList = async () => {
-        await getUserListAction(true, page, 10)
+    const fetchActiveUserList = async (direction: PaginationDirection = PaginationDirection.Next) => {
+        await getUserListAction(true, direction, 10)
     }
 
     const openEditDialog = async (userId: string) => {
@@ -259,10 +257,15 @@ const ActiveUserList = () => {
             onView={(row: Row<any>) => {
                 router.push(`/user/${row.getValue('userGuid')}`)
             }}
+            currentPage={currentPage}
             totalRecords={totalUserList}
             recordsPerPage={10}
-            currentPage={page}
-            setCurrentPage={setPage}
+            fetchNext={() => {
+                fetchActiveUserList(PaginationDirection.Next)
+            }}
+            fetchPrev={() => {
+                fetchActiveUserList(PaginationDirection.Previous)
+            }}
         />
     )
 }

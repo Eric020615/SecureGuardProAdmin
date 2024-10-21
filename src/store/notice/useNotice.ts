@@ -8,11 +8,18 @@ import {
 } from '@api/noticeService/noticeService'
 import { generalAction } from '@store/application/useApplication'
 import { IResponse } from '@api/globalHandler'
-import { CreateNoticeDto, DeleteNoticeDto, EditNoticeDto, GetNoticeDto } from '@dtos/notice/notice.dto'
+import {
+    CreateNoticeDto,
+    DeleteNoticeDto,
+    EditNoticeDto,
+    GetNoticeDto,
+} from '@dtos/notice/notice.dto'
+import { PaginationDirection } from '@config/constant'
 
 interface State {
     notice: GetNoticeDto
     notices: GetNoticeDto[]
+    currentPage: number
     totalNotices: number
 }
 
@@ -21,25 +28,44 @@ interface Actions {
     getNoticeByIdAction: (noticeGuid: string) => Promise<any>
     updateNoticeByIdAction: (noticeForm: EditNoticeDto) => Promise<any>
     deleteNoticeByIdAction: (deleteNotice: DeleteNoticeDto) => Promise<any>
-    getNoticeAction: (page: number, limit: number) => Promise<IResponse<any>>
+    getNoticeAction: (
+        direction: PaginationDirection,
+        limit: number
+    ) => Promise<IResponse<any>>
     resetNoticeAction: () => void
 }
 
-export const useNotice = create<State & Actions>((set) => ({
+export const useNotice = create<State & Actions>((set, get) => ({
     notice: {} as GetNoticeDto,
     notices: [],
+    currentPage: 0,
     totalNotices: 0,
-    getNoticeAction: async (page: number, limit: number) => {
+    getNoticeAction: async (direction: PaginationDirection, limit: number) => {
         return generalAction(
             async () => {
-                const response = await getNotice(page, limit)
+                let response: any
+                const { notices, currentPage } = get()
+                if (direction === PaginationDirection.Next) {
+                    // Pass the last booking ID from the current list for next pagination
+                    const lastId =
+                        notices.length > 0 ? notices[notices.length - 1].noticeId : 0 // If no history, pass 0 or handle accordingly
+
+                    response = await getNotice(direction, lastId, limit)
+                    set({ currentPage: currentPage + 1 })
+                } else {
+                    // Pass the first booking ID from the current list for previous pagination
+                    const firstId = notices.length > 0 ? notices[0].noticeId : 0 // If no history, pass 0 or handle accordingly
+
+                    response = await getNotice(direction, firstId, limit)
+                    set({ currentPage: Math.max(currentPage - 1, 1) })
+                }
                 if (!response.success) {
                     throw new Error(response.msg)
                 }
-                set((state) => ({
-                    notices: [...state.notices, ...response.data.list],
-                }))
-                set({ totalNotices: response.data.count })
+                set({
+                    notices: response.data.list,
+                    totalNotices: response.data.count,
+                })
                 return response
             },
             '',
@@ -47,7 +73,7 @@ export const useNotice = create<State & Actions>((set) => ({
         )
     },
     resetNoticeAction() {
-        set({ notices: [], totalNotices: 0 })
+        set({ notices: [], currentPage: 0, totalNotices: 0 })
     },
     createNoticeAction: async (notice: CreateNoticeDto) => {
         return generalAction(

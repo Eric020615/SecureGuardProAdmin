@@ -17,7 +17,7 @@ import {
 import CustomTable from '@components/table/Table'
 import { useRouter } from 'next/navigation'
 import { Badge } from '@components/ui/badge'
-import { ITimeFormat } from '@config/constant'
+import { ITimeFormat, PaginationDirection } from '@config/constant'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import { useVisitor } from '@store/visitor/useVisitor'
 import { GetVisitorDto } from '@dtos/visitor/visitor.dto'
@@ -26,6 +26,7 @@ import { convertDateStringToFormattedString } from '@lib/time'
 const VisitorManagementPage = () => {
     const {
         visitorHistory,
+        currentPage,
         totalVisitorHistory,
         getVisitorHistoryAction,
         resetVisitorHistoryAction,
@@ -33,7 +34,6 @@ const VisitorManagementPage = () => {
     const [openCancelDialog, setOpenCancelDialog] = useState(false)
     const [selectedVisitorGuid, setSelectedVisitorGuid] = useState('')
     const router = useRouter()
-    const [page, setPage] = useState(0)
 
     const columns: ColumnDef<GetVisitorDto>[] = [
         {
@@ -173,10 +173,10 @@ const VisitorManagementPage = () => {
     useEffect(() => {
         resetVisitorHistoryAction()
         fetchVisitorHistory()
-    }, [page])
+    }, [])
 
-    const fetchVisitorHistory = async () => {
-        await getVisitorHistoryAction(page, 10)
+    const fetchVisitorHistory = async (direction: PaginationDirection = PaginationDirection.Next) => {
+        await getVisitorHistoryAction(direction, 10)
     }
 
     return (
@@ -200,11 +200,16 @@ const VisitorManagementPage = () => {
                     columns={columns}
                     onView={(row: Row<GetVisitorDto>) => {
                         router.push(`/visitor/${row.getValue('visitorGuid')}`) // Adjust route as necessary
-                    }} // Implement view logic if needed
+                    }}
+                    currentPage={currentPage}
                     totalRecords={totalVisitorHistory}
                     recordsPerPage={10}
-                    currentPage={page}
-                    setCurrentPage={setPage}
+                    fetchNext={() => {
+                        fetchVisitorHistory(PaginationDirection.Next)
+                    }}
+                    fetchPrev={() => {
+                        fetchVisitorHistory(PaginationDirection.Previous)
+                    }}
                 />
             </div>
         </>

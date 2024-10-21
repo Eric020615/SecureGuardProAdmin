@@ -16,29 +16,34 @@ import {
 import CustomTable from '@components/table/Table'
 import { useRouter } from 'next/navigation'
 import { useUserManagement } from '@store/userManagement/useUserManagement'
-import { ITimeFormat } from '@config/constant'
+import { ITimeFormat, PaginationDirection } from '@config/constant'
 import { useApplication } from '@store/application/useApplication'
 import { GetUserDto } from '@dtos/user-management/userManagement.dto'
 import { convertDateStringToFormattedString } from '@lib/time'
 
 const InactiveUserList = () => {
-    const { getUserListAction, userList, totalUserList, resetUserListAction } =
-        useUserManagement()
-    const { setIsLoading } = useApplication()
+    const {
+        getUserListAction,
+        userList,
+        currentPage,
+        totalUserList,
+        resetUserListAction,
+    } = useUserManagement()
     const [selectedUserId, setSelectedUserId] = useState('')
     const router = useRouter()
     const [openEditUserDialog, setOpenEditUserDialog] = useState(false)
     const [openCustomDialog, setOpenCustomDialog] = useState(false)
     const [userId, setUserId] = useState('')
-    const [page, setPage] = useState(0)
 
     useEffect(() => {
         resetUserListAction()
         fetchInactiveUserList()
-    }, [page])
+    }, [])
 
-    const fetchInactiveUserList = async () => {
-        await getUserListAction(false, page, 10)
+    const fetchInactiveUserList = async (
+        direction: PaginationDirection = PaginationDirection.Next
+    ) => {
+        await getUserListAction(false, direction, 10)
     }
 
     const openEditDialog = async (userId: string) => {
@@ -247,10 +252,15 @@ const InactiveUserList = () => {
             onView={(row: Row<any>) => {
                 router.push(`/user/${row.getValue('userGuid')}`)
             }}
+            currentPage={currentPage}
             totalRecords={totalUserList}
             recordsPerPage={10}
-            currentPage={page}
-            setCurrentPage={setPage}
+            fetchNext={() => {
+                fetchInactiveUserList(PaginationDirection.Next)
+            }}
+            fetchPrev={() => {
+                fetchInactiveUserList(PaginationDirection.Previous)
+            }}
         />
     )
 }

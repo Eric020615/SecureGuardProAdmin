@@ -18,7 +18,7 @@ import CustomTable from '@components/table/Table'
 import { useNotice } from '@store/notice/useNotice'
 import { useRouter } from 'next/navigation'
 import EditNoticeDialog from '@components/dialog/EditNoticeDialog'
-import { ITimeFormat } from '@config/constant'
+import { ITimeFormat, PaginationDirection } from '@config/constant'
 import { GetNoticeDto } from '@dtos/notice/notice.dto'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import CustomConfirmDialog from '@components/dialog/CustomConfirmDialog'
@@ -160,6 +160,7 @@ const NoticeManagementPage = () => {
 
     const {
         notices,
+        currentPage,
         totalNotices,
         getNoticeAction,
         deleteNoticeByIdAction,
@@ -168,16 +169,15 @@ const NoticeManagementPage = () => {
     const [selectedNoticeGuid, setSelectedNoticeGuid] = useState('')
     const router = useRouter()
     const [openEditNoticeDialog, setOpenEditNoticeDialog] = useState(false)
-    const [page, setPage] = useState(0)
     const [openConfirmModal, setOpenConfirmModal] = useState(false)
 
     useEffect(() => {
         resetNoticeAction()
         fetchNotice()
-    }, [page])
+    }, [])
 
-    const fetchNotice = async () => {
-        await getNoticeAction(page, 10)
+    const fetchNotice = async (direction: PaginationDirection = PaginationDirection.Next) => {
+        await getNoticeAction(direction, 10)
     }
 
     const openEditDialog = async (noticeGuid: string) => {
@@ -237,10 +237,15 @@ const NoticeManagementPage = () => {
                     data={notices}
                     columns={columns}
                     onView={(row: Row<any>) => {}}
+                    currentPage={currentPage}
                     totalRecords={totalNotices}
                     recordsPerPage={10}
-                    currentPage={page}
-                    setCurrentPage={setPage}
+                    fetchNext={() => {
+                        fetchNotice(PaginationDirection.Next)
+                    }}
+                    fetchPrev={() => {
+                        fetchNotice(PaginationDirection.Previous)
+                    }}
                 />
             </div>
         </>

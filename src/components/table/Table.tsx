@@ -39,7 +39,8 @@ interface CustomTableProps {
     totalRecords: number
     recordsPerPage: number
     currentPage: number
-    setCurrentPage: React.Dispatch<React.SetStateAction<number>>
+    fetchNext: () => void
+    fetchPrev: () => void
 }
 
 const CustomTable = ({
@@ -49,7 +50,8 @@ const CustomTable = ({
     totalRecords,
     recordsPerPage,
     currentPage,
-    setCurrentPage,
+    fetchNext,
+    fetchPrev,
 }: CustomTableProps) => {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -134,54 +136,23 @@ const CustomTable = ({
                 <PaginationContent>
                     <PaginationItem>
                         <PaginationPrevious
-                            aria-disabled={currentPage <= 0}
-                            tabIndex={currentPage <= 0 ? -1 : undefined}
-                            onClick={() =>
-                                setCurrentPage((prev) => Math.max(prev - 1, 0))
-                            }
+                            aria-disabled={currentPage <= 1}
+                            tabIndex={currentPage <= 1 ? -1 : undefined}
+                            onClick={() => fetchPrev()}
                             className={
-                                currentPage <= 0
+                                currentPage <= 1
                                     ? 'pointer-events-none opacity-50'
                                     : 'cursor-pointer'
                             }
                         />
                     </PaginationItem>
-                    {Array.from(
-                        { length: totalPages > 5 ? 5 : totalPages },
-                        (_, index) => (
-                            <PaginationItem key={index}>
-                                <PaginationLink
-                                    aria-disabled={currentPage === index}
-                                    tabIndex={currentPage === index ? -1 : undefined}
-                                    className={
-                                        currentPage === index
-                                            ? 'pointer-events-none opacity-50'
-                                            : 'cursor-pointer'
-                                    }
-                                    onClick={() => setCurrentPage(index)}
-                                >
-                                    {index + 1}
-                                </PaginationLink>
-                            </PaginationItem>
-                        )
-                    )}
-                    {/* Ellipsis for large numbers of pages */}
-                    {totalPages > 5 && currentPage < totalPages - 1 && (
-                        <PaginationItem>
-                            <PaginationEllipsis />
-                        </PaginationItem>
-                    )}
                     <PaginationItem>
                         <PaginationNext
-                            aria-disabled={currentPage + 1 >= totalPages}
-                            tabIndex={currentPage + 1 >= totalPages ? -1 : undefined}
-                            onClick={() =>
-                                setCurrentPage((prev) =>
-                                    Math.min(prev + 1, totalPages - 1)
-                                )
-                            }
+                            aria-disabled={currentPage >= totalPages}
+                            tabIndex={currentPage >= totalPages ? -1 : undefined}
+                            onClick={() => fetchNext()}
                             className={
-                                currentPage + 1 >= totalPages
+                                currentPage >= totalPages
                                     ? 'pointer-events-none opacity-50'
                                     : 'cursor-pointer'
                             }

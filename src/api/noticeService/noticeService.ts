@@ -2,6 +2,7 @@ import { getCookies } from '@lib/cookies'
 import GlobalHandler, { IResponse } from '../globalHandler'
 import { listUrl } from '../listUrl'
 import { CreateNoticeDto, DeleteNoticeDto, EditNoticeDto } from '@dtos/notice/notice.dto'
+import { PaginationDirection } from '@config/constant'
 
 export const createNotice = async (notice: CreateNoticeDto): Promise<any> => {
     try {
@@ -28,14 +29,18 @@ export const createNotice = async (notice: CreateNoticeDto): Promise<any> => {
     }
 }
 
-export const getNotice = async (page: number, limit: number): Promise<IResponse<any>> => {
+export const getNotice = async (
+    direction: PaginationDirection,
+    id: number,
+    limit: number
+): Promise<IResponse<any>> => {
     try {
         const cookieValue = await getCookies('token')
         const [success, response] = await GlobalHandler({
             path: listUrl.notice.getNotices.path,
             type: listUrl.notice.getNotices.type,
             _token: cookieValue as string,
-            data: { page, limit },
+            data: { direction, id, limit },
         })
         const result: IResponse<any> = {
             success,
