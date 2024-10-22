@@ -42,7 +42,10 @@ const DashboardPage = () => {
     // CSV data
     const csvData = [
         ['Date', 'Visitors'],
-        ...visitorAnalytics.map((data) => [data.date, data.count.toString()]),
+        ...visitorAnalytics.map((data) => [
+            convertDateStringToFormattedString(data.date, ITimeFormat.date), 
+            data.count.toString()
+        ]),
     ]
 
     return (
