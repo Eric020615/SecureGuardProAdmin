@@ -4,6 +4,7 @@ import {
     checkAvailabilitySlot,
     createBooking,
     getBookingHistory,
+    getFacilityBookingDetails,
 } from '@api/facilityService/facilityService'
 import { generalAction } from '@store/application/useApplication'
 import { IResponse } from '@api/globalHandler'
@@ -18,6 +19,7 @@ import { PaginationDirection } from '@config/constant'
 interface State {
     availabilitySlot: SpaceAvailabilityDto[]
     facilityBookingHistory: GetFacilityBookingHistoryDto[]
+    facilityBookingDetails: GetFacilityBookingHistoryDto
     currentPage: number
     totalFacilityBookingHistory: number
 }
@@ -28,6 +30,7 @@ interface Actions {
         direction: PaginationDirection,
         limit: number
     ) => Promise<any>
+    getFacilityBookingDetailsAction: (facilityBookingGuid: string) => Promise<any>
     resetFacilityBookingHistoryAction: () => void
     cancelBookingAction: (
         cancelBookingForm: CancelFacilityBookingDto
@@ -42,6 +45,7 @@ interface Actions {
 export const useFacility = create<State & Actions>((set, get) => ({
     availabilitySlot: [],
     facilityBookingHistory: [],
+    facilityBookingDetails: {} as GetFacilityBookingHistoryDto,
     currentPage: 0,
     totalFacilityBookingHistory: 0,
     submitBookingAction: async (facilityBookingForm: FacilityBookingFormDto) => {
@@ -104,6 +108,20 @@ export const useFacility = create<State & Actions>((set, get) => ({
 			currentPage: 0,
             totalFacilityBookingHistory: 0,
         })
+    },
+    getFacilityBookingDetailsAction: async (facilityBookingGuid: string) => {
+        return generalAction(
+            async () => {
+                const response = await getFacilityBookingDetails(facilityBookingGuid)
+                if (!response.success) {
+                    throw new Error(response.msg)
+                }
+                set({ facilityBookingDetails: response.data })
+                return response
+            },
+            '',
+            'Failed to retrieve booking details. Please try again.'
+        )
     },
     cancelBookingAction: async (cancelBookingForm: CancelFacilityBookingDto) => {
         return generalAction(

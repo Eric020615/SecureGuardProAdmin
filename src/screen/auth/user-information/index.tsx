@@ -4,7 +4,7 @@ import SubUserInformationForm from '@components/form/auth/SubUserInformationForm
 import UserInformationForm from '@components/form/auth/UserInformationForm'
 import { RoleEnum } from '@config/constant/user'
 import { useAuth } from '@store/auth/useAuth'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'nextjs-toploader/app';
 import React, { useEffect } from 'react'
 
 const UserInformationPage = () => {

@@ -13,7 +13,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Input } from '@components/ui/input'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'nextjs-toploader/app';
 import React from 'react'
 import { useNotice } from '@store/notice/useNotice'
 import { ITimeFormat } from '@config/constant'

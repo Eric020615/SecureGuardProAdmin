@@ -74,7 +74,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                                 <CustomLoader />
                             </div>
                         )}
-                        <TopLoader />
                         <div className="md:px-10 md:py-8 p-5">{children}</div>
                     </div>
                 </div>

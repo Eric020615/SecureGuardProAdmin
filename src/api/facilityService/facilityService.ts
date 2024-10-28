@@ -1,10 +1,16 @@
 import { getCookies } from '@lib/cookies'
 import GlobalHandler, { IResponse } from '../globalHandler'
 import { listUrl } from '../listUrl'
-import { CancelFacilityBookingDto, FacilityBookingFormDto, SpaceAvailabilityDto } from '@dtos/facility/facility.dto'
+import {
+    CancelFacilityBookingDto,
+    FacilityBookingFormDto,
+    SpaceAvailabilityDto,
+} from '@dtos/facility/facility.dto'
 import { PaginationDirection } from '@config/constant'
 
-export const createBooking = async (bookingForm: FacilityBookingFormDto): Promise<any> => {
+export const createBooking = async (
+    bookingForm: FacilityBookingFormDto
+): Promise<any> => {
     try {
         const cookieValue = await getCookies('token')
         const [success, response] = await GlobalHandler({
@@ -62,7 +68,38 @@ export const getBookingHistory = async (
     }
 }
 
-export const cancelBooking = async (cancelBookingForm: CancelFacilityBookingDto): Promise<IResponse<any>> => {
+export const getFacilityBookingDetails = async (
+    facilityBookingGuid: string
+): Promise<IResponse<any>> => {
+    try {
+        const cookieValue = await getCookies('token')
+        const [success, response] = await GlobalHandler({
+            path: listUrl.facility.getFacilityBookingDetails.path,
+            type: listUrl.facility.getFacilityBookingDetails.type,
+            _token: cookieValue as string,
+            data: {
+                facilityBookingGuid,
+            },
+        })
+        const result: IResponse<any> = {
+            success,
+            msg: success ? 'success' : response?.message,
+            data: success ? response?.data : undefined,
+        }
+        return result
+    } catch (error: any) {
+        const result: IResponse<any> = {
+            success: false,
+            msg: error,
+            data: null,
+        }
+        return result
+    }
+}
+
+export const cancelBooking = async (
+    cancelBookingForm: CancelFacilityBookingDto
+): Promise<IResponse<any>> => {
     try {
         const cookieValue = await getCookies('token')
         const [success, response] = await GlobalHandler({

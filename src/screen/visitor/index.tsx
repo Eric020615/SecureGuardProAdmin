@@ -15,7 +15,7 @@ import {
     DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu'
 import CustomTable from '@components/table/Table'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'nextjs-toploader/app';
 import { Badge } from '@components/ui/badge'
 import { ITimeFormat, PaginationDirection } from '@config/constant'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
@@ -135,33 +135,6 @@ const VisitorManagementPage = () => {
                     )}
                 </div>
             ),
-        },
-        {
-            id: 'actions',
-            enableHiding: false,
-            cell: ({ row }) => {
-                return (
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                                onClick={() => {
-                                    openCancelVisitDialog(row.getValue('visitorGuid'))
-                                }}
-                            >
-                                Cancel Visit
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                )
-            },
         },
     ]
 

@@ -2,7 +2,6 @@ import moment from 'moment-timezone'
 
 // Convert a DateTimeOffset string to a Date object
 export const convertDateStringToDate = (dateString: string) => {
-    if (!dateString) return null
     return moment.parseZone(dateString).toDate()
 }
 

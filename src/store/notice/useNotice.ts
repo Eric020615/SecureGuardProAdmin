@@ -3,7 +3,7 @@ import {
     createNotice,
     deleteNoticeById,
     getNotice,
-    getNoticeById,
+    getNoticeDetailsById,
     updateNoticeById,
 } from '@api/noticeService/noticeService'
 import { generalAction } from '@store/application/useApplication'
@@ -17,7 +17,7 @@ import {
 import { PaginationDirection } from '@config/constant'
 
 interface State {
-    notice: GetNoticeDto
+    noticeDetails: GetNoticeDto
     notices: GetNoticeDto[]
     currentPage: number
     totalNotices: number
@@ -25,7 +25,7 @@ interface State {
 
 interface Actions {
     createNoticeAction: (notice: CreateNoticeDto) => Promise<any>
-    getNoticeByIdAction: (noticeGuid: string) => Promise<any>
+    getNoticeDetailsByIdAction: (noticeGuid: string) => Promise<any>
     updateNoticeByIdAction: (noticeForm: EditNoticeDto) => Promise<any>
     deleteNoticeByIdAction: (deleteNotice: DeleteNoticeDto) => Promise<any>
     getNoticeAction: (
@@ -36,7 +36,7 @@ interface Actions {
 }
 
 export const useNotice = create<State & Actions>((set, get) => ({
-    notice: {} as GetNoticeDto,
+    noticeDetails: {} as GetNoticeDto,
     notices: [],
     currentPage: 0,
     totalNotices: 0,
@@ -88,11 +88,11 @@ export const useNotice = create<State & Actions>((set, get) => ({
             'Failed to create notice. Please try again.'
         )
     },
-    getNoticeByIdAction: async (noticeGuid: string) => {
+    getNoticeDetailsByIdAction: async (noticeGuid: string) => {
         return generalAction(
             async () => {
-                const response = await getNoticeById(noticeGuid)
-                set({ notice: response.data })
+                const response = await getNoticeDetailsById(noticeGuid)
+                set({ noticeDetails: response.data })
                 if (!response.success) {
                     throw new Error(response.msg)
                 }

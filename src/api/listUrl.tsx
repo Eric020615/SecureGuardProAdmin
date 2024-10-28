@@ -1,5 +1,6 @@
 import { IType } from '@config/index'
 import { getVisitorDetailsById } from './visitorService/visitorService'
+import { getFacilityBookingDetails } from './facilityService/facilityService'
 
 export const listUrl = {
     auth: {
@@ -55,6 +56,10 @@ export const listUrl = {
         },
         getBookingHistory: {
             path: 'facility/admin',
+            type: IType.get,
+        },
+        getFacilityBookingDetails: {
+            path: 'facility/details',
             type: IType.get,
         },
         cancelBooking: {

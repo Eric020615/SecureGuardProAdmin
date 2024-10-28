@@ -7,7 +7,10 @@ import {
 import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
 import { GenderConst, RoleConst, RoleEnum } from '@config/constant/user'
-import { ResidentInformationDto, SystemAdminInformationDto } from '@dtos/user-management/userManagement.dto'
+import {
+    ResidentInformationDto,
+    SystemAdminInformationDto,
+} from '@dtos/user-management/userManagement.dto'
 import { useUserManagement } from '@store/userManagement/useUserManagement'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
@@ -20,11 +23,11 @@ const RenderResidentRoleInformation = (roleInfo: ResidentInformationDto) => (
     <>
         <div className="flex flex-col gap-1">
             <span className="text-sm font-semibold">Floor:</span>
-            <span className="text-sm">{roleInfo.floorNumber}</span>
+            <span className="text-sm">{roleInfo.floor}</span>
         </div>
         <div className="flex flex-col gap-1">
             <span className="text-sm font-semibold">Unit:</span>
-            <span className="text-sm">{roleInfo.unitNumber}</span>
+            <span className="text-sm">{roleInfo.unit}</span>
         </div>
     </>
 )
@@ -73,7 +76,7 @@ const UserDetailsPage = () => {
             <div className="flex justify-between items-center">
                 <div className="flex items-center gap-3">
                     <Button
-                        className="bg-transparent text-primary p-0"
+                        className="bg-transparent text-primary p-0 focus:outline-none active:bg-primary hover:bg-primary/20"
                         onClick={() => {
                             router.push('/user')
                         }}

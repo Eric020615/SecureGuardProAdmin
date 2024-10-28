@@ -1,23 +1,14 @@
 'use client'
 
 import { Button } from '@components/ui/button'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { RiAddBoxLine } from 'react-icons/ri'
 import { ColumnDef, Row } from '@tanstack/react-table'
-import { ArrowUpDown, MoreHorizontal } from 'lucide-react'
+import { ArrowUpDown } from 'lucide-react'
 import { Checkbox } from '@components/ui/checkbox'
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@components/ui/dropdown-menu'
 import CustomTable from '@components/table/Table'
 import { useFacility } from '@store/facility/useFacility'
-import { useRouter } from 'next/navigation'
-import CancelBookingDialog from '@components/dialog/CancelBookingDialog'
+import { useRouter } from 'nextjs-toploader/app'
 import { Badge } from '@components/ui/badge'
 import { ITimeFormat, PaginationDirection } from '@config/constant'
 import { GetFacilityBookingHistoryDto } from '@dtos/facility/facility.dto'
@@ -28,7 +19,7 @@ import {
     getCurrentDate,
 } from '@lib/time'
 
-const FacilityManagementPage = () => {
+const FacilityBookingManagementPage = () => {
     const {
         facilityBookingHistory,
         currentPage,
@@ -36,8 +27,6 @@ const FacilityManagementPage = () => {
         getFacilityBookingHistoryAction,
         resetFacilityBookingHistoryAction,
     } = useFacility()
-    const [openCancelDialog, setOpenCancelDialog] = useState(false)
-    const [selectedBookingGuid, setSelectedBookingGuid] = useState('')
     const router = useRouter()
 
     const columns: ColumnDef<GetFacilityBookingHistoryDto>[] = [
@@ -165,64 +154,12 @@ const FacilityManagementPage = () => {
                 )
             },
         },
-        {
-            id: 'actions',
-            enableHiding: false,
-            cell: ({ row }) => {
-                const startDate = row.getValue('startDate')
-                    ? convertDateStringToDate(row.getValue('startDate'))
-                    : null
-                return (
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            {startDate &&
-                                (startDate > getCurrentDate() ? (
-                                    row.getValue('isCancelled') ? (
-                                        <Badge className="w-full bg-red-500 text-center">
-                                            Cancelled
-                                        </Badge>
-                                    ) : (
-                                        <DropdownMenuItem
-                                            onClick={() => {
-                                                openCancelBookingDialog(
-                                                    row.getValue('bookingGuid')
-                                                )
-                                            }}
-                                        >
-                                            Cancel Booking
-                                        </DropdownMenuItem>
-                                    )
-                                ) : (
-                                    <div className="flex justify-center">
-                                        <Badge className="w-full bg-red-500 text-center">
-                                            Expired Booking
-                                        </Badge>
-                                    </div>
-                                ))}
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                )
-            },
-        },
     ]
 
     useEffect(() => {
         resetFacilityBookingHistoryAction()
         fetchFacilityBookingHistory()
     }, [])
-
-    const openCancelBookingDialog = (bookingGuid: string) => {
-        setOpenCancelDialog(true)
-        setSelectedBookingGuid(bookingGuid)
-    }
 
     const fetchFacilityBookingHistory = async (
         direction: PaginationDirection = PaginationDirection.Next
@@ -233,11 +170,6 @@ const FacilityManagementPage = () => {
     return (
         <>
             <ActionConfirmationDialog />
-            <CancelBookingDialog
-                open={openCancelDialog}
-                setOpen={setOpenCancelDialog}
-                bookingGuid={selectedBookingGuid}
-            />
             <div className="flex flex-row justify-between">
                 <h3 className="text-3xl font-bold text-black">Facility</h3>
                 <Button
@@ -254,7 +186,9 @@ const FacilityManagementPage = () => {
                 <CustomTable
                     data={facilityBookingHistory}
                     columns={columns}
-                    onView={(row: Row<any>) => {}}
+                    onView={(row: Row<GetFacilityBookingHistoryDto>) => {
+                        router.push(`/facility/${row.original.bookingGuid}`)
+                    }}
                     currentPage={currentPage}
                     totalRecords={totalFacilityBookingHistory}
                     recordsPerPage={10}
@@ -270,4 +204,4 @@ const FacilityManagementPage = () => {
     )
 }
 
-export default FacilityManagementPage
+export default FacilityBookingManagementPage

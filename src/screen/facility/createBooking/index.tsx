@@ -13,7 +13,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Input } from '@components/ui/input'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'nextjs-toploader/app';
 import React, { useEffect, useState } from 'react'
 import CustomSelect from '@components/select/Select'
 import { FacilitySelect } from '@config/listOption/facility'

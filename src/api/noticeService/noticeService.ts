@@ -58,7 +58,7 @@ export const getNotice = async (
     }
 }
 
-export const getNoticeById = async (noticeGuid: string): Promise<any> => {
+export const getNoticeDetailsById = async (noticeGuid: string): Promise<any> => {
     try {
         const cookieValue = await getCookies('token')
         const [success, response] = await GlobalHandler({

@@ -16,7 +16,7 @@ import {
 } from '@components/ui/dropdown-menu'
 import CustomTable from '@components/table/Table'
 import { useNotice } from '@store/notice/useNotice'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'nextjs-toploader/app';
 import EditNoticeDialog from '@components/dialog/EditNoticeDialog'
 import { ITimeFormat, PaginationDirection } from '@config/constant'
 import { GetNoticeDto } from '@dtos/notice/notice.dto'
@@ -236,7 +236,9 @@ const NoticeManagementPage = () => {
                 <CustomTable
                     data={notices}
                     columns={columns}
-                    onView={(row: Row<any>) => {}}
+                    onView={(row: Row<GetNoticeDto>) => {
+                        router.push(`/notice/${row.original.noticeGuid}`)
+                    }}
                     currentPage={currentPage}
                     totalRecords={totalNotices}
                     recordsPerPage={10}

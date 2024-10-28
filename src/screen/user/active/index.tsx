@@ -15,7 +15,7 @@ import {
     DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu'
 import CustomTable from '@components/table/Table'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'nextjs-toploader/app';
 import { useUserManagement } from '@store/userManagement/useUserManagement'
 import { ITimeFormat, PaginationDirection } from '@config/constant'
 import { GetUserDto } from '@dtos/user-management/userManagement.dto'

@@ -14,7 +14,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                     <CustomLoader />
                 </div>
             )}
-            <TopLoader />
             {children}
         </main>
     )

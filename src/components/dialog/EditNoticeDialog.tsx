@@ -57,7 +57,7 @@ const EditNoticeDialog = ({ noticeGuid, open, setOpen }: EditNoticeDialogProps) 
             endDate: '',
         },
     })
-    const { notice, getNoticeByIdAction, updateNoticeByIdAction } = useNotice()
+    const { noticeDetails, getNoticeDetailsByIdAction, updateNoticeByIdAction } = useNotice()
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         const response = await updateNoticeByIdAction({
             noticeGuid: noticeGuid,
@@ -84,28 +84,28 @@ const EditNoticeDialog = ({ noticeGuid, open, setOpen }: EditNoticeDialogProps) 
     }, [noticeGuid])
 
     const getNotice = async (noticeGuid: string) => {
-        await getNoticeByIdAction(noticeGuid)
+        await getNoticeDetailsByIdAction(noticeGuid)
     }
 
     useEffect(() => {
-        form.setValue('title', notice.title ? notice.title : '')
-        form.setValue('description', notice.description ? notice.description : '')
+        form.setValue('title', noticeDetails.title ? noticeDetails.title : '')
+        form.setValue('description', noticeDetails.description ? noticeDetails.description : '')
         form.setValue(
             'startDate',
-            notice.startDate
+            noticeDetails.startDate
                 ? convertDateStringToFormattedString(
-                      notice.startDate,
+                      noticeDetails.startDate,
                       ITimeFormat.dateTime
                   )
                 : ''
         )
         form.setValue(
             'endDate',
-            notice.endDate
-                ? convertDateStringToFormattedString(notice.endDate, ITimeFormat.dateTime)
+            noticeDetails.endDate
+                ? convertDateStringToFormattedString(noticeDetails.endDate, ITimeFormat.dateTime)
                 : ''
         )
-    }, [notice])
+    }, [noticeDetails])
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>

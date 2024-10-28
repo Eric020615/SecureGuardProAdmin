@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { cn } from '@lib/utils'
-import LayoutWrapper from '@screen/layoutWrapper'
+import TopLoader from '@components/loadingBar/LoadingBar'
 
 const inter = Inter({
     subsets: ['latin'],
@@ -24,7 +24,8 @@ export default function RootLayout({
         <html lang="en">
             <body className={cn('font-inter antialiased', inter.variable)}>
                 <div className="w-full">
-                    <LayoutWrapper>{children}</LayoutWrapper>
+                    <TopLoader />
+                    {children}
                 </div>
             </body>
         </html>
