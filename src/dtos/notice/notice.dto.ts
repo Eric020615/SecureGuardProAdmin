@@ -24,10 +24,7 @@ export interface GetNoticeDto {
     description: string
     startDate: string
     endDate: string
-    createdBy: string
-    createdDateTime: string
-    updatedBy: string
-    updatedDateTime: string
+    status: string
 }
 
 export interface GetNoticeDetailsByIdDto {
@@ -37,6 +34,7 @@ export interface GetNoticeDetailsByIdDto {
     description: string
     startDate: string
     endDate: string
+    status: string
     createdBy: string
     createdDateTime: string
     updatedBy: string

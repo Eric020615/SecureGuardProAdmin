@@ -81,7 +81,7 @@ export const listUrl = {
             type: IType.get,
         },
         getNoticeById: {
-            path: 'notice/detail',
+            path: 'notice/details',
             type: IType.get,
         },
         editNoticeById: {
@@ -95,7 +95,7 @@ export const listUrl = {
     },
     userManagement: {
         getUsers: {
-            path: 'user/user-list',
+            path: 'user/admin/user-list',
             type: IType.get,
         },
         getUserDetailsById: {

@@ -12,6 +12,7 @@ import { GetUserDto } from '@dtos/user-management/userManagement.dto'
 import { Button } from '@components/ui/button'
 import { ITimeFormat, PaginationDirection } from '@config/constant'
 import { convertDateStringToFormattedString } from '@lib/time'
+import { Badge } from '@components/ui/badge'
 
 const UserManagementPage = () => {
     const {
@@ -39,22 +40,27 @@ const UserManagementPage = () => {
         {
             id: 'select',
             header: ({ table }) => (
-                <Checkbox
-                    checked={
-                        table.getIsAllPageRowsSelected() ||
-                        (table.getIsSomePageRowsSelected() && 'indeterminate')
-                    }
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Select all"
-                    className="text-center"
-                />
+                <div className="flex items-center justify-center h-full">
+                    <Checkbox
+                        checked={
+                            table.getIsAllPageRowsSelected() ||
+                            (table.getIsSomePageRowsSelected() && 'indeterminate')
+                        }
+                        onCheckedChange={(value) =>
+                            table.toggleAllPageRowsSelected(!!value)
+                        }
+                        aria-label="Select all"
+                    />
+                </div>
             ),
             cell: ({ row }) => (
-                <Checkbox
-                    checked={row.getIsSelected()}
-                    onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label="Select row"
-                />
+                <div className="flex items-center justify-center h-full">
+                    <Checkbox
+                        checked={row.getIsSelected()}
+                        onCheckedChange={(value) => row.toggleSelected(!!value)}
+                        aria-label="Select row"
+                    />
+                </div>
             ),
             enableSorting: false,
             enableHiding: false,
@@ -62,101 +68,116 @@ const UserManagementPage = () => {
         {
             accessorKey: 'userId',
             header: ({ column }) => (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-                    className="flex items-center justify-center w-full text-left"
-                >
-                    User Id
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
+                <div className="flex items-center justify-center h-full">
+                    <Button
+                        variant="ghost"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === 'asc')
+                        }
+                    >
+                        Id
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </div>
             ),
             cell: ({ row }) => (
-                <div className="text-center">{row.getValue('userId') as string}</div>
+                <div className="flex items-center justify-center h-full">
+                    {row.getValue('userId') as string}
+                </div>
             ),
-            size: 100, // Fixed width
         },
         {
             accessorKey: 'userName',
-            header: 'Username',
+            header: () => (
+                <div className="flex items-center justify-center h-full">Username</div>
+            ),
             cell: ({ row }) => (
-                <div className="text-center capitalize">
+                <div className="flex items-center justify-center h-full capitalize">
                     {row.getValue('userName') as string}
                 </div>
             ),
-            size: 150, // Fixed width
         },
         {
             accessorKey: 'firstName',
-            header: 'First Name',
+            header: () => (
+                <div className="flex items-center justify-center h-full">First Name</div>
+            ),
             cell: ({ row }) => (
-                <div className="text-center capitalize">
+                <div className="flex items-center justify-center h-full capitalize">
                     {row.getValue('firstName') as string}
                 </div>
             ),
-            size: 150, // Fixed width
         },
         {
             accessorKey: 'lastName',
-            header: 'Last Name',
+            header: () => (
+                <div className="flex items-center justify-center h-full">Last Name</div>
+            ),
             cell: ({ row }) => (
-                <div className="text-center capitalize">
+                <div className="flex items-center justify-center h-full capitalize">
                     {row.getValue('lastName') as string}
                 </div>
             ),
-            size: 150, // Fixed width
+        },
+        {
+            accessorKey: 'gender',
+            header: () => (
+                <div className="flex items-center justify-center h-full">Gender</div>
+            ),
+            cell: ({ row }) => (
+                <div className="flex items-center justify-center h-full capitalize">
+                    {row.getValue('gender') as string}
+                </div>
+            ),
+        },
+        {
+            accessorKey: 'contactNumber',
+            header: () => (
+                <div className="flex items-center justify-center h-full">
+                    Contact Number
+                </div>
+            ),
+            cell: ({ row }) => (
+                <div className="flex items-center justify-center h-full capitalize">
+                    {row.getValue('contactNumber') as string}
+                </div>
+            ),
         },
         {
             accessorKey: 'role',
-            header: 'User Type',
-            cell: ({ row }) => (
-                <div className="text-center capitalize">{row.getValue('role')}</div>
-            ),
-            size: 100, // Fixed width
-        },
-        {
-            accessorKey: 'createdDateTime',
-            header: ({ column }) => (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-                    className="flex items-center justify-center w-full text-left"
-                >
-                    Created time
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
+            header: () => (
+                <div className="flex items-center justify-center h-full">Role</div>
             ),
             cell: ({ row }) => (
-                <div className="text-center">
-                    {convertDateStringToFormattedString(
-                        row.getValue('createdDateTime'),
-                        ITimeFormat.dateTime
-                    )}
+                <div className="flex items-center justify-center h-full capitalize">
+                    {row.getValue('role') as string}
                 </div>
             ),
-            size: 150, // Fixed width
         },
         {
-            accessorKey: 'updatedDateTime',
-            header: ({ column }) => (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-                    className="flex items-center justify-center w-full text-left"
-                >
-                    Updated time
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
+            accessorKey: 'userStatus',
+            header: () => (
+                <div className="flex items-center justify-center h-full">User Status</div>
             ),
-            cell: ({ row }) => (
-                <div className="text-center">
-                    {convertDateStringToFormattedString(
-                        row.getValue('updatedDateTime'),
-                        ITimeFormat.dateTime
-                    )}
-                </div>
-            ),
-            size: 150, // Fixed width
+            cell: ({ row }) => {
+                return (
+                    <div className="flex items-center justify-center h-full">
+                        <div className="w-[100px]">
+                            <Badge
+                                className={`w-full ${
+                                    row.getValue('userStatus') === 'Active'
+                                        ? 'bg-green-500'
+                                        : row.getValue('userStatus') === 'Inactive'
+                                          ? 'bg-orange-500'
+                                          : 'bg-gray-500' // Default color for other statuses
+                                } flex justify-center`}
+                            >
+                                <span>{row.getValue('userStatus')}</span>
+                            </Badge>
+                        </div>
+                    </div>
+                )
+            },
         },
     ]
 

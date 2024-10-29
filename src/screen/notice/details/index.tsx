@@ -24,7 +24,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import CustomForm, { CustomField } from '@components/form/element/CustomForm'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import { DeleteNoticeDto } from '@dtos/notice/notice.dto'
-import CustomConfirmDialog from '@components/dialog/CustomConfirmDialog'
 
 const formSchema = z
     .object({
@@ -51,6 +50,7 @@ const NoticeDetailsPage = () => {
 
     // Fetch Notice Details
     const getNoticeDetailsById = async () => {
+        console.log('params.noticeGuid', params.noticeGuid)
         await getNoticeDetailsByIdAction(params.noticeGuid)
     }
 

@@ -12,12 +12,13 @@ import {
     CreateNoticeDto,
     DeleteNoticeDto,
     EditNoticeDto,
+    GetNoticeDetailsByIdDto,
     GetNoticeDto,
 } from '@dtos/notice/notice.dto'
 import { PaginationDirection } from '@config/constant'
 
 interface State {
-    noticeDetails: GetNoticeDto
+    noticeDetails: GetNoticeDetailsByIdDto
     notices: GetNoticeDto[]
     currentPage: number
     totalNotices: number
@@ -36,7 +37,7 @@ interface Actions {
 }
 
 export const useNotice = create<State & Actions>((set, get) => ({
-    noticeDetails: {} as GetNoticeDto,
+    noticeDetails: {} as GetNoticeDetailsByIdDto,
     notices: [],
     currentPage: 0,
     totalNotices: 0,

@@ -1,23 +1,15 @@
 'use client'
 
 import { Button } from '@components/ui/button'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { RiAddBoxLine } from 'react-icons/ri'
 import { ColumnDef, Row } from '@tanstack/react-table'
-import { ArrowUpDown, MoreHorizontal } from 'lucide-react'
+import { ArrowUpDown } from 'lucide-react'
 import { Checkbox } from '@components/ui/checkbox'
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@components/ui/dropdown-menu'
 import CustomTable from '@components/table/Table'
-import { useRouter } from 'nextjs-toploader/app';
+import { useRouter } from 'nextjs-toploader/app'
 import { Badge } from '@components/ui/badge'
-import { ITimeFormat, PaginationDirection } from '@config/constant'
+import { DocumentStatus, ITimeFormat, PaginationDirection } from '@config/constant'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import { useVisitor } from '@store/visitor/useVisitor'
 import { GetVisitorDto } from '@dtos/visitor/visitor.dto'
@@ -31,67 +23,97 @@ const VisitorManagementPage = () => {
         getVisitorHistoryAction,
         resetVisitorHistoryAction,
     } = useVisitor()
-    const [openCancelDialog, setOpenCancelDialog] = useState(false)
-    const [selectedVisitorGuid, setSelectedVisitorGuid] = useState('')
     const router = useRouter()
 
     const columns: ColumnDef<GetVisitorDto>[] = [
         {
             id: 'select',
             header: ({ table }) => (
-                <Checkbox
-                    checked={
-                        table.getIsAllPageRowsSelected() ||
-                        (table.getIsSomePageRowsSelected() && 'indeterminate')
-                    }
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Select all"
-                />
+                <div className="flex items-center justify-center h-full">
+                    <Checkbox
+                        checked={
+                            table.getIsAllPageRowsSelected() ||
+                            (table.getIsSomePageRowsSelected() && 'indeterminate')
+                        }
+                        onCheckedChange={(value) =>
+                            table.toggleAllPageRowsSelected(!!value)
+                        }
+                        aria-label="Select all"
+                    />
+                </div>
             ),
             cell: ({ row }) => (
-                <Checkbox
-                    checked={row.getIsSelected()}
-                    onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label="Select row"
-                />
+                <div className="flex items-center justify-center h-full">
+                    <Checkbox
+                        checked={row.getIsSelected()}
+                        onCheckedChange={(value) => row.toggleSelected(!!value)}
+                        aria-label="Select row"
+                    />
+                </div>
             ),
             enableSorting: false,
             enableHiding: false,
         },
         {
             accessorKey: 'visitorId',
-            header: 'Id',
-            cell: ({ row }) => <div>{row.getValue('visitorId')}</div>,
-        },
-        {
-            accessorKey: 'visitorGuid',
-            header: () => null,
-            cell: () => null,
-            enableHiding: true,
+            header: ({ column }) => (
+                <div className="flex items-center justify-center h-full">
+                    <Button
+                        variant="ghost"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === 'asc')
+                        }
+                    >
+                        Id
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </div>
+            ),
+            cell: ({ row }) => (
+                <div className="flex items-center justify-center h-full">
+                    {row.getValue('visitorId')}
+                </div>
+            ),
         },
         {
             accessorKey: 'visitorName',
-            header: 'Visitor Name',
+            header: () => (
+                <div className="flex items-center justify-center h-full">Name</div>
+            ),
             cell: ({ row }) => (
-                <div className="capitalize">{row.getValue('visitorName')}</div>
+                <div className="flex items-center justify-center h-full capitalize">
+                    {row.getValue('visitorName')}
+                </div>
             ),
         },
         {
             accessorKey: 'visitorCategory',
-            header: 'Category',
+            header: () => (
+                <div className="flex items-center justify-center h-full">Category</div>
+            ),
             cell: ({ row }) => (
-                <div className="capitalize">{row.getValue('visitorCategory')}</div>
+                <div className="flex items-center justify-center h-full capitalize">
+                    {row.getValue('visitorCategory')}
+                </div>
             ),
         },
         {
             accessorKey: 'visitorContactNumber',
-            header: 'Contact Number',
-            cell: ({ row }) => <div>{row.getValue('visitorContactNumber')}</div>,
+            header: () => (
+                <div className="flex items-center justify-center h-full">
+                    Contact Number
+                </div>
+            ),
+            cell: ({ row }) => (
+                <div className="flex items-center justify-center h-full capitalize">
+                    {row.getValue('visitorContactNumber')}
+                </div>
+            ),
         },
         {
             accessorKey: 'visitDateTime',
-            header: ({ column }) => {
-                return (
+            header: ({ column }) => (
+                <div className="flex items-center justify-center h-full">
                     <Button
                         variant="ghost"
                         onClick={() =>
@@ -101,10 +123,10 @@ const VisitorManagementPage = () => {
                         Visit Date
                         <ArrowUpDown className="ml-2 h-4 w-4" />
                     </Button>
-                )
-            },
+                </div>
+            ),
             cell: ({ row }) => (
-                <div className="capitalize">
+                <div className="flex items-center justify-center h-full capitalize">
                     {convertDateStringToFormattedString(
                         row.getValue('visitDateTime'),
                         ITimeFormat.dateTime
@@ -113,42 +135,61 @@ const VisitorManagementPage = () => {
             ),
         },
         {
-            accessorKey: 'createdBy',
-            header: 'Created By',
-            cell: ({ row }) => (
-                <div className="capitalize">{row.getValue('createdBy')}</div>
-            ),
-        },
-        {
             accessorKey: 'status',
-            header: 'Status',
-            cell: ({ row }) => (
-                <div className="w-[100px]">
-                    {row.getValue('status') ? (
-                        <Badge className="w-full bg-green-500 flex justify-center">
-                            <span>Active</span>
-                        </Badge>
-                    ) : (
-                        <Badge className="w-full bg-red-500 flex justify-center">
-                            <span>Cancelled</span>
-                        </Badge>
-                    )}
-                </div>
+            header: () => (
+                <div className="flex items-center justify-center h-full">Status</div>
             ),
+            cell: ({ row }) => {
+                const statusValue = row.getValue('status') as string
+
+                // Function to get status name from DocumentStatus enum
+                const getStatusName = (value: string): string => {
+                    switch (value) {
+                        case DocumentStatus.Active:
+                            return 'Active'
+                        case DocumentStatus.SoftDeleted:
+                            return 'Soft Deleted'
+                        case DocumentStatus.Archived:
+                            return 'Archived'
+                        case DocumentStatus.Pending:
+                            return 'Pending'
+                        case DocumentStatus.Draft:
+                            return 'Draft'
+                        case DocumentStatus.Suspended:
+                            return 'Suspended'
+                        default:
+                            return 'Unknown'
+                    }
+                }
+                return (
+                    <div className="flex items-center justify-center h-full">
+                        <div className="w-[100px]">
+                            <Badge
+                                className={`w-full ${
+                                    statusValue === DocumentStatus.SoftDeleted
+                                        ? 'bg-orange-500'
+                                        : statusValue === DocumentStatus.Active
+                                          ? 'bg-green-500'
+                                          : 'bg-gray-500' // Default color for other statuses
+                                } flex justify-center`}
+                            >
+                                <span>{getStatusName(statusValue)}</span>
+                            </Badge>
+                        </div>
+                    </div>
+                )
+            },
         },
     ]
-
-    const openCancelVisitDialog = (visitorGuid: string) => {
-        setOpenCancelDialog(true)
-        setSelectedVisitorGuid(visitorGuid)
-    }
 
     useEffect(() => {
         resetVisitorHistoryAction()
         fetchVisitorHistory()
     }, [])
 
-    const fetchVisitorHistory = async (direction: PaginationDirection = PaginationDirection.Next) => {
+    const fetchVisitorHistory = async (
+        direction: PaginationDirection = PaginationDirection.Next
+    ) => {
         await getVisitorHistoryAction(direction, 10)
     }
 

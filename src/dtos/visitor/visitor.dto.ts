@@ -21,7 +21,17 @@ export interface GetVisitorDto {
     visitorCategory: string;
     visitorContactNumber: string;
     visitDateTime: string;
-    status: DocumentStatus,
+    status: string,
+}
+
+export interface GetVisitorDetailsDto {
+    visitorId: number;
+    visitorGuid: string;
+    visitorName: string;
+    visitorCategory: string;
+    visitorContactNumber: string;
+    visitDateTime: string;
+    status: string,
     createdBy: string;
     updatedBy: string;
     createdDateTime: string;

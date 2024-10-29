@@ -104,7 +104,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, menuList }: SidebarProps) => {
                     </SheetContent>
                 </Sheet>
             ) : (
-                <div className="h-[100vh] lg:w-[20%] md:w-[30%]">
+                <div className="h-[120vh] lg:w-[20%] md:w-[30%]">
                     <Command className="h-full w-full">
                         <CommandInput
                             className="text-base"

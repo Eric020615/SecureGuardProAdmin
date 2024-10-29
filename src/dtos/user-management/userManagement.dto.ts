@@ -9,11 +9,7 @@ export interface GetUserDto {
     contactNumber: string
     gender: GenderEnum
     role: RoleEnum
-    dateOfBirth: string
-    createdBy: string
-    createdDateTime: string
-    updatedBy: string
-    updatedDateTime: string
+    userStatus: string
 }
 
 export interface GetUserDetailsByUserGuidDto {
