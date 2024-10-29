@@ -175,7 +175,7 @@ const FacilityBookingManagementPage = () => {
                 <Button
                     className="flex items-center gap-1"
                     onClick={() => {
-                        router.push('/facility/create-booking')
+                        router.push('/facility/create')
                     }}
                 >
                     <RiAddBoxLine className="text-xl" />

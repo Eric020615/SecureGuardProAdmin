@@ -3,7 +3,7 @@
 import NoticeManagementPage from '@screen/notice'
 import React from 'react'
 
-const NoticeManagementLayout = () => {
+const NoticeManagement = () => {
   return (
     <>
       <NoticeManagementPage/>
@@ -11,4 +11,4 @@ const NoticeManagementLayout = () => {
   )
 }
 
-export default NoticeManagementLayout
+export default NoticeManagement

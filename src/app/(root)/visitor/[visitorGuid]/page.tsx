@@ -1,10 +1,10 @@
 import VisitorDetailsPage from '@screen/visitor/details'
 import React from 'react'
 
-const VisitorDetailsLayout = () => {
+const VisitorDetails = () => {
   return (
     <VisitorDetailsPage />
   )
 }
 
-export default VisitorDetailsLayout
+export default VisitorDetails

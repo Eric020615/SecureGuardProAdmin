@@ -3,10 +3,10 @@
 import CreateNoticePage from '@screen/notice/createNotice'
 import React from 'react'
 
-const CreateNoticeLayout = () => {
+const CreateNotice = () => {
   return (
       <CreateNoticePage/>
   )
 }
 
-export default CreateNoticeLayout
+export default CreateNotice

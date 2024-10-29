@@ -43,7 +43,7 @@ const RenderSystemAdminInformation = (roleInfo: SystemAdminInformationDto) => (
 )
 
 const UserDetailsPage = () => {
-    const params = useParams<{ userId: string }>()
+    const params = useParams<{ userGuid: string }>()
     const router = useRouter()
     const {
         userDetails,
@@ -52,7 +52,7 @@ const UserDetailsPage = () => {
         deactivateUserByIdAction,
     } = useUserManagement()
     const getUserDetailsById = async () => {
-        await getUserDetailsAction(params.userId)
+        await getUserDetailsAction(params.userGuid)
     }
     useEffect(() => {
         getUserDetailsById()

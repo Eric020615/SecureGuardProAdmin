@@ -1,10 +1,10 @@
 import ProfilePage from '@screen/profile'
 import React from 'react'
 
-const ProfileLayout = () => {
+const Profile = () => {
   return (
     <ProfilePage />
   )
 }
 
-export default ProfileLayout
+export default Profile

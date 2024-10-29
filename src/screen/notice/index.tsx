@@ -225,7 +225,7 @@ const NoticeManagementPage = () => {
                 <Button
                     className="flex items-center gap-1"
                     onClick={() => {
-                        router.push('/notice/create-notice')
+                        router.push('/notice/create')
                     }}
                 >
                     <RiAddBoxLine className="text-xl" />

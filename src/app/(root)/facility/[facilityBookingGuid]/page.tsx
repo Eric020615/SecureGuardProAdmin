@@ -1,10 +1,10 @@
 import FacilityBookingDetailsPage from '@screen/facility/details'
 import React from 'react'
 
-const FacilityBookingDetailsLayout = () => {
+const FacilityBookingDetails = () => {
   return (
     <FacilityBookingDetailsPage />
   )
 }
 
-export default FacilityBookingDetailsLayout
+export default FacilityBookingDetails

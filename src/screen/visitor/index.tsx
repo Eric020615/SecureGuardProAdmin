@@ -160,7 +160,7 @@ const VisitorManagementPage = () => {
                 <Button
                     className="flex items-center gap-1"
                     onClick={() => {
-                        router.push('/visitor/create-visitor') // Adjust route as necessary
+                        router.push('/visitor/create') // Adjust route as necessary
                     }}
                 >
                     <RiAddBoxLine className="text-xl" />

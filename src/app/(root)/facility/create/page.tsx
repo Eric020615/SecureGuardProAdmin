@@ -2,10 +2,10 @@
 import CreateBookingPage from '@screen/facility/createBooking'
 import React from 'react'
 
-const CreateFacilityLayout = () => {
+const CreateFacility = () => {
   return (
       <CreateBookingPage/>
   )
 }
 
-export default CreateFacilityLayout
+export default CreateFacility

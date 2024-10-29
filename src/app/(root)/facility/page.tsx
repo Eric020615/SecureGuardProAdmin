@@ -3,7 +3,7 @@
 import FacilityBookingManagementPage from '@screen/facility'
 import React from 'react'
 
-const FacilityBookingManagementLayout = () => {
+const FacilityBookingManagement = () => {
   return (
     <>
       <FacilityBookingManagementPage/>
@@ -11,4 +11,4 @@ const FacilityBookingManagementLayout = () => {
   )
 }
 
-export default FacilityBookingManagementLayout
+export default FacilityBookingManagement

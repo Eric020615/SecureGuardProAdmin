@@ -3,10 +3,10 @@
 import UserDetailsPage from '@screen/user/details';
 import React from 'react'
 
-const UserDetailsLayout = () => {
+const UserDetails = () => {
   return (
     <UserDetailsPage />
   )
 }
 
-export default UserDetailsLayout
+export default UserDetails
