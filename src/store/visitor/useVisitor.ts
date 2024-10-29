@@ -32,7 +32,6 @@ export const useVisitor = create<State & Actions>((set, get) => ({
     getVisitorDetailsByIdAction: async (visitorGuid: string) => {
         return generalAction(
             async () => {
-                console.log('visitorGuid', visitorGuid)
                 const response = await getVisitorDetailsById(visitorGuid)
                 if (!response.success) {
                     throw new Error(response.msg)

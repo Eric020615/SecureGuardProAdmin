@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@components/ui/card'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -78,7 +78,7 @@ const MyProfilePage = () => {
     }
 
     const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-        const response = await editUserProfileByIdAction({
+        await editUserProfileByIdAction({
             email: userProfile?.email ? userProfile.email : '',
             firstName: values.firstName,
             lastName: values.lastName,

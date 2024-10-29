@@ -4,24 +4,14 @@ import { Button } from '@components/ui/button'
 import React, { useEffect, useState } from 'react'
 import { RiAddBoxLine } from 'react-icons/ri'
 import { ColumnDef, Row } from '@tanstack/react-table'
-import { ArrowUpDown, MoreHorizontal } from 'lucide-react'
+import { ArrowUpDown } from 'lucide-react'
 import { Checkbox } from '@components/ui/checkbox'
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@components/ui/dropdown-menu'
 import CustomTable from '@components/table/Table'
 import { useNotice } from '@store/notice/useNotice'
 import { useRouter } from 'nextjs-toploader/app';
-import EditNoticeDialog from '@components/dialog/EditNoticeDialog'
 import { ITimeFormat, PaginationDirection } from '@config/constant'
 import { GetNoticeDto } from '@dtos/notice/notice.dto'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
-import CustomConfirmDialog from '@components/dialog/CustomConfirmDialog'
 import { convertDateStringToFormattedString } from '@lib/time'
 
 const NoticeManagementPage = () => {
@@ -122,40 +112,6 @@ const NoticeManagementPage = () => {
                 </div>
             ),
         },
-        {
-            id: 'actions',
-            enableHiding: false,
-            cell: ({ row }) => {
-                return (
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                                onClick={() => {
-                                    openEditDialog(row.getValue('noticeGuid'))
-                                }}
-                            >
-                                Edit Notice
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                onClick={() => {
-                                    openCustomDialog(row.getValue('noticeGuid'))
-                                }}
-                            >
-                                Delete Notice
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                )
-            },
-        },
     ]
 
     const {
@@ -166,9 +122,7 @@ const NoticeManagementPage = () => {
         deleteNoticeByIdAction,
         resetNoticeAction,
     } = useNotice()
-    const [selectedNoticeGuid, setSelectedNoticeGuid] = useState('')
     const router = useRouter()
-    const [openEditNoticeDialog, setOpenEditNoticeDialog] = useState(false)
     const [openConfirmModal, setOpenConfirmModal] = useState(false)
 
     useEffect(() => {
@@ -180,45 +134,12 @@ const NoticeManagementPage = () => {
         await getNoticeAction(direction, 10)
     }
 
-    const openEditDialog = async (noticeGuid: string) => {
-        setOpenEditNoticeDialog(true)
-        setSelectedNoticeGuid(noticeGuid)
-    }
-
-    const openCustomDialog = async (noticeGuid: string) => {
-        setSelectedNoticeGuid(noticeGuid)
-        setOpenConfirmModal(true)
-    }
-
-    const isConfirm = async () => {
-        if (!selectedNoticeGuid) {
-            return
-        }
-        await deleteNoticeByIdAction({
-            noticeGuid: selectedNoticeGuid,
-        })
-    }
-
     return (
         <>
-            <EditNoticeDialog
-                open={openEditNoticeDialog}
-                setOpen={setOpenEditNoticeDialog}
-                noticeGuid={selectedNoticeGuid}
-            />
             <ActionConfirmationDialog
                 onSuccessConfirm={() => {
                     window.location.reload()
                 }}
-            />
-            <CustomConfirmDialog
-                onConfirm={isConfirm}
-                content={{
-                    title: 'Delete Notice',
-                    subtitle: 'Are you sure you want to delete this notice?',
-                }}
-                isOpen={openConfirmModal}
-                setOpen={setOpenConfirmModal}
             />
             <div className="flex flex-row justify-between">
                 <h3 className="text-3xl font-bold text-black">Notice</h3>

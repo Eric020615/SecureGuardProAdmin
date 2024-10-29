@@ -17,7 +17,7 @@ import {
     convertDateStringToFormattedString,
     getCurrentDate,
 } from '@lib/time'
-import { ITimeFormat } from '@config/constant'
+import { DocumentStatus, ITimeFormat } from '@config/constant'
 import CancelBookingDialog from '@components/dialog/CancelBookingDialog'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 
@@ -83,6 +83,14 @@ const FacilityBookingDetailsPage = () => {
                                 <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
                                     <div className="flex flex-col gap-1">
                                         <span className="text-sm font-semibold">
+                                            Facility:
+                                        </span>
+                                        <span className="text-sm">
+                                            {facilityBookingDetails.facilityName}
+                                        </span>
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-sm font-semibold">
                                             Booking ID:
                                         </span>
                                         <span className="text-sm">
@@ -110,6 +118,28 @@ const FacilityBookingDetailsPage = () => {
                                                     Valid
                                                 </Badge>
                                             )}
+                                        </span>
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-sm font-semibold">
+                                            Status:
+                                        </span>
+                                        <span>
+                                            <Badge
+                                                className={`w-[80px] ${
+                                                    facilityBookingDetails.status ===
+                                                    DocumentStatus.SoftDeleted
+                                                        ? 'bg-orange-500'
+                                                        : facilityBookingDetails.status ===
+                                                            DocumentStatus.Active
+                                                          ? 'bg-green-500'
+                                                          : 'bg-gray-500' // Default color for other statuses
+                                                } flex justify-center`}
+                                            >
+                                                <span>
+                                                    {facilityBookingDetails.status}
+                                                </span>
+                                            </Badge>
                                         </span>
                                     </div>
                                     <div className="flex flex-col gap-1">

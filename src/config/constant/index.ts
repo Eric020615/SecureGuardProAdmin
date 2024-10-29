@@ -33,12 +33,12 @@ export const ITimeFormat = {
 }
 
 export enum DocumentStatus {
-    Active = 1,
-    SoftDeleted = 0,
-    Archived = -1,
-    Pending = 2,
-    Draft = 3,
-    Suspended = 4,
+    Active = "Active",
+    SoftDeleted = "SoftDeleted",
+    Archived = "Archived",
+    Pending = "Pending",
+    Draft = "Draft",
+    Suspended = "Suspended",
 }
 
 export function getDocumentStatusLabel(status: DocumentStatus): string {

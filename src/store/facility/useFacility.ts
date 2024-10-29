@@ -11,6 +11,7 @@ import { IResponse } from '@api/globalHandler'
 import {
     CancelFacilityBookingDto,
     FacilityBookingFormDto,
+    GetFacilityBookingDetailsDto,
     GetFacilityBookingHistoryDto,
     SpaceAvailabilityDto,
 } from '@dtos/facility/facility.dto'
@@ -19,7 +20,7 @@ import { PaginationDirection } from '@config/constant'
 interface State {
     availabilitySlot: SpaceAvailabilityDto[]
     facilityBookingHistory: GetFacilityBookingHistoryDto[]
-    facilityBookingDetails: GetFacilityBookingHistoryDto
+    facilityBookingDetails: GetFacilityBookingDetailsDto
     currentPage: number
     totalFacilityBookingHistory: number
 }
@@ -45,7 +46,7 @@ interface Actions {
 export const useFacility = create<State & Actions>((set, get) => ({
     availabilitySlot: [],
     facilityBookingHistory: [],
-    facilityBookingDetails: {} as GetFacilityBookingHistoryDto,
+    facilityBookingDetails: {} as GetFacilityBookingDetailsDto,
     currentPage: 0,
     totalFacilityBookingHistory: 0,
     submitBookingAction: async (facilityBookingForm: FacilityBookingFormDto) => {

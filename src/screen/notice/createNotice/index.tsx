@@ -3,12 +3,11 @@ import React from 'react'
 import { z } from 'zod'
 import { useRouter } from 'next/navigation'
 import { useNotice } from '@store/notice/useNotice'
-import CustomForm from '@components/form/element/CustomForm'
+import CustomForm, { CustomField } from '@components/form/element/CustomForm'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-// Define the validation schema for the form
 const formSchema = z
     .object({
         title: z.string().min(1, { message: 'Notice title is required' }),
@@ -33,32 +32,31 @@ const CreateNoticePage = () => {
             endDate: '',
         },
     })
-    const handleSubmit = async (data: any) => {
+    const fields: Record<string, CustomField> = {
+        title: { type: 'text', label: 'Title' },
+        description: { type: 'text', label: 'Description' },
+        startDate: { type: 'datetime', label: 'Start Date' },
+        endDate: { type: 'datetime', label: 'End Date' },
+    }
+    const handleSubmit = async (values: z.infer<typeof formSchema>) => {
         await createNoticeAction({
-            title: data.title,
-            description: data.description,
-            startDate: data.startDate,
-            endDate: data.endDate,
+            title: values.title,
+            description: values.description,
+            startDate: values.startDate,
+            endDate: values.endDate,
         })
     }
 
     return (
         <div>
-            <ActionConfirmationDialog onSuccessConfirm={() => {
-                router.push('/notice')
-            }}/>
+            <ActionConfirmationDialog
+                onSuccessConfirm={() => {
+                    router.push('/notice')
+                }}
+            />
             <h3 className="text-3xl font-bold text-black">Create New Notice</h3>
             <div className="mt-5">
-                <CustomForm
-                    form={form}
-                    fields={{
-                        title: { type: 'text', label: 'Title' },
-                        description: { type: 'text', label: 'Description' },
-                        startDate: { type: 'datetime', label: 'Start Date' },
-                        endDate: { type: 'datetime', label: 'End Date' },
-                    }}
-                    onSubmit={handleSubmit}
-                />
+                <CustomForm form={form} fields={fields} onSubmit={handleSubmit} />
             </div>
         </div>
     )

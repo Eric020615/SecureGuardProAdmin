@@ -1,5 +1,3 @@
-'use client'
-
 import { Button } from '@components/ui/button'
 import React, { useEffect } from 'react'
 import { RiAddBoxLine } from 'react-icons/ri'
@@ -10,7 +8,7 @@ import CustomTable from '@components/table/Table'
 import { useFacility } from '@store/facility/useFacility'
 import { useRouter } from 'nextjs-toploader/app'
 import { Badge } from '@components/ui/badge'
-import { ITimeFormat, PaginationDirection } from '@config/constant'
+import { DocumentStatus, ITimeFormat, PaginationDirection } from '@config/constant'
 import { GetFacilityBookingHistoryDto } from '@dtos/facility/facility.dto'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import {
@@ -33,60 +31,72 @@ const FacilityBookingManagementPage = () => {
         {
             id: 'select',
             header: ({ table }) => (
-                <Checkbox
-                    checked={
-                        table.getIsAllPageRowsSelected() ||
-                        (table.getIsSomePageRowsSelected() && 'indeterminate')
-                    }
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Select all"
-                />
+                <div className="flex items-center justify-center h-full">
+                    <Checkbox
+                        checked={
+                            table.getIsAllPageRowsSelected() ||
+                            (table.getIsSomePageRowsSelected() && 'indeterminate')
+                        }
+                        onCheckedChange={(value) =>
+                            table.toggleAllPageRowsSelected(!!value)
+                        }
+                        aria-label="Select all"
+                    />
+                </div>
             ),
             cell: ({ row }) => (
-                <Checkbox
-                    checked={row.getIsSelected()}
-                    onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label="Select row"
-                />
+                <div className="flex items-center justify-center h-full">
+                    <Checkbox
+                        checked={row.getIsSelected()}
+                        onCheckedChange={(value) => row.toggleSelected(!!value)}
+                        aria-label="Select row"
+                    />
+                </div>
             ),
             enableSorting: false,
             enableHiding: false,
         },
         {
             accessorKey: 'bookingId',
-            header: 'Id',
-            cell: ({ row }) => <div>{row.getValue('bookingId')}</div>,
-        },
-        {
-            accessorKey: 'bookingGuid',
-            header: () => null,
-            cell: () => null,
-            enableHiding: true,
-        },
-        {
-            accessorKey: 'facilityId',
-            header: 'Facility',
+            header: () => (
+                <div className="flex items-center justify-center h-full">Id</div>
+            ),
             cell: ({ row }) => (
-                <div className="capitalize">{row.getValue('facilityId') as string}</div>
+                <div className="flex items-center justify-center h-full">
+                    {row.getValue('bookingId')}
+                </div>
+            ),
+        },
+        {
+            accessorKey: 'facilityName',
+            header: () => (
+                <div className="flex items-center justify-center h-full">Facility</div>
+            ),
+            cell: ({ row }) => (
+                <div className="flex items-center justify-center h-full capitalize">
+                    {row.getValue('facilityName') as string}
+                </div>
             ),
         },
         {
             accessorKey: 'startDate',
             header: ({ column }) => {
                 return (
-                    <Button
-                        variant="ghost"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === 'asc')
-                        }
-                    >
-                        Start Date
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                    </Button>
+                    <div className="flex items-center justify-center h-full">
+                        <Button
+                            variant="ghost"
+                            onClick={() =>
+                                column.toggleSorting(column.getIsSorted() === 'asc')
+                            }
+                        >
+                            Start Date
+                            <ArrowUpDown className="ml-2 h-4 w-4" />
+                        </Button>
+                    </div>
                 )
             },
             cell: ({ row }) => (
-                <div className="capitalize">
+                <div className="flex items-center justify-center h-full capitalize">
                     {convertDateStringToFormattedString(
                         row.getValue('startDate'),
                         ITimeFormat.dateTime
@@ -98,19 +108,21 @@ const FacilityBookingManagementPage = () => {
             accessorKey: 'endDate',
             header: ({ column }) => {
                 return (
-                    <Button
-                        variant="ghost"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === 'asc')
-                        }
-                    >
-                        End Date
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                    </Button>
+                    <div className="flex items-center justify-center h-full">
+                        <Button
+                            variant="ghost"
+                            onClick={() =>
+                                column.toggleSorting(column.getIsSorted() === 'asc')
+                            }
+                        >
+                            End Date
+                            <ArrowUpDown className="ml-2 h-4 w-4" />
+                        </Button>
+                    </div>
                 )
             },
             cell: ({ row }) => (
-                <div className="capitalize">
+                <div className="flex items-center justify-center h-full capitalize">
                     {convertDateStringToFormattedString(
                         row.getValue('endDate'),
                         ITimeFormat.dateTime
@@ -120,20 +132,28 @@ const FacilityBookingManagementPage = () => {
         },
         {
             accessorKey: 'bookedBy',
-            header: 'Created By',
+            header: () => (
+                <div className="flex items-center justify-center h-full">Created By</div>
+            ),
             cell: ({ row }) => (
-                <div className="capitalize">{row.getValue('bookedBy')}</div>
+                <div className="flex items-center justify-center h-full capitalize">
+                    {row.getValue('bookedBy')}
+                </div>
             ),
         },
         {
             accessorKey: 'isCancelled',
-            header: 'Status',
+            header: () => (
+                <div className="flex items-center justify-center h-full">
+                    Booking Status
+                </div>
+            ),
             cell: ({ row }) => {
                 const startDate = row.getValue('startDate')
                     ? convertDateStringToDate(row.getValue('startDate'))
                     : null
                 return (
-                    <div className="w-[100px]">
+                    <div className="flex items-center justify-center h-full">
                         {startDate &&
                             (startDate > getCurrentDate() ? (
                                 row.getValue('isCancelled') ? (
@@ -146,10 +166,56 @@ const FacilityBookingManagementPage = () => {
                                     </Badge>
                                 )
                             ) : (
-                                <Badge className="w-full bg-red-500 flex justify-center">
+                                <Badge className="w-full bg-gray-500 flex justify-center">
                                     <span>Expired</span>
                                 </Badge>
                             ))}
+                    </div>
+                )
+            },
+        },
+        {
+            accessorKey: 'status',
+            header: () => (
+                <div className="flex items-center justify-center h-full">Status</div>
+            ),
+            cell: ({ row }) => {
+                const statusValue = row.getValue('status') as string
+
+                // Function to get status name from DocumentStatus enum
+                const getStatusName = (value: string): string => {
+                    switch (value) {
+                        case DocumentStatus.Active:
+                            return 'Active'
+                        case DocumentStatus.SoftDeleted:
+                            return 'Soft Deleted'
+                        case DocumentStatus.Archived:
+                            return 'Archived'
+                        case DocumentStatus.Pending:
+                            return 'Pending'
+                        case DocumentStatus.Draft:
+                            return 'Draft'
+                        case DocumentStatus.Suspended:
+                            return 'Suspended'
+                        default:
+                            return 'Unknown'
+                    }
+                }
+                return (
+                    <div className="flex items-center justify-center h-full">
+                        <div className="w-[100px]">
+                            <Badge
+                                className={`w-full ${
+                                    statusValue === DocumentStatus.SoftDeleted
+                                        ? 'bg-orange-500'
+                                        : statusValue === DocumentStatus.Active
+                                          ? 'bg-green-500'
+                                          : 'bg-gray-500' // Default color for other statuses
+                                } flex justify-center`}
+                            >
+                                <span>{getStatusName(statusValue)}</span>
+                            </Badge>
+                        </div>
                     </div>
                 )
             },
