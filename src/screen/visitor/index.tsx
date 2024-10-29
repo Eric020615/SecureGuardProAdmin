@@ -213,7 +213,7 @@ const VisitorManagementPage = () => {
                     data={visitorHistory}
                     columns={columns}
                     onView={(row: Row<GetVisitorDto>) => {
-                        router.push(`/visitor/${row.getValue('visitorGuid')}`) // Adjust route as necessary
+                        router.push(`/visitor/${row.original.visitorGuid}`) // Adjust route as necessary
                     }}
                     currentPage={currentPage}
                     totalRecords={totalVisitorHistory}

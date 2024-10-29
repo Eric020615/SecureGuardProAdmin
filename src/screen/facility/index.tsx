@@ -133,7 +133,7 @@ const FacilityBookingManagementPage = () => {
         {
             accessorKey: 'bookedBy',
             header: () => (
-                <div className="flex items-center justify-center h-full">Created By</div>
+                <div className="flex items-center justify-center h-full">Booked By</div>
             ),
             cell: ({ row }) => (
                 <div className="flex items-center justify-center h-full capitalize">

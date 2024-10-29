@@ -17,7 +17,7 @@ import {
     convertDateStringToFormattedString,
     getCurrentDate,
 } from '@lib/time'
-import { ITimeFormat } from '@config/constant'
+import { DocumentStatus, ITimeFormat } from '@config/constant'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -217,21 +217,22 @@ const NoticeDetailsPage = () => {
                                     </div>
                                     <div className="flex flex-col gap-1">
                                         <span className="text-sm font-semibold">
-                                            Notice Status:
+                                            Status:
                                         </span>
-                                        <span className="text-sm">
-                                            {noticeDetails?.endDate &&
-                                            convertDateStringToDate(
-                                                noticeDetails.endDate
-                                            ) < getCurrentDate() ? (
-                                                <Badge className="w-[80px] bg-gray-500 flex justify-center text-white">
-                                                    Expired
-                                                </Badge>
-                                            ) : (
-                                                <Badge className="w-[80px] bg-green-500 flex justify-center text-white">
-                                                    Active
-                                                </Badge>
-                                            )}
+                                        <span>
+                                            <Badge
+                                                className={`w-[80px] ${
+                                                    noticeDetails.status ===
+                                                    DocumentStatus.SoftDeleted
+                                                        ? 'bg-orange-500'
+                                                        : noticeDetails.status ===
+                                                            DocumentStatus.Active
+                                                          ? 'bg-green-500'
+                                                          : 'bg-gray-500' // Default color for other statuses
+                                                } flex justify-center`}
+                                            >
+                                                <span>{noticeDetails.status}</span>
+                                            </Badge>
                                         </span>
                                     </div>
                                     <div className="flex flex-col gap-1">

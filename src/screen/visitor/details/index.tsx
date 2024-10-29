@@ -7,8 +7,9 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from '@components/ui/accordion'
+import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
-import { getDocumentStatusLabel, ITimeFormat } from '@config/constant'
+import { DocumentStatus, getDocumentStatusLabel, ITimeFormat } from '@config/constant'
 import { convertDateStringToFormattedString } from '@lib/time'
 import { useVisitor } from '@store/visitor/useVisitor'
 import { ArrowLeft } from 'lucide-react'
@@ -75,11 +76,7 @@ const VisitorDetailsPage = () => {
                     <Accordion
                         type="multiple"
                         className="w-full"
-                        defaultValue={[
-                            'Personal Information',
-                            'Visit Information',
-                            'Supported Documents',
-                        ]}
+                        defaultValue={['Personal Information', 'Visit Information']}
                     >
                         {/* Personal Information Accordion */}
                         <AccordionItem value="Personal Information">
@@ -100,10 +97,20 @@ const VisitorDetailsPage = () => {
                                         <span className="text-sm font-semibold">
                                             Status:
                                         </span>
-                                        <span className="text-sm">
-                                            {getDocumentStatusLabel(
-                                                visitorDetails.status
-                                            )}
+                                        <span>
+                                            <Badge
+                                                className={`w-[80px] ${
+                                                    visitorDetails.status ===
+                                                    DocumentStatus.SoftDeleted
+                                                        ? 'bg-orange-500'
+                                                        : visitorDetails.status ===
+                                                            DocumentStatus.Active
+                                                          ? 'bg-green-500'
+                                                          : 'bg-gray-500' // Default color for other statuses
+                                                } flex justify-center`}
+                                            >
+                                                <span>{visitorDetails.status}</span>
+                                            </Badge>
                                         </span>
                                     </div>
                                     <div className="flex flex-col gap-1">
@@ -153,16 +160,6 @@ const VisitorDetailsPage = () => {
                                         </span>
                                     </div>
                                 </div>
-                            </AccordionContent>
-                        </AccordionItem>
-
-                        {/* Supported Documents Accordion */}
-                        <AccordionItem value="Supported Documents">
-                            <AccordionTrigger className="py-2 px-4 bg-slate-100">
-                                <h2>Supported Documents</h2>
-                            </AccordionTrigger>
-                            <AccordionContent className="p-4 bg-slate-50">
-                                <div className="grid gap-1"></div>
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>

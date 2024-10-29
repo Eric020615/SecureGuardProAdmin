@@ -1,3 +1,4 @@
+import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import {
     Accordion,
     AccordionContent,
@@ -6,11 +7,13 @@ import {
 } from '@components/ui/accordion'
 import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
+import { ITimeFormat } from '@config/constant'
 import { GenderConst, RoleConst, RoleEnum } from '@config/constant/user'
 import {
     ResidentInformationDto,
     SystemAdminInformationDto,
 } from '@dtos/user-management/userManagement.dto'
+import { convertDateStringToFormattedString } from '@lib/time'
 import { useUserManagement } from '@store/userManagement/useUserManagement'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
@@ -59,20 +62,19 @@ const UserDetailsPage = () => {
     }, [])
 
     const activateUserById = async () => {
-        const response = await activateUserByIdAction(userDetails.userGuid)
-        if (response.success) {
-            window.location.reload()
-        }
+        await activateUserByIdAction(userDetails.userGuid)
     }
     const deactivateUserById = async () => {
-        const response = await deactivateUserByIdAction(userDetails.userGuid)
-        if (response.success) {
-            window.location.reload()
-        }
+        await deactivateUserByIdAction(userDetails.userGuid)
     }
 
     return (
         <div>
+            <ActionConfirmationDialog
+                onSuccessConfirm={() => {
+                    window.location.reload()
+                }}
+            />
             <div className="flex justify-between items-center">
                 <div className="flex items-center gap-3">
                     <Button
@@ -218,7 +220,10 @@ const UserDetailsPage = () => {
                                             Birthday:
                                         </span>
                                         <span className="text-sm">
-                                            {userDetails.dateOfBirth}
+                                            {convertDateStringToFormattedString(
+                                                userDetails.dateOfBirth,
+                                                ITimeFormat.date
+                                            )}
                                         </span>
                                     </div>
                                 </div>

@@ -18,7 +18,10 @@ interface State {
 
 interface Actions {
     getVisitorDetailsByIdAction: (visitorGuid: string) => Promise<any>
-    getVisitorHistoryAction: (direction: PaginationDirection, limit: number) => Promise<any>
+    getVisitorHistoryAction: (
+        direction: PaginationDirection,
+        limit: number
+    ) => Promise<any>
     resetVisitorHistoryAction: () => void
     getVisitorAnalyticsAction: (startDate: string, endDate: string) => Promise<any>
 }
@@ -68,6 +71,7 @@ export const useVisitor = create<State & Actions>((set, get) => ({
                 if (!response.success) {
                     throw new Error(response.msg)
                 }
+                console.log(response.data)
                 set({
                     visitorHistory: response.data.list,
                     totalVisitorHistory: response.data.count,
