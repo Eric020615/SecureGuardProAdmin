@@ -1,13 +1,5 @@
 import React, { forwardRef, useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@components/ui/card'
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@components/ui/form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -17,15 +9,14 @@ import { GenderConst, GenderEnum, RoleConst } from '@config/constant/user'
 import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
 import { Edit } from 'lucide-react'
-import { Input } from '@components/ui/input'
-import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
-import CustomSelect from '@components/select/Select'
 import { GenderList } from '@config/listOption/user'
 import { ITimeFormat } from '@config/constant'
 import { convertDateStringToFormattedString } from '@lib/time'
+import CustomForm, { CustomField } from '@components/form/element/CustomForm'
+import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 
-const profileSchema = z.object({
+const formSchema = z.object({
     firstName: z.string().min(1, { message: 'First Name is required' }),
     lastName: z.string().min(1, { message: 'Last Name is required' }),
     userName: z.string().min(1, { message: 'User Name is required' }),
@@ -34,18 +25,16 @@ const profileSchema = z.object({
     dateOfBirth: z.string().min(1, { message: 'Date of Birth is required' }),
 })
 
-const PhoneNumberInput = forwardRef<HTMLInputElement>((props, ref) => {
-    return <input {...props} ref={ref} className="h-full w-full rounded-md px-2" />
-})
-
 const MyProfilePage = () => {
     const { getUserProfileByIdAction, editUserProfileByIdAction, userProfile } = useUser()
     const [pageMode, setPageMode] = useState<'edit' | 'view'>('view')
+
     useEffect(() => {
         getData()
-    }, [])
-    const form = useForm<z.infer<typeof profileSchema>>({
-        resolver: zodResolver(profileSchema),
+    }, [pageMode])
+
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
         defaultValues: {
             firstName: userProfile?.firstName,
             lastName: userProfile?.lastName,
@@ -55,11 +44,40 @@ const MyProfilePage = () => {
             dateOfBirth: userProfile?.dateOfBirth,
         },
     })
+
+    const fields: Record<string, CustomField> = {
+        firstName: {
+            label: 'First Name',
+            type: 'text',
+        },
+        lastName: {
+            label: 'Last Name',
+            type: 'text',
+        },
+        userName: {
+            label: 'Username',
+            type: 'text',
+        },
+        phoneNumber: {
+            label: 'Phone Number',
+            type: 'phone',
+        },
+        gender: {
+            label: 'Gender',
+            type: 'select',
+            options: GenderList,
+        },
+        dateOfBirth: {
+            label: 'Date of Birth',
+            type: 'date',
+        },
+    }
+
     const getData = async () => {
         await getUserProfileByIdAction()
     }
 
-    const onSubmit = async (values: z.infer<typeof profileSchema>) => {
+    const handleSubmit = async (values: z.infer<typeof formSchema>) => {
         const response = await editUserProfileByIdAction({
             email: userProfile?.email ? userProfile.email : '',
             firstName: values.firstName,
@@ -72,11 +90,8 @@ const MyProfilePage = () => {
                 ITimeFormat.isoDateTime
             ),
         })
-        if (response.success) {
-            setPageMode('view')
-            window.location.reload()
-        }
     }
+
     useEffect(() => {
         form.setValue('firstName', userProfile?.firstName ? userProfile.firstName : '')
         form.setValue('lastName', userProfile?.lastName ? userProfile.lastName : '')
@@ -99,6 +114,11 @@ const MyProfilePage = () => {
 
     return (
         <div className="h-full">
+            <ActionConfirmationDialog
+                onSuccessConfirm={() => {
+                    setPageMode('view')
+                }}
+            />
             <div className="grid gap-5">
                 {pageMode === 'view' ? (
                     <div className="grid gap-4 my-2">
@@ -221,124 +241,7 @@ const MyProfilePage = () => {
                     </div>
                 ) : (
                     <div className="p-2">
-                        <Form {...form}>
-                            <form
-                                onSubmit={form.handleSubmit(onSubmit)}
-                                className="space-y-8"
-                            >
-                                <FormField
-                                    control={form.control}
-                                    name="firstName"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>First Name</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    type="text"
-                                                    placeholder="Enter your first name"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="lastName"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Last Name</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    type="text"
-                                                    placeholder="Enter your last name"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="userName"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Username</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    type="text"
-                                                    placeholder="Choose a username"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="phoneNumber"
-                                    render={({ field: { onChange, value } }) => (
-                                        <FormItem>
-                                            <FormLabel>Phone Number</FormLabel>
-                                            <FormControl>
-                                                <PhoneInput
-                                                    onChange={onChange}
-                                                    value={value}
-                                                    name="phoneNumber"
-                                                    placeholder="Enter your phone number"
-                                                    className="flex h-10 w-full rounded-md border border-input bg-background pl-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                                    inputComponent={PhoneNumberInput}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="gender"
-                                    render={({ field: { value, onChange } }) => (
-                                        <FormItem>
-                                            <FormLabel>Gender</FormLabel>
-                                            <FormControl>
-                                                <CustomSelect
-                                                    title="Gender"
-                                                    selectLabel="Gender"
-                                                    selectItem={GenderList}
-                                                    onDataChange={onChange}
-                                                    value={value}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="dateOfBirth"
-                                    render={({ field: { value, onChange } }) => (
-                                        <FormItem>
-                                            <FormLabel>Date of Birth</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    type="date"
-                                                    placeholder="Select your date of birth"
-                                                    value={value}
-                                                    onChange={onChange}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <Button type="submit" className="w-[30%]">
-                                    Submit
-                                </Button>
-                            </form>
-                        </Form>
+                        <CustomForm form={form} fields={fields} onSubmit={handleSubmit} />
                     </div>
                 )}
             </div>

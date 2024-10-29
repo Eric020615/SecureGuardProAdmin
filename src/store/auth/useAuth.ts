@@ -21,7 +21,6 @@ interface Actions {
 	logOutAction: () => void
 	checkJwtAuthAction: (token: string, check?: boolean) => Promise<any>
     checkSubUserAuthAction: (token: string) => Promise<IResponse<SubUserAuthTokenPayloadDto>>
-	setTempTokenAction: (token: string) => void
 }
 
 
@@ -56,7 +55,7 @@ export const useAuth = create<State & Actions>((set) => ({
 				}
 				return response
 			},
-			'', // Custom success message
+			'Welcome back.', // Custom success message
 			'Sign-in failed. Please check your credentials and try again.', // Custom error message
 		)
 	},
@@ -130,6 +129,4 @@ export const useAuth = create<State & Actions>((set) => ({
 			'Authentication failed. Please log in again.', // Custom error message
 		)
     },
-
-	setTempTokenAction: (token: string) => set({ tempToken: token }),
 }))

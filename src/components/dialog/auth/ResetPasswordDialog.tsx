@@ -11,16 +11,8 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@components/ui/form'
 import { useAuth } from '@store/auth/useAuth'
-import CustomInput from '@components/form/element/Input'
+import CustomForm, { CustomField } from '@components/form/element/CustomForm'
 
 interface ResetPasswordDialogProps {
     open: boolean
@@ -35,7 +27,7 @@ const formSchema = z
             message: 'Password must be at least 6 characters long',
         }),
     })
-    .refine((data) => data.newPassword != data.currentPassword, {
+    .refine((data) => data.newPassword !== data.currentPassword, {
         message: 'New password cannot be the same as the current password',
         path: ['newPassword'],
     })
@@ -49,6 +41,18 @@ const ResetPasswordDialog = ({ open, setOpen }: ResetPasswordDialogProps) => {
         },
     })
     const resetPasswordAction = useAuth((state) => state.resetPasswordAction)
+
+    // Define the fields for the custom form
+    const fields: Record<string, CustomField> = {
+        currentPassword: {
+            type: 'password',
+            label: 'Current Password',
+        },
+        newPassword: {
+            type: 'password',
+            label: 'New Password',
+        },
+    }
 
     // Handle the form submission
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -70,60 +74,7 @@ const ResetPasswordDialog = ({ open, setOpen }: ResetPasswordDialogProps) => {
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
-                    <Form {...form}>
-                        <form
-                            onSubmit={form.handleSubmit(onSubmit)}
-                            className="space-y-8"
-                        >
-                            <FormField
-                                control={form.control}
-                                name="currentPassword"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <div className="grid grid-cols-4 items-center gap-4">
-                                            <FormLabel className="text-right">
-                                                Current Password
-                                            </FormLabel>
-                                            <FormControl>
-                                                <CustomInput
-                                                    type=""
-                                                    placeholder="Enter your current password"
-                                                    containerStyle="col-span-3"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                        </div>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="newPassword"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <div className="grid grid-cols-4 items-center gap-4">
-                                            <FormLabel className="text-right">
-                                                New Password
-                                            </FormLabel>
-                                            <FormControl>
-                                                <CustomInput
-                                                    type=""
-                                                    placeholder="Enter your new password"
-                                                    containerStyle="col-span-3"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                        </div>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <DialogFooter>
-                                <Button type="submit">Reset Password</Button>
-                            </DialogFooter>
-                        </form>
-                    </Form>
+                    <CustomForm form={form} fields={fields} onSubmit={onSubmit} />
                 </div>
             </DialogContent>
         </Dialog>

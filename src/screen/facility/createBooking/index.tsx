@@ -1,133 +1,142 @@
 'use client'
 
-import { Button } from '@components/ui/button'
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@components/ui/form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { Input } from '@components/ui/input'
-import { useRouter } from 'nextjs-toploader/app';
-import React, { useEffect, useState } from 'react'
-import CustomSelect from '@components/select/Select'
-import { FacilitySelect } from '@config/listOption/facility'
-import moment from 'moment'
-import CustomDatePicker from '@components/datePicker/DatePicker'
+import { useRouter } from 'nextjs-toploader/app'
+import React, { useEffect } from 'react'
+import {
+    FacilitySelect,
+    DurationOptions,
+    NumOfGuestOptions,
+} from '@config/listOption/facility' // Make sure DurationOptions is defined
 import { useFacility } from '@store/facility/useFacility'
-import { ITimeFormat } from '@config/constant'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
-import { convertDateToDateString, getCurrentDate } from '@lib/time'
+import {
+    convertDateStringToFormattedString,
+} from '@lib/time'
+import { ITimeFormat } from '@config/constant'
+import CustomForm, { CustomField } from '@components/form/element/CustomForm'
+import moment from 'moment'
 
-const formSchema = z
-    .object({
-        user: z.string().min(1, {
-            message: 'Target user is required',
-        }),
-        facilityId: z.string().min(1, {
-            message: 'Facility is required to be selected',
-        }),
-        date: z.date(),
-        startTime: z.string().min(1, {
-            message: 'Start Time is required',
-        }),
-        endTime: z.string().min(1, {
-            message: 'End Time is required',
-        }),
-        numOfGuest: z.string().min(1, {
-            message: 'Number of Guests is required',
-        }),
-        spaceId: z.string().min(1, { message: 'Slot selection is required' }), // Add slot selection
-    })
-    .refine((data) => data.endTime > data.startTime, {
-        path: ['endTime'],
-        message: 'End Date must be after Start Date',
-    })
+const formSchema = z.object({
+    user: z.string().min(1, {
+        message: 'Target user is required',
+    }),
+    facilityId: z.string().min(1, {
+        message: 'Facility is required to be selected',
+    }),
+    startDate: z.string().min(1, {
+        message: 'Start date must be in the future',
+    }),
+    duration: z.string().min(1, {
+        message: 'Duration is required',
+    }),
+    numOfGuest: z.string().min(1, {
+        message: 'Number of Guests is required',
+    }),
+    spaceId: z.string().min(1, { message: 'Slot selection is required' }), // Add slot selection
+})
 
 const CreateBookingPage = () => {
     const router = useRouter()
-    const { submitBookingAction, checkAvailabilitySlotAction, availabilitySlot } = useFacility()
-    const [facility, setFacility] = useState('')
-    const [date, setDate] = useState<Date | undefined>(getCurrentDate())
-    const [slotId, setSlotId] = useState('') // Store selected slot
-
+    const { submitBookingAction, checkAvailabilitySlotAction, availabilitySlot } =
+        useFacility()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             facilityId: '',
-            date: date,
-            startTime: '',
-            endTime: '',
+            startDate: '',
+            duration: '',
             user: '',
             numOfGuest: '',
             spaceId: '',
         },
     })
 
-    useEffect(() => {
-        form.setValue('facilityId', facility)
-    }, [facility])
-
-    useEffect(() => {
-        form.setValue('spaceId', slotId)
-    }, [slotId])
-
-    useEffect(() => {
-        form.setValue('date', date ? date : getCurrentDate())
-    }, [date])
-
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        let startTimeSplit = values.startTime.split(':')
-        let endTimeSplit = values.endTime.split(':')
-        let startDate = moment(values.date)
-            .hour(parseInt(startTimeSplit[0]))
-            .minute(parseInt(startTimeSplit[1]))
-        let endDate = moment(values.date)
-            .hour(parseInt(endTimeSplit[0]))
-            .minute(parseInt(endTimeSplit[1]))
         const response = await submitBookingAction({
             facilityId: values.facilityId,
             bookedBy: values.user,
-            startDate: convertDateToDateString(startDate.toDate(), ITimeFormat.isoDateTime),
-            endDate: convertDateToDateString(endDate.toDate(), ITimeFormat.isoDateTime),
+            startDate: convertDateStringToFormattedString(
+                values.startDate,
+                ITimeFormat.isoDateTime
+            ),
+            endDate: convertDateStringToFormattedString(
+                moment(values.startDate)
+                    .add(values.duration as string, 'hours')
+                    .format(ITimeFormat.dateTime),
+                ITimeFormat.isoDateTime
+            ),
             numOfGuest: parseInt(values.numOfGuest),
             spaceId: values.spaceId,
         })
+
         if (response.success) {
             router.push('/facility')
         }
     }
 
     useEffect(() => {
-        const startTime = form.getValues('startTime')
-        const endTime = form.getValues('endTime')
         const facilityId = form.getValues('facilityId')
+        const startDate = form.getValues('startDate')
+        const duration = form.getValues('duration')
+        const endDate = moment(startDate)
+            .add(duration as string, 'hours')
+            .format(ITimeFormat.dateTime)
 
-        // Check if date, startTime, endTime, and facilityId are available
-        if (date && startTime && endTime && facilityId) {
+        if (startDate && facilityId && duration) {
             const fetchAvailableSlots = async () => {
-                let startTimeSplit = startTime.split(':')
-                let endTimeSplit = endTime.split(':')
-                let startDate = moment(date)
-                    .hour(parseInt(startTimeSplit[0]))
-                    .minute(parseInt(startTimeSplit[1]))
-                let endDate = moment(date)
-                    .hour(parseInt(endTimeSplit[0]))
-                    .minute(parseInt(endTimeSplit[1]))
                 await checkAvailabilitySlotAction(
                     facilityId,
-                    convertDateToDateString(startDate.toDate(), ITimeFormat.isoDateTime),
-                    convertDateToDateString(endDate.toDate(), ITimeFormat.isoDateTime)
+                    convertDateStringToFormattedString(startDate, ITimeFormat.isoDateTime),
+                    convertDateStringToFormattedString(endDate, ITimeFormat.isoDateTime)
                 )
             }
             fetchAvailableSlots()
         }
-    }, [date, form.watch('startTime'), form.watch('endTime'), form.watch('facilityId')])
+    }, [form.watch('startDate'), form.watch('duration'), form.watch('facilityId')])
+
+    const fields: Record<string, CustomField> = {
+        user: { type: 'text', label: 'User' },
+        facilityId: {
+            type: 'select',
+            label: 'Facility',
+            options: FacilitySelect.map((item) => ({
+                label: item.label,
+                value: item.value,
+            })),
+        },
+        startDate: {
+            type: 'datetime',
+            label: 'Start Date',
+        },
+        duration: {
+            type: 'select',
+            label: 'Duration',
+            options: DurationOptions.map((item) => ({
+                label: item.label,
+                value: item.value,
+            })),
+        },
+        spaceId: {
+            type: 'select',
+            label: 'Booking Slot',
+            options: availabilitySlot.map((x) => ({
+                label: x.spaceName,
+                value: x.spaceId,
+                disabled: x.isBooked,
+            })),
+        },
+        numOfGuest: {
+            type: 'select',
+            label: 'Guests',
+            options: NumOfGuestOptions.map((item) => ({
+                label: item.label,
+                value: item.value,
+            })),
+        },
+    }
 
     return (
         <>
@@ -136,136 +145,7 @@ const CreateBookingPage = () => {
                 <h3 className="text-3xl font-bold text-black">Create new booking</h3>
             </div>
             <div className="mt-5">
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                        <FormField
-                            control={form.control}
-                            name="user"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>User</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            type="text"
-                                            placeholder="User Id"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="facilityId"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Facility</FormLabel>
-                                    <FormControl>
-                                        <CustomSelect
-                                            title="Select a facility"
-                                            selectLabel="Facility"
-                                            selectItem={FacilitySelect}
-                                            onDataChange={setFacility}
-                                            value={facility}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="date"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Date</FormLabel>
-                                    <FormControl>
-                                        <CustomDatePicker
-                                            title="Select a date"
-                                            selectedDate={date}
-                                            setSelectedDate={setDate}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="startTime"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Start Time</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            type="time"
-                                            placeholder="shadcn"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="endTime"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>End Time</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            type="time"
-                                            placeholder="shadcn"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="spaceId"
-                            render={() => (
-                                <FormItem>
-                                    <FormLabel>Booking Slot</FormLabel>
-                                    <FormControl>
-                                        <CustomSelect
-                                            title="Select a slot"
-                                            selectLabel="Slot"
-                                            selectItem={availabilitySlot.map((x) => {
-                                                return {
-                                                    label: x.spaceName,
-                                                    value: x.spaceId,
-                                                    disabled: x.isBooked,
-                                                }
-                                            })}
-                                            onDataChange={setSlotId}
-                                            value={slotId}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="numOfGuest"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Number of Guest</FormLabel>
-                                    <FormControl>
-                                        <Input type="number" placeholder="0" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <Button type="submit">Submit</Button>
-                    </form>
-                </Form>
+                <CustomForm form={form} fields={fields} onSubmit={onSubmit} />
             </div>
         </>
     )

@@ -35,7 +35,7 @@ interface SubUserRegistrationFormProps {
 
 const SubUserRegistrationForm = ({ email }: SubUserRegistrationFormProps) => {
     const router = useRouter()
-    const { signUpAction, setTempTokenAction } = useAuth()
+    const { signUpAction } = useAuth()
     const form = useForm<z.infer<typeof subUserRegistrationSchema>>({
         resolver: zodResolver(subUserRegistrationSchema),
         defaultValues: {
@@ -62,7 +62,6 @@ const SubUserRegistrationForm = ({ email }: SubUserRegistrationFormProps) => {
             RoleEnum.RESIDENT_SUBUSER
         )
         if (response.success) {
-            setTempTokenAction(response.data)
             router.replace('/user-information')
         }
     }

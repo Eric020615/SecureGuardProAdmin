@@ -8,7 +8,8 @@ import {
     AccordionTrigger,
 } from '@components/ui/accordion'
 import { Button } from '@components/ui/button'
-import { getDocumentStatusLabel } from '@config/constant'
+import { getDocumentStatusLabel, ITimeFormat } from '@config/constant'
+import { convertDateStringToFormattedString } from '@lib/time'
 import { useVisitor } from '@store/visitor/useVisitor'
 import { ArrowLeft } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
@@ -16,12 +17,12 @@ import React, { useEffect } from 'react'
 import Avatar from 'react-avatar'
 
 const VisitorDetailsPage = () => {
-    const params = useParams<{ visitorId: string }>()
+    const params = useParams<{ visitorGuid: string }>()
     const router = useRouter()
     const { visitorDetails, getVisitorDetailsByIdAction } = useVisitor()
 
     const getVisitorDetailsById = async () => {
-        await getVisitorDetailsByIdAction(params.visitorId)
+        await getVisitorDetailsByIdAction(params.visitorGuid)
     }
 
     useEffect(() => {
@@ -137,7 +138,10 @@ const VisitorDetailsPage = () => {
                                             Visit Date:
                                         </span>
                                         <span className="text-sm">
-                                            {visitorDetails.visitDateTime}
+                                            {convertDateStringToFormattedString(
+                                                visitorDetails.visitDateTime,
+                                                ITimeFormat.dateTime
+                                            )}
                                         </span>
                                     </div>
                                     <div className="flex flex-col gap-1">
