@@ -1,11 +1,11 @@
-import { GeneralFile } from "@dtos/application/application.dto"
+import { GeneralFileDto, GeneralFileResponseDto } from "@dtos/application/application.dto"
 
 export interface CreateNoticeDto {
     title: string
     description: string
     startDate: string
     endDate: string
-    attachments: GeneralFile[]
+    attachments: GeneralFileDto[]
 }
 
 export interface EditNoticeDto {
@@ -38,6 +38,7 @@ export interface GetNoticeDetailsByIdDto {
     startDate: string
     endDate: string
     status: string
+    attachments: GeneralFileResponseDto[]
     createdBy: string
     createdDateTime: string
     updatedBy: string

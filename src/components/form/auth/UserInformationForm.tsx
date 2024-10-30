@@ -64,12 +64,14 @@ const UserInformationForm = () => {
                     values.dateOfBirth,
                     ITimeFormat.isoDateTime
                 ),
-                supportedFiles:
+                supportedDocuments:
                     values.files.length > 0
-                        ? values.files.map(async (file) => {
-                              const generalFile = await getGeneralFileDto(file)
-                              return generalFile
-                          })
+                        ? await Promise.all(
+                              values.files.map(async (file) => {
+                                  const generalFile = await getGeneralFileDto(file)
+                                  return generalFile
+                              })
+                          )
                         : [],
             },
             tempToken

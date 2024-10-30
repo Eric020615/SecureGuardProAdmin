@@ -94,6 +94,7 @@ export const useNotice = create<State & Actions>((set, get) => ({
             async () => {
                 const response = await getNoticeDetailsById(noticeGuid)
                 set({ noticeDetails: response.data })
+                console.log(response)
                 if (!response.success) {
                     throw new Error(response.msg)
                 }

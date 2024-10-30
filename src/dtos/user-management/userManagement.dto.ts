@@ -1,4 +1,5 @@
 import { GenderEnum, RoleEnum } from "@config/constant/user"
+import { GeneralFileResponseDto } from "@dtos/application/application.dto"
 
 export interface GetUserDto {
     userId: number
@@ -34,10 +35,10 @@ export interface GetUserDetailsByUserGuidDto {
 export interface ResidentInformationDto {
     floor: string
     unit: string
-    supportedFiles: string[]
+    supportedDocuments: GeneralFileResponseDto[]
 }
 
 export interface SystemAdminInformationDto {
     staffId: string
-    supportedFiles: string[]
+    supportedDocuments: GeneralFileResponseDto[]
 }

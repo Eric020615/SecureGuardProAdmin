@@ -9,7 +9,7 @@ import {
     AccordionTrigger,
 } from '@components/ui/accordion'
 import { useNotice } from '@store/notice/useNotice'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Download } from 'lucide-react'
 import { Button } from '@components/ui/button'
 import { Badge } from '@components/ui/badge'
 import {
@@ -182,7 +182,7 @@ const NoticeDetailsPage = () => {
                     <Accordion
                         className="w-full"
                         type="multiple"
-                        defaultValue={['Notice Information']}
+                        defaultValue={['Notice Information', 'Notice Attachments']}
                     >
                         <AccordionItem value="Notice Information">
                             <AccordionTrigger className="py-2 px-4 bg-slate-100">
@@ -295,6 +295,56 @@ const NoticeDetailsPage = () => {
                                         </span>
                                     </div>
                                 </div>
+                            </AccordionContent>
+                        </AccordionItem>
+                        <AccordionItem value="Notice Attachments">
+                            <AccordionTrigger className="py-2 px-4 bg-slate-100">
+                                <h2>Notice Attachments</h2>
+                            </AccordionTrigger>
+                            <AccordionContent className="p-4 bg-slate-50">
+                                {noticeDetails?.attachments &&
+                                noticeDetails.attachments.length > 0 ? (
+                                    <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
+                                        {noticeDetails.attachments.map(
+                                            (attachment, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="flex flex-col gap-1 border-b pb-3"
+                                                >
+                                                    <span className="font-semibold">
+                                                        File Name:
+                                                    </span>
+                                                    <a
+                                                        href={attachment.fileUrl}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-blue-600 underline"
+                                                    >
+                                                        {attachment.fileName}
+                                                    </a>
+                                                    <span className="font-semibold">
+                                                        Content Type:
+                                                    </span>
+                                                    <span>{attachment.contentType}</span>
+                                                    {attachment.size && (
+                                                        <>
+                                                            <span className="font-semibold">
+                                                                Size:
+                                                            </span>
+                                                            <span>
+                                                                {attachment.size} KB
+                                                            </span>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            )
+                                        )}
+                                    </div>
+                                ) : (
+                                    <p className="text-sm text-gray-500">
+                                        No attachments available.
+                                    </p>
+                                )}
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>

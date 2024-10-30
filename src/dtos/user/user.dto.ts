@@ -1,6 +1,6 @@
 import { GenderEnum, RoleEnum } from "@config/constant/user"
-import { GeneralFile } from "../application/application.dto"
 import { SystemAdminInformationDto } from "../user-management/userManagement.dto"
+import { GeneralFileDto } from "@dtos/application/application.dto"
 
 export interface UserInformationFormDto {
     firstName: string
@@ -13,7 +13,7 @@ export interface UserInformationFormDto {
 
 export interface SystemAdminInformationFormDto extends UserInformationFormDto {
     staffId: string
-    supportedFiles: GeneralFile[]
+    supportedDocuments: GeneralFileDto[]
 }
 
 export interface SubUserInformationFormDto extends UserInformationFormDto {

@@ -269,20 +269,45 @@ const UserDetailsPage = () => {
                             </AccordionTrigger>
                             <AccordionContent className="p-4 bg-slate-50">
                                 <div className="grid gap-1">
-                                    {userDetails.roleInformation?.supportedFiles &&
-                                    userDetails.roleInformation?.supportedFiles.length >
-                                        0 ? (
-                                        userDetails.roleInformation.supportedFiles.map(
+                                    {userDetails.roleInformation?.supportedDocuments &&
+                                    userDetails.roleInformation?.supportedDocuments
+                                        .length > 0 ? (
+                                        userDetails.roleInformation.supportedDocuments.map(
                                             (document, index) => (
-                                                <Link
-                                                    href={document}
+                                                <div
                                                     key={index}
-                                                    className="text-blue-700"
-                                                >{`Document ${index + 1}`}</Link>
+                                                    className="flex flex-col gap-1 border-b pb-3"
+                                                >
+                                                    <span className="font-semibold">
+                                                        File Name:
+                                                    </span>
+                                                    <a
+                                                        href={document.fileUrl}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-blue-600 underline"
+                                                    >
+                                                        {document.fileName}
+                                                    </a>
+                                                    <span className="font-semibold">
+                                                        Content Type:
+                                                    </span>
+                                                    <span>{document.contentType}</span>
+                                                    {document.size && (
+                                                        <>
+                                                            <span className="font-semibold">
+                                                                Size:
+                                                            </span>
+                                                            <span>
+                                                                {document.size} KB
+                                                            </span>
+                                                        </>
+                                                    )}
+                                                </div>
                                             )
                                         )
                                     ) : (
-                                        <span>No supported documents</span>
+                                        <span>No supported documents available.</span>
                                     )}
                                 </div>
                             </AccordionContent>
