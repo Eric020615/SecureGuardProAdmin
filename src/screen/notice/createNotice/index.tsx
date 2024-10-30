@@ -7,6 +7,7 @@ import CustomForm, { CustomField } from '@components/form/element/CustomForm'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { getGeneralFileDto } from '@lib/file'
 
 const formSchema = z
     .object({
@@ -14,6 +15,7 @@ const formSchema = z
         description: z.string().min(1, { message: 'Notice description is required' }),
         startDate: z.string().min(1, { message: 'Start Date is required' }),
         endDate: z.string().min(1, { message: 'End Date is required' }),
+        attachments: z.array(z.any()),
     })
     .refine((data) => new Date(data.endDate) > new Date(data.startDate), {
         message: 'End Date cannot be before Start Date',
@@ -30,6 +32,7 @@ const CreateNoticePage = () => {
             description: '',
             startDate: '',
             endDate: '',
+            attachments: [],
         },
     })
     const fields: Record<string, CustomField> = {
@@ -37,6 +40,7 @@ const CreateNoticePage = () => {
         description: { type: 'text', label: 'Description' },
         startDate: { type: 'datetime', label: 'Start Date' },
         endDate: { type: 'datetime', label: 'End Date' },
+        attachments: { type: 'file', label: 'Attachments' },
     }
     const handleSubmit = async (values: z.infer<typeof formSchema>) => {
         await createNoticeAction({
@@ -44,6 +48,15 @@ const CreateNoticePage = () => {
             description: values.description,
             startDate: values.startDate,
             endDate: values.endDate,
+            attachments:
+                values.attachments.length > 0
+                    ? await Promise.all(
+                          values.attachments.map(async (file) => {
+                              const generalFile = await getGeneralFileDto(file)
+                              return generalFile
+                          })
+                      )
+                    : [],
         })
     }
 

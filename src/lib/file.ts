@@ -1,6 +1,6 @@
-import { GeneralFile } from "@dtos/application/application.dto"
+import { GeneralFileDto } from '@dtos/application/application.dto'
 
-export const getBase64 = (file: File): Promise<GeneralFile> =>
+export const getGeneralFileDto = (file: File): Promise<GeneralFileDto> =>
     new Promise((resolve, reject) => {
         const reader = new FileReader()
 
@@ -12,7 +12,9 @@ export const getBase64 = (file: File): Promise<GeneralFile> =>
                 const data = base64.split(',')[1]
                 resolve({
                     fileName: file.name,
-                    data: data,
+                    fileData: data,
+                    contentType: file.type,
+                    size: file.size,
                 })
             } else {
                 reject(new Error('File reading failed: result is null'))

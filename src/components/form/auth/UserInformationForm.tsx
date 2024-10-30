@@ -13,13 +13,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Input } from '@components/ui/input'
-import { useRouter } from 'nextjs-toploader/app';
+import { useRouter } from 'nextjs-toploader/app'
 import { useAuth } from '@store/auth/useAuth'
 import { GenderEnum, userInformationConst } from '@config/constant/user'
 import { useDropzone, FileWithPath } from 'react-dropzone'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
-import { getBase64 } from '@lib/file'
+import { getGeneralFileDto } from '@lib/file'
 import { useUser } from '@store/user/useUser'
 import { ITimeFormat } from '@config/constant'
 import CustomSelect from '@components/select/Select'
@@ -66,12 +66,10 @@ const UserInformationForm = () => {
                 ),
                 supportedFiles:
                     values.files.length > 0
-                        ? await Promise.all(
-                              values.files.map(async (file) => {
-                                  const base64 = await getBase64(file)
-                                  return base64
-                              })
-                          )
+                        ? values.files.map(async (file) => {
+                              const generalFile = await getGeneralFileDto(file)
+                              return generalFile
+                          })
                         : [],
             },
             tempToken

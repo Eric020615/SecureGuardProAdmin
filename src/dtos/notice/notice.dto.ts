@@ -1,8 +1,11 @@
+import { GeneralFile } from "@dtos/application/application.dto"
+
 export interface CreateNoticeDto {
     title: string
     description: string
     startDate: string
     endDate: string
+    attachments: GeneralFile[]
 }
 
 export interface EditNoticeDto {

@@ -50,7 +50,6 @@ const NoticeDetailsPage = () => {
 
     // Fetch Notice Details
     const getNoticeDetailsById = async () => {
-        console.log('params.noticeGuid', params.noticeGuid)
         await getNoticeDetailsByIdAction(params.noticeGuid)
     }
 

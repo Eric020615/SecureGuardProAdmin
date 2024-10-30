@@ -14,9 +14,10 @@ import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 import CustomSelect from '@components/select/Select'
 import { Eye, EyeOff } from 'lucide-react'
+import { useDropzone, FileWithPath } from 'react-dropzone'
 
 export interface CustomField {
-    type: 'text' | 'phone' | 'select' | 'date' | 'datetime' | 'password'
+    type: 'text' | 'phone' | 'select' | 'date' | 'datetime' | 'password' | 'file'
     label: string
     options?: any // For select input options
 }
@@ -30,6 +31,41 @@ interface CustomFormProps {
 const phoneNumberInput = forwardRef<HTMLInputElement>((props, ref) => {
     return <input {...props} ref={ref} className="h-full w-full rounded-md px-2" />
 })
+
+interface FileDropzoneProps {
+    onChange: (event: any[]) => void
+    value: FileWithPath[]
+}
+
+const FileDropzoneInput = ({ onChange, value }: FileDropzoneProps) => {
+    const { getRootProps, getInputProps } = useDropzone({
+        onDrop: (acceptedFiles: FileWithPath[]) => {
+            onChange(acceptedFiles)
+        },
+    })
+    return (
+        <>
+            <div
+                {...getRootProps({
+                    className:
+                        'dropzone flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400',
+                })}
+            >
+                <input {...getInputProps()} />
+                <p className="text-gray-500">
+                    Drag 'n' drop some files here, or click to select files
+                </p>
+            </div>
+            <aside className="mt-4">
+                <ul className="list-disc list-inside mt-2 text-gray-600 text-sm">
+                    {value &&
+                        value.length > 0 &&
+                        value.map((file, index) => <li key={index}>{file.name}</li>)}
+                </ul>
+            </aside>
+        </>
+    )
+}
 
 const CustomForm: React.FC<CustomFormProps> = ({ form, fields, onSubmit }) => {
     const renderField = (key: string, fieldType: CustomField) => {
@@ -107,18 +143,14 @@ const CustomForm: React.FC<CustomFormProps> = ({ form, fields, onSubmit }) => {
                             <FormItem>
                                 <FormLabel>{fieldType.label}</FormLabel>
                                 <FormControl>
-                                    <Input
-                                        type="date"
-                                        placeholder="shadcn"
-                                        {...field}
-                                    />
+                                    <Input type="date" placeholder="shadcn" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
                 )
-            case 'datetime': 
+            case 'datetime':
                 return (
                     <FormField
                         control={form.control}
@@ -169,6 +201,25 @@ const CustomForm: React.FC<CustomFormProps> = ({ form, fields, onSubmit }) => {
                                             )}
                                         </button>
                                     </div>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                )
+            case 'file':
+                return (
+                    <FormField
+                        control={form.control}
+                        name={key}
+                        render={({ field: { onChange, value } }) => (
+                            <FormItem>
+                                <FormLabel>{fieldType.label}</FormLabel>
+                                <FormControl>
+                                    <FileDropzoneInput
+                                        onChange={onChange}
+                                        value={value}
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
