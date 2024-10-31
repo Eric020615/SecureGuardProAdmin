@@ -1,7 +1,6 @@
 'use client'
 
 import CustomLoader from '@components/loader/Loader'
-import TopLoader from '@components/loadingBar/LoadingBar'
 import { useApplication } from '@store/application/useApplication'
 import React from 'react'
 

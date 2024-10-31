@@ -13,10 +13,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Input } from '@components/ui/input'
-import { useRouter } from 'nextjs-toploader/app';
+import { useRouter } from 'nextjs-toploader/app'
 import { useAuth } from '@store/auth/useAuth'
 import { UserSignUpFormDto } from '@dtos/auth/auth.dto'
 import { RoleEnum } from '@config/constant/user'
+import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 
 const subUserRegistrationSchema = z
     .object({
@@ -61,13 +62,15 @@ const SubUserRegistrationForm = ({ email }: SubUserRegistrationFormProps) => {
             } as UserSignUpFormDto,
             RoleEnum.RESIDENT_SUBUSER
         )
-        if (response.success) {
-            router.replace('/user-information')
-        }
     }
 
     return (
         <section className="auth-form w-full bg-white p-8 rounded-3xl">
+            <ActionConfirmationDialog
+                onSuccessConfirm={() => {
+                    router.replace('/user-information')
+                }}
+            />
             <header className="flex flex-col gap-2 md:gap-3 mb-5">
                 <Link href="/" className="font-bold text-4xl">
                     Secure Guard Pro

@@ -13,7 +13,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Input } from '@components/ui/input'
-import { useRouter } from 'nextjs-toploader/app';
+import { useRouter } from 'nextjs-toploader/app'
 import { useAuth } from '@store/auth/useAuth'
 import { GenderEnum, userInformationConst } from '@config/constant/user'
 import PhoneInput from 'react-phone-number-input'
@@ -23,6 +23,7 @@ import { ITimeFormat } from '@config/constant'
 import CustomSelect from '@components/select/Select'
 import { GenderList } from '@config/listOption/user'
 import { convertDateStringToFormattedString } from '@lib/time'
+import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 
 const userInformationSchema = z.object({
     firstName: z.string().min(1, { message: 'First Name is required' }),
@@ -63,13 +64,15 @@ const SubUserInformationForm = () => {
             },
             tempToken
         )
-        if (response.success) {
-            router.replace('/sign-up')
-        }
     }
 
     return (
         <section className="auth-form w-full bg-white p-8 rounded-3xl">
+            <ActionConfirmationDialog
+                onSuccessConfirm={() => {
+                    router.replace('/sign-up')
+                }}
+            />
             <header className="flex flex-col gap-2 md:gap-3 mb-5">
                 <Link href="/" className="font-bold text-4xl">
                     Secure Guard Pro

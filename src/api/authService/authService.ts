@@ -11,13 +11,16 @@ import {
     UserSignUpFormDto,
 } from '@dtos/auth/auth.dto'
 
-export const signUp = async (ISignUp: UserSignUpFormDto, role: RoleEnum): Promise<any> => {
+export const signUp = async (
+    ISignUp: UserSignUpFormDto,
+    role: RoleEnum
+): Promise<any> => {
     try {
         const [success, response] = await GlobalHandler({
             path: listUrl.auth.signUp.path,
             type: listUrl.auth.signUp.type,
             data: ISignUp,
-            params: { role: role },
+			params: { role: role },
         })
         const result: IResponse<any> = {
             success,
@@ -59,55 +62,62 @@ export const signIn = async (ISignIn: SignInFormDto): Promise<any> => {
     }
 }
 
-export const requestResetPassword = async (requestResetPasswordDto: RequestResetPasswordDto): Promise<IResponse<any>> => {
-	try {
-		const [success, response] = await GlobalHandler({
-			path: listUrl.auth.requestResetPasswordEmail.path,
-			type: listUrl.auth.requestResetPasswordEmail.type,
-			data: requestResetPasswordDto,
-		})
-		const result: IResponse<any> = {
-			success,
-			msg: success ? 'success' : response?.message,
-			data: success ? response?.data : undefined,
-		}
-		return result
-	} catch (error: any) {
-		const result: IResponse<any> = {
-			success: false,
-			msg: error,
-			data: null,
-		}
-		return result
-	}
+export const requestResetPassword = async (
+    requestResetPasswordDto: RequestResetPasswordDto
+): Promise<IResponse<any>> => {
+    try {
+        const [success, response] = await GlobalHandler({
+            path: listUrl.auth.requestResetPasswordEmail.path,
+            type: listUrl.auth.requestResetPasswordEmail.type,
+            data: requestResetPasswordDto,
+        })
+        const result: IResponse<any> = {
+            success,
+            msg: success ? 'success' : response?.message,
+            data: success ? response?.data : undefined,
+        }
+        return result
+    } catch (error: any) {
+        const result: IResponse<any> = {
+            success: false,
+            msg: error,
+            data: null,
+        }
+        return result
+    }
 }
 
-export const resetPassword = async (resetPasswordDto: ResetPasswordDto): Promise<IResponse<any>> => {
-	try {
-        const cookieValue = await getCookies("token")
-		const [success, response] = await GlobalHandler({
-			path: listUrl.auth.resetPassword.path,
-			type: listUrl.auth.resetPassword.type,
-			data: resetPasswordDto,
+export const resetPassword = async (
+    resetPasswordDto: ResetPasswordDto
+): Promise<IResponse<any>> => {
+    try {
+        const cookieValue = await getCookies('token')
+        const [success, response] = await GlobalHandler({
+            path: listUrl.auth.resetPassword.path,
+            type: listUrl.auth.resetPassword.type,
+            data: resetPasswordDto,
             _token: cookieValue as string,
-		})
-		const result: IResponse<any> = {
-			success,
-			msg: success ? 'success' : response?.message,
-			data: success ? response?.data : undefined,
-		}
-		return result
-	} catch (error: any) {
-		const result: IResponse<any> = {
-			success: false,
-			msg: error,
-			data: null,
-		}
-		return result
-	}
+        })
+        const result: IResponse<any> = {
+            success,
+            msg: success ? 'success' : response?.message,
+            data: success ? response?.data : undefined,
+        }
+        return result
+    } catch (error: any) {
+        const result: IResponse<any> = {
+            success: false,
+            msg: error,
+            data: null,
+        }
+        return result
+    }
 }
 
-export const checkAuth = async (token: string, check: boolean): Promise<IResponse<AuthTokenPayloadDto>> => {
+export const checkAuth = async (
+    token: string,
+    check: boolean
+): Promise<IResponse<AuthTokenPayloadDto>> => {
     try {
         const [success, response] = await GlobalHandler({
             path: listUrl.auth.checkJwtAuth.path,

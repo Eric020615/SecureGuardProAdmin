@@ -25,6 +25,7 @@ import { ITimeFormat } from '@config/constant'
 import CustomSelect from '@components/select/Select'
 import { GenderList } from '@config/listOption/user'
 import { convertDateStringToFormattedString } from '@lib/time'
+import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 
 const userInformationSchema = z.object({
     firstName: z.string().min(1, { message: 'First Name is required' }),
@@ -76,13 +77,15 @@ const UserInformationForm = () => {
             },
             tempToken
         )
-        if (response.success) {
-            router.replace('/sign-up')
-        }
     }
 
     return (
         <section className="auth-form w-full bg-white p-8 rounded-3xl">
+            <ActionConfirmationDialog
+                onSuccessConfirm={() => {
+                    router.replace('/sign-up')
+                }}
+            />
             <header className="flex flex-col gap-2 md:gap-3 mb-5">
                 <Link href="/" className="font-bold text-4xl">
                     Secure Guard Pro

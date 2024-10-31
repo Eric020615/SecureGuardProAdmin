@@ -14,7 +14,7 @@ interface State {
 }
 
 interface Actions {
-	signUpAction: (userSignUpForm: UserSignUpFormDto, role?: RoleEnum) => Promise<any>
+	signUpAction: (userSignUpForm: UserSignUpFormDto, role: RoleEnum) => Promise<any>
 	signInAction: (userSignInForm: SignInFormDto) => Promise<any>
 	requestResetPasswordAction: (requestResetPasswordDto: RequestResetPasswordDto) => Promise<any>
 	resetPasswordAction: (resetPasswordDto: ResetPasswordDto) => Promise<any>
@@ -29,7 +29,7 @@ export const useAuth = create<State & Actions>((set) => ({
 	tempToken: '',
 	subUserPayload: {} as SubUserAuthTokenPayloadDto,
 	authTokenPayload: {} as AuthTokenPayloadDto,
-	signUpAction: async (userSignUpForm: UserSignUpFormDto, role = RoleEnum.SYSTEM_ADMIN) => {
+	signUpAction: async (userSignUpForm: UserSignUpFormDto, role: RoleEnum) => {
 		return generalAction(
 			async () => {
 				const response = await signUp(userSignUpForm, role)
@@ -39,7 +39,7 @@ export const useAuth = create<State & Actions>((set) => ({
 				set({ isLogged: true, tempToken: response.data })
 				return response
 			},
-			'', // Custom success message
+			'Account created successfully.', // Custom success message
 			'Account created failed. Please try again.', // Custom error message
 		)
 	},

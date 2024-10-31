@@ -113,6 +113,7 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
                                 data: data,
                             })
                         } else {
+                            console.log(payload.params)
                             response = await Axios.post(baseURL, JSON.stringify(data), {
                                 headers: {
                                     'Content-Type': payload.isFormData
@@ -126,7 +127,7 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
                                           }
                                         : {}),
                                 },
-                                params: encodeURIComponent(payload.params),
+                                params: payload.params,
                                 paramsSerializer: (params) => parseParams(params),
                             })
                         }

@@ -9,7 +9,7 @@ export const listUrl = {
             type: IType.post,
         },
         signUp: {
-            path: 'auth/sign-up',
+            path: 'auth/sign-up/',
             type: IType.post,
         },
         resetPassword: {
