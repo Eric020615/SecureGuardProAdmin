@@ -22,6 +22,7 @@ interface State {
     notices: GetNoticeDto[]
     currentPage: number
     totalNotices: number
+    deletedAttachments: string[]
 }
 
 interface Actions {
@@ -34,6 +35,7 @@ interface Actions {
         limit: number
     ) => Promise<IResponse<any>>
     resetNoticeAction: () => void
+    deleteAttachmentAction: (attachmentGuid: string) => void
 }
 
 export const useNotice = create<State & Actions>((set, get) => ({
@@ -41,6 +43,7 @@ export const useNotice = create<State & Actions>((set, get) => ({
     notices: [],
     currentPage: 0,
     totalNotices: 0,
+    deletedAttachments: [],
     getNoticeAction: async (direction: PaginationDirection, limit: number) => {
         return generalAction(
             async () => {
@@ -107,6 +110,8 @@ export const useNotice = create<State & Actions>((set, get) => ({
     updateNoticeByIdAction: async (noticeForm: EditNoticeDto) => {
         return generalAction(
             async () => {
+                const { deletedAttachments } = get()
+                noticeForm.deletedAttachments = deletedAttachments
                 const response = await updateNoticeById(noticeForm)
                 if (!response.success) {
                     throw new Error(response.msg)
@@ -129,5 +134,17 @@ export const useNotice = create<State & Actions>((set, get) => ({
             'Notice successfully deleted!',
             'Failed to delete notice. Please try again.'
         )
+    },
+    deleteAttachmentAction: (attachmentGuid: string) => {
+        const { noticeDetails, deletedAttachments } = get()
+        set({
+            noticeDetails: {
+                ...noticeDetails,
+                attachments: noticeDetails.attachments.filter(
+                    (attachment) => attachment.fileGuid !== attachmentGuid
+                ),
+            },
+        })
+        set({ deletedAttachments: [...deletedAttachments, attachmentGuid] })
     },
 }))

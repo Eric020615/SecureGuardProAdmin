@@ -13,13 +13,16 @@ import { Input } from '@components/ui/input'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 import CustomSelect from '@components/select/Select'
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, Trash2 } from 'lucide-react'
 import { useDropzone, FileWithPath } from 'react-dropzone'
+import { GeneralFileResponseDto } from '@dtos/application/application.dto'
 
 export interface CustomField {
     type: 'text' | 'phone' | 'select' | 'date' | 'datetime' | 'password' | 'file'
     label: string
     options?: any // For select input options
+    uploadedFiles?: GeneralFileResponseDto[]
+    handleDeleteFile?: (fileGuid: string) => void
 }
 
 interface CustomFormProps {
@@ -43,8 +46,9 @@ const FileDropzoneInput = ({ onChange, value }: FileDropzoneProps) => {
             onChange(acceptedFiles)
         },
     })
+
     return (
-        <>
+        <div>
             <div
                 {...getRootProps({
                     className:
@@ -56,14 +60,18 @@ const FileDropzoneInput = ({ onChange, value }: FileDropzoneProps) => {
                     Drag 'n' drop some files here, or click to select files
                 </p>
             </div>
-            <aside className="mt-4">
-                <ul className="list-disc list-inside mt-2 text-gray-600 text-sm">
-                    {value &&
-                        value.length > 0 &&
-                        value.map((file, index) => <li key={index}>{file.name}</li>)}
-                </ul>
-            </aside>
-        </>
+            {/* Displaying files to be uploaded */}
+            {value && value.length > 0 && (
+                <aside className="mt-4">
+                    <h3 className="font-semibold text-gray-600">Files to Upload:</h3>
+                    <ul className="list-disc list-inside mt-2 text-gray-600 text-sm space-y-2">
+                        {value.map((file, index) => (
+                            <li key={index}>{file.name}</li>
+                        ))}
+                    </ul>
+                </aside>
+            )}
+        </div>
     )
 }
 
@@ -134,7 +142,7 @@ const CustomForm: React.FC<CustomFormProps> = ({ form, fields, onSubmit }) => {
                         )}
                     />
                 )
-            case 'date': // Add the case for date input
+            case 'date':
                 return (
                     <FormField
                         control={form.control}
@@ -185,7 +193,7 @@ const CustomForm: React.FC<CustomFormProps> = ({ form, fields, onSubmit }) => {
                                             type={showPassword ? 'text' : 'password'}
                                             placeholder={`Enter your ${key}`}
                                             {...field}
-                                            className="pr-10" // Add padding to avoid overlap with the icon
+                                            className="pr-10"
                                         />
                                         <button
                                             type="button"
@@ -216,10 +224,50 @@ const CustomForm: React.FC<CustomFormProps> = ({ form, fields, onSubmit }) => {
                             <FormItem>
                                 <FormLabel>{fieldType.label}</FormLabel>
                                 <FormControl>
-                                    <FileDropzoneInput
-                                        onChange={onChange}
-                                        value={value}
-                                    />
+                                    <>
+                                        <FileDropzoneInput
+                                            onChange={onChange}
+                                            value={value}
+                                        />
+                                        {/* Displaying previously uploaded files */}
+                                        {fieldType.uploadedFiles &&
+                                            fieldType.uploadedFiles.length > 0 && (
+                                                <aside className="mt-4">
+                                                    <h3 className="font-semibold text-gray-600">
+                                                        Uploaded Files:
+                                                    </h3>
+                                                    <ul className="list-disc list-inside mt-2 text-gray-600 text-sm space-y-2">
+                                                        {fieldType.uploadedFiles.map(
+                                                            (file, index) => (
+                                                                <li
+                                                                    key={index}
+                                                                    className="flex items-center justify-between"
+                                                                >
+                                                                    <span>
+                                                                        {file.fileName}
+                                                                    </span>
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() =>
+                                                                            fieldType.handleDeleteFile?.(
+                                                                                file.fileGuid
+                                                                            )
+                                                                        }
+                                                                        className="text-red-500 hover:text-red-700"
+                                                                        title="Delete file"
+                                                                    >
+                                                                        <Trash2
+                                                                            size={16}
+                                                                        />
+                                                                    </button>
+                                                                </li>
+                                                            )
+                                                        )}
+                                                    </ul>
+                                                </aside>
+                                            )
+                                        }
+                                    </>
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>

@@ -24,6 +24,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import CustomForm, { CustomField } from '@components/form/element/CustomForm'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import { DeleteNoticeDto } from '@dtos/notice/notice.dto'
+import { getGeneralFileDto } from '@lib/file'
 
 const formSchema = z
     .object({
@@ -31,6 +32,7 @@ const formSchema = z
         description: z.string().min(1, { message: 'Notice description is required' }),
         startDate: z.string().min(1, { message: 'Start Date is required' }),
         endDate: z.string().min(1, { message: 'End Date is required' }),
+        attachments: z.array(z.any()),
     })
     .refine((data) => new Date(data.endDate) > new Date(data.startDate), {
         message: 'End Date cannot be before Start Date',
@@ -45,6 +47,7 @@ const NoticeDetailsPage = () => {
         getNoticeDetailsByIdAction,
         updateNoticeByIdAction,
         deleteNoticeByIdAction,
+        deleteAttachmentAction,
     } = useNotice()
     const [pageMode, setPageMode] = useState<'edit' | 'view'>('view')
 
@@ -64,15 +67,25 @@ const NoticeDetailsPage = () => {
             description: '',
             startDate: '',
             endDate: '',
+            attachments: [],
         },
     })
 
-    const fields: Record<string, CustomField> = {
+    const deleteAttachment = (attachmentGuid: string) => {
+        deleteAttachmentAction(attachmentGuid)
+    }
+
+    const [fields, setFields] = useState<Record<string, CustomField>>({
         title: { type: 'text', label: 'Title' },
         description: { type: 'text', label: 'Description' },
         startDate: { type: 'datetime', label: 'Start Date' },
         endDate: { type: 'datetime', label: 'End Date' },
-    }
+        attachments: {
+            type: 'file',
+            label: 'Attachments',
+            handleDeleteFile: deleteAttachment,
+        },
+    })
 
     useEffect(() => {
         form.setValue('title', noticeDetails?.title ? noticeDetails.title : '')
@@ -98,7 +111,27 @@ const NoticeDetailsPage = () => {
                   )
                 : ''
         )
+        setFields((prevFields) => ({
+            ...prevFields,
+            attachments: {
+                ...prevFields.attachments,
+                uploadedFiles: noticeDetails.attachments || [], // Update with received attachments
+            },
+        }))
+        console.log(noticeDetails)
     }, [noticeDetails && pageMode === 'edit'])
+
+    useEffect(() => {
+        if (pageMode === 'edit') {
+            setFields((prevFields) => ({
+                ...prevFields,
+                attachments: {
+                    ...prevFields.attachments,
+                    uploadedFiles: noticeDetails.attachments || [], // Update with received attachments
+                },
+            }))
+        }
+    }, [noticeDetails.attachments])
 
     const handleSubmit = async (values: z.infer<typeof formSchema>) => {
         await updateNoticeByIdAction({
@@ -107,6 +140,15 @@ const NoticeDetailsPage = () => {
             description: values.description,
             startDate: values.startDate,
             endDate: values.endDate,
+            newAttachments:
+                values.attachments.length > 0
+                    ? await Promise.all(
+                          values.attachments.map(async (file) => {
+                              const generalFile = await getGeneralFileDto(file)
+                              return generalFile
+                          })
+                      )
+                    : [],
         })
     }
 
