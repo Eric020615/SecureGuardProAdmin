@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import {
     activateUserById,
     deactivateUserById,
+    deleteUserById,
     getUserDetailsById,
     getUserList,
 } from '@api/userManagementService/userManagementService'
@@ -32,6 +33,7 @@ interface Actions {
     ) => Promise<IResponse<GetUserDetailsByUserGuidDto>>
     activateUserByIdAction: (userGuid: string) => Promise<IResponse<any>>
     deactivateUserByIdAction: (userGuid: string) => Promise<IResponse<any>>
+    deleteUserByIdAction: (userGuid: string) => Promise<IResponse<any>>
 }
 
 export const useUserManagement = create<State & Actions>((set, get) => ({
@@ -65,9 +67,9 @@ export const useUserManagement = create<State & Actions>((set, get) => ({
                 if (!response.success) {
                     throw new Error(response.msg)
                 }
-                set({ 
+                set({
                     userList: response.data.list,
-                    totalUserList: response.data.count 
+                    totalUserList: response.data.count,
                 })
                 return response
             },
@@ -116,6 +118,19 @@ export const useUserManagement = create<State & Actions>((set, get) => ({
             },
             'User deactivated successfully!',
             'Failed to deactivate user. Please try again.'
+        )
+    },
+    deleteUserByIdAction: async (userGuid: string) => {
+        return generalAction(
+            async () => {
+                const response = await deleteUserById(userGuid)
+                if (!response.success) {
+                    throw new Error(response.msg)
+                }
+                return response
+            },
+            'User deleted successfully!',
+            'Failed to delete user. Please try again.'
         )
     },
 }))

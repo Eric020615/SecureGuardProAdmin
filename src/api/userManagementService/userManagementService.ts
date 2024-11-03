@@ -113,3 +113,29 @@ export const deactivateUserById = async (userGuid: string): Promise<IResponse<an
         return result
     }
 }
+
+export const deleteUserById = async (userGuid: string): Promise<IResponse<any>> => {
+    try {
+        const cookieValue = await getCookies('token')
+        console.log(userGuid)
+        const [success, response] = await GlobalHandler({
+            path: listUrl.userManagement.deleteUserById.path,
+            type: listUrl.userManagement.deleteUserById.type,
+            _token: cookieValue as string,
+            params: { userGuid },
+        })
+        const result: IResponse<any> = {
+            success,
+            msg: success ? 'success' : response?.message,
+            data: success ? response?.data : undefined,
+        }
+        return result
+    } catch (error: any) {
+        const result: IResponse<any> = {
+            success: false,
+            msg: error,
+            data: null,
+        }
+        return result
+    }
+}

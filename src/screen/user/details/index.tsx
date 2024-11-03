@@ -16,7 +16,6 @@ import {
 import { convertDateStringToFormattedString } from '@lib/time'
 import { useUserManagement } from '@store/userManagement/useUserManagement'
 import { ArrowLeft } from 'lucide-react'
-import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 import Avatar from 'react-avatar'
@@ -53,6 +52,7 @@ const UserDetailsPage = () => {
         getUserDetailsAction,
         activateUserByIdAction,
         deactivateUserByIdAction,
+        deleteUserByIdAction
     } = useUserManagement()
     const getUserDetailsById = async () => {
         await getUserDetailsAction(params.userGuid)
@@ -88,7 +88,7 @@ const UserDetailsPage = () => {
                     <h1 className="text-3xl font-bold">User Details</h1>
                 </div>
                 <div>
-                    <div>
+                    <div className='flex gap-2'>
                         {userDetails.isActive ? (
                             <Button
                                 type="submit"
@@ -110,6 +110,15 @@ const UserDetailsPage = () => {
                                 Enable
                             </Button>
                         )}
+                        <Button
+                            type="submit"
+                            className="w-full bg-red-600"
+                            onClick={() => {
+                                deleteUserByIdAction(params.userGuid)
+                            }}
+                        >
+                            Delete
+                        </Button>
                     </div>
                 </div>
             </div>

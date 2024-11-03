@@ -1,6 +1,4 @@
 import { IType } from '@config/index'
-import { getVisitorDetailsById } from './visitorService/visitorService'
-import { getFacilityBookingDetails } from './facilityService/facilityService'
 
 export const listUrl = {
     auth: {
@@ -110,6 +108,10 @@ export const listUrl = {
             path: 'user/deactivate/',
             type: IType.put,
         },
+        deleteUserById: {
+            path: 'user/admin/delete/',
+            type: IType.delete,
+        }
     },
     vistorManagement: {
         getVisitors: {

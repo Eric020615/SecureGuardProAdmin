@@ -11,6 +11,7 @@ export interface GetUserDto {
     gender: GenderEnum
     role: RoleEnum
     userStatus: string
+    status: string
 }
 
 export interface GetUserDetailsByUserGuidDto {
@@ -26,6 +27,7 @@ export interface GetUserDetailsByUserGuidDto {
     roleInformation: ResidentInformationDto | SystemAdminInformationDto
     dateOfBirth: string
     isActive: boolean
+    status: string
     createdBy: string
     createdDateTime: string
     updatedBy: string

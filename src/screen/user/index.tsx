@@ -10,7 +10,7 @@ import { Checkbox } from '@components/ui/checkbox'
 import { ColumnDef, Row } from '@tanstack/react-table'
 import { GetUserDto } from '@dtos/user-management/userManagement.dto'
 import { Button } from '@components/ui/button'
-import { ITimeFormat, PaginationDirection } from '@config/constant'
+import { DocumentStatus, ITimeFormat, PaginationDirection } from '@config/constant'
 import { convertDateStringToFormattedString } from '@lib/time'
 import { Badge } from '@components/ui/badge'
 
@@ -173,6 +173,52 @@ const UserManagementPage = () => {
                                 } flex justify-center`}
                             >
                                 <span>{row.getValue('userStatus')}</span>
+                            </Badge>
+                        </div>
+                    </div>
+                )
+            },
+        },
+        {
+            accessorKey: 'status',
+            header: () => (
+                <div className="flex items-center justify-center h-full">Status</div>
+            ),
+            cell: ({ row }) => {
+                const statusValue = row.getValue('status') as string
+
+                // Function to get status name from DocumentStatus enum
+                const getStatusName = (value: string): string => {
+                    switch (value) {
+                        case DocumentStatus.Active:
+                            return 'Active'
+                        case DocumentStatus.SoftDeleted:
+                            return 'Soft Deleted'
+                        case DocumentStatus.Archived:
+                            return 'Archived'
+                        case DocumentStatus.Pending:
+                            return 'Pending'
+                        case DocumentStatus.Draft:
+                            return 'Draft'
+                        case DocumentStatus.Suspended:
+                            return 'Suspended'
+                        default:
+                            return 'Unknown'
+                    }
+                }
+                return (
+                    <div className="flex items-center justify-center h-full">
+                        <div className="w-[100px]">
+                            <Badge
+                                className={`w-full ${
+                                    statusValue === DocumentStatus.SoftDeleted
+                                        ? 'bg-orange-500'
+                                        : statusValue === DocumentStatus.Active
+                                          ? 'bg-green-500'
+                                          : 'bg-gray-500' // Default color for other statuses
+                                } flex justify-center`}
+                            >
+                                <span>{getStatusName(statusValue)}</span>
                             </Badge>
                         </div>
                     </div>
