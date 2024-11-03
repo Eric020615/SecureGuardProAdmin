@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@components/ui/button'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { RiAddBoxLine } from 'react-icons/ri'
 import { ColumnDef, Row } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
@@ -14,6 +14,7 @@ import { GetNoticeDto } from '@dtos/notice/notice.dto'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import { convertDateStringToFormattedString } from '@lib/time'
 import { Badge } from '@components/ui/badge'
+import { tableStyles } from '@screen/style'
 
 const NoticeManagementPage = () => {
     const columns: ColumnDef<GetNoticeDto>[] = [
@@ -41,35 +42,37 @@ const NoticeManagementPage = () => {
         },
         {
             accessorKey: 'noticeId',
-            header: () => (
-                <div className="flex items-center justify-center h-full">Notice ID</div>
-            ),
+            header: () => <div className={tableStyles.headerStyle}>Notice ID</div>,
             enableSorting: true,
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full capitalize">
+                <div className={tableStyles.dateCellStyle}>
                     {row.getValue('noticeId')}
                 </div>
             ),
         },
         {
             accessorKey: 'title',
-            header: () => (
-                <div className="flex items-center justify-center h-full">Title</div>
-            ),
+            header: () => <div className={tableStyles.headerStyle}>Title</div>,
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full capitalize">
-                    {row.getValue('title')}
+                <div className={tableStyles.dateCellStyle}>
+                    <p className={`${tableStyles.textCellEllipsisStyle}`}>
+                        {row.getValue('title')}
+                    </p>
                 </div>
             ),
         },
         {
             accessorKey: 'description',
             header: () => (
-                <div className="flex items-center justify-center h-full">Description</div>
+                <div className={`${tableStyles.headerStyle} max-w-[200px]`}>
+                    Description
+                </div>
             ),
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full capitalize">
-                    {row.getValue('description')}
+                <div className={`${tableStyles.dateCellStyle}`}>
+                    <p className={`${tableStyles.textCellEllipsisStyle}`}>
+                        {row.getValue('description')}
+                    </p>
                 </div>
             ),
         },
@@ -77,7 +80,7 @@ const NoticeManagementPage = () => {
             accessorKey: 'startDate',
             header: ({ column }) => {
                 return (
-                    <div className="flex items-center justify-center h-full">
+                    <div className={tableStyles.headerStyle}>
                         <Button
                             variant="ghost"
                             onClick={() =>
@@ -91,7 +94,7 @@ const NoticeManagementPage = () => {
                 )
             },
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full capitalize">
+                <div className={tableStyles.dateCellStyle}>
                     {convertDateStringToFormattedString(
                         row.getValue('startDate'),
                         ITimeFormat.dateTime
@@ -103,7 +106,7 @@ const NoticeManagementPage = () => {
             accessorKey: 'endDate',
             header: ({ column }) => {
                 return (
-                    <div className="flex items-center justify-center h-full">
+                    <div className={tableStyles.headerStyle}>
                         <Button
                             variant="ghost"
                             onClick={() =>
@@ -117,7 +120,7 @@ const NoticeManagementPage = () => {
                 )
             },
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full capitalize">
+                <div className={tableStyles.dateCellStyle}>
                     {convertDateStringToFormattedString(
                         row.getValue('endDate'),
                         ITimeFormat.dateTime
@@ -127,9 +130,7 @@ const NoticeManagementPage = () => {
         },
         {
             accessorKey: 'status',
-            header: () => (
-                <div className="flex items-center justify-center h-full">Status</div>
-            ),
+            header: () => <div className={tableStyles.headerStyle}>Status</div>,
             cell: ({ row }) => {
                 const statusValue = row.getValue('status') as string
 
@@ -153,20 +154,18 @@ const NoticeManagementPage = () => {
                     }
                 }
                 return (
-                    <div className="flex items-center justify-center h-full">
-                        <div className="w-[100px]">
-                            <Badge
-                                className={`w-full ${
-                                    statusValue === DocumentStatus.SoftDeleted
-                                        ? 'bg-orange-500'
-                                        : statusValue === DocumentStatus.Active
-                                          ? 'bg-green-500'
-                                          : 'bg-gray-500' // Default color for other statuses
-                                } flex justify-center`}
-                            >
-                                <span>{getStatusName(statusValue)}</span>
-                            </Badge>
-                        </div>
+                    <div className={tableStyles.dateCellStyle}>
+                        <Badge
+                            className={`w-full ${
+                                statusValue === DocumentStatus.SoftDeleted
+                                    ? tableStyles.badgeColor.softDeleted
+                                    : statusValue === DocumentStatus.Active
+                                      ? tableStyles.badgeColor.active
+                                      : tableStyles.badgeColor.default // Default color for other statuses
+                            } flex justify-center`}
+                        >
+                            <span>{getStatusName(statusValue)}</span>
+                        </Badge>
                     </div>
                 )
             },
