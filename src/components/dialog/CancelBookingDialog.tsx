@@ -43,8 +43,7 @@ const CancelBookingDialog = ({
     }
     const cancelBooking = useFacility((state) => state.cancelBookingAction)
     const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-        const response = await cancelBooking({
-            bookingGuid: bookingGuid,
+        const response = await cancelBooking(bookingGuid, {
             cancelRemark: values.cancelRemark,
         })
         if (response.success) {

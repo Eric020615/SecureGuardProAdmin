@@ -87,7 +87,11 @@ export const useUserManagement = create<State & Actions>((set, get) => ({
                 if (!response.success) {
                     throw new Error(response.msg)
                 }
-                set({ userDetails: response.data })
+                set({
+                    userDetails: response.data
+                        ? response.data
+                        : ({} as GetUserDetailsByUserGuidDto),
+                })
                 return response
             },
             '',

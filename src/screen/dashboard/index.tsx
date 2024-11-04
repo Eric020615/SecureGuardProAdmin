@@ -1,10 +1,17 @@
 'use client'
 
 import CustomDatePicker from '@components/datePicker/DatePicker'
+import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import LineChart from '@components/graph/line'
 import { Button } from '@components/ui/button'
 import { ITimeFormat } from '@config/constant'
-import { convertDateStringToFormattedString, convertDateToDateString, getCurrentDate, getCurrentDateString, initializeDateAtBoundary } from '@lib/time'
+import {
+    convertDateStringToFormattedString,
+    convertDateToDateString,
+    getCurrentDate,
+    getCurrentDateString,
+    initializeDateAtBoundary,
+} from '@lib/time'
 import { useVisitor } from '@store/visitor/useVisitor'
 import React, { useState } from 'react'
 import { CSVLink } from 'react-csv'
@@ -27,7 +34,7 @@ const DashboardPage = () => {
                 ITimeFormat.isoDateTime
             ),
             convertDateToDateString(
-                endDate ? initializeDateAtBoundary(endDate, "end") : getCurrentDate(),
+                endDate ? initializeDateAtBoundary(endDate, 'end') : getCurrentDate(),
                 ITimeFormat.isoDateTime
             )
         )
@@ -43,13 +50,14 @@ const DashboardPage = () => {
     const csvData = [
         ['Date', 'Visitors'],
         ...visitorAnalytics.map((data) => [
-            convertDateStringToFormattedString(data.date, ITimeFormat.date), 
-            data.count.toString()
+            convertDateStringToFormattedString(data.date, ITimeFormat.date),
+            data.count.toString(),
         ]),
     ]
 
     return (
         <>
+            <ActionConfirmationDialog />
             <div className="flex flex-row justify-between">
                 <h3 className="text-3xl font-bold text-black">Dashboard</h3>
                 <Button className="flex items-center gap-1" onClick={() => {}}>

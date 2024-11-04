@@ -134,28 +134,28 @@ const NoticeDetailsPage = () => {
     }, [noticeDetails.attachments])
 
     const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-        await updateNoticeByIdAction({
-            noticeGuid: params.noticeGuid,
-            title: values.title,
-            description: values.description,
-            startDate: values.startDate,
-            endDate: values.endDate,
-            newAttachments:
-                values.attachments.length > 0
-                    ? await Promise.all(
-                          values.attachments.map(async (file) => {
-                              const generalFile = await getGeneralFileDto(file)
-                              return generalFile
-                          })
-                      )
-                    : [],
-        })
+        await updateNoticeByIdAction(
+            {
+                title: values.title,
+                description: values.description,
+                startDate: values.startDate,
+                endDate: values.endDate,
+                newAttachments:
+                    values.attachments.length > 0
+                        ? await Promise.all(
+                              values.attachments.map(async (file) => {
+                                  const generalFile = await getGeneralFileDto(file)
+                                  return generalFile
+                              })
+                          )
+                        : [],
+            },
+            params.noticeGuid
+        )
     }
 
     const deleteNoticeById = async () => {
-        await deleteNoticeByIdAction({
-            noticeGuid: params.noticeGuid,
-        } as DeleteNoticeDto)
+        await deleteNoticeByIdAction(params.noticeGuid)
     }
 
     return (

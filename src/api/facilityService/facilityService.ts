@@ -1,9 +1,10 @@
 import { getCookies } from '@lib/cookies'
-import GlobalHandler, { IResponse } from '../globalHandler'
+import { handleApiRequest, IResponse } from '../globalHandler'
 import { listUrl } from '../listUrl'
 import {
     CancelFacilityBookingDto,
     FacilityBookingFormDto,
+    GetFacilityBookingDetailsDto,
     SpaceAvailabilityDto,
 } from '@dtos/facility/facility.dto'
 import { PaginationDirection } from '@config/constant'
@@ -11,28 +12,14 @@ import { PaginationDirection } from '@config/constant'
 export const createBooking = async (
     bookingForm: FacilityBookingFormDto
 ): Promise<any> => {
-    try {
-        const cookieValue = await getCookies('token')
-        const [success, response] = await GlobalHandler({
-            path: listUrl.facility.book.path,
-            type: listUrl.facility.book.type,
-            data: bookingForm,
-            _token: cookieValue as string,
-        })
-        const result: IResponse<any> = {
-            success,
-            msg: success ? 'success' : response?.message,
-            data: success ? response?.data : undefined,
-        }
-        return result
-    } catch (error: any) {
-        const result: IResponse<any> = {
-            success: false,
-            msg: error,
-            data: null,
-        }
-        return result
-    }
+    const cookieValue = await getCookies('token')
+    const response = await handleApiRequest<any>(
+        listUrl.facilities.cancelBooking.path,
+        listUrl.facilities.cancelBooking.type,
+        bookingForm,
+        cookieValue as string
+    )
+    return response
 }
 
 export const getBookingHistory = async (
@@ -40,88 +27,52 @@ export const getBookingHistory = async (
     id: number,
     limit: number
 ): Promise<IResponse<any>> => {
-    try {
-        const cookieValue = await getCookies('token')
-        const [success, response] = await GlobalHandler({
-            path: listUrl.facility.getBookingHistory.path,
-            type: listUrl.facility.getBookingHistory.type,
-            _token: cookieValue as string,
-            data: {
-                direction,
-                id,
-                limit,
-            },
-        })
-        const result: IResponse<any> = {
-            success,
-            msg: success ? 'success' : response?.message,
-            data: success ? response?.data : undefined,
-        }
-        return result
-    } catch (error: any) {
-        const result: IResponse<any> = {
-            success: false,
-            msg: error,
-            data: null,
-        }
-        return result
-    }
+    const cookieValue = await getCookies('token')
+    const response = await handleApiRequest<any>(
+        listUrl.facilities.getBookingHistory.path,
+        listUrl.facilities.getBookingHistory.type,
+        {},
+        cookieValue as string,
+        { direction, id, limit }
+    )
+    return response
 }
 
 export const getFacilityBookingDetails = async (
     facilityBookingGuid: string
-): Promise<IResponse<any>> => {
-    try {
-        const cookieValue = await getCookies('token')
-        const [success, response] = await GlobalHandler({
-            path: listUrl.facility.getFacilityBookingDetails.path,
-            type: listUrl.facility.getFacilityBookingDetails.type,
-            _token: cookieValue as string,
-            data: {
-                facilityBookingGuid,
-            },
-        })
-        const result: IResponse<any> = {
-            success,
-            msg: success ? 'success' : response?.message,
-            data: success ? response?.data : undefined,
+): Promise<IResponse<GetFacilityBookingDetailsDto>> => {
+    const cookieValue = await getCookies('token')
+    const response = await handleApiRequest<GetFacilityBookingDetailsDto>(
+        listUrl.facilities.getDetails.path,
+        listUrl.facilities.getDetails.type,
+        {},
+        cookieValue as string,
+        {},
+        {
+            placeholder: ':id',
+            value: facilityBookingGuid,
         }
-        return result
-    } catch (error: any) {
-        const result: IResponse<any> = {
-            success: false,
-            msg: error,
-            data: null,
-        }
-        return result
-    }
+    )
+    return response
 }
 
 export const cancelBooking = async (
+    facilityBookingGuid: string,
     cancelBookingForm: CancelFacilityBookingDto
 ): Promise<IResponse<any>> => {
-    try {
-        const cookieValue = await getCookies('token')
-        const [success, response] = await GlobalHandler({
-            path: listUrl.facility.cancelBooking.path,
-            type: listUrl.facility.cancelBooking.type,
-            data: cancelBookingForm,
-            _token: cookieValue as string,
-        })
-        const result: IResponse<any> = {
-            success,
-            msg: success ? 'success' : response?.message,
-            data: success ? response?.data : undefined,
+    const cookieValue = await getCookies('token')
+    const response = await handleApiRequest<any>(
+        listUrl.facilities.cancelBooking.path,
+        listUrl.facilities.cancelBooking.type,
+        cancelBookingForm,
+        cookieValue as string,
+        {},
+        {
+            placeholder: ':id',
+            value: facilityBookingGuid,
         }
-        return result
-    } catch (error: any) {
-        const result: IResponse<any> = {
-            success: false,
-            msg: error,
-            data: null,
-        }
-        return result
-    }
+    )
+    return response
 }
 
 export const checkAvailabilitySlot = async (
@@ -129,30 +80,17 @@ export const checkAvailabilitySlot = async (
     startDate: string,
     endDate: string
 ): Promise<IResponse<SpaceAvailabilityDto[]>> => {
-    try {
-        const cookieValue = await getCookies('token')
-        const [success, response] = await GlobalHandler({
-            path: listUrl.facility.checkAvailabilitySlot.path,
-            type: listUrl.facility.checkAvailabilitySlot.type,
-            data: {
-                facilityId: facilityId,
-                startDate: startDate,
-                endDate: endDate,
-            },
-            _token: cookieValue as string,
-        })
-        const result: IResponse<SpaceAvailabilityDto[]> = {
-            success,
-            msg: success ? 'success' : response?.message,
-            data: success ? response?.data : undefined,
-        }
-        return result
-    } catch (error: any) {
-        const result: IResponse<any> = {
-            success: false,
-            msg: error,
-            data: null,
-        }
-        return result
-    }
+    const cookieValue = await getCookies('token')
+    const response = await handleApiRequest<any>(
+        listUrl.facilities.checkAvailability.path,
+        listUrl.facilities.checkAvailability.type,
+        {
+            facilityId,
+            startDate,
+            endDate,
+        },
+        cookieValue as string,
+        {}
+    )
+    return response
 }

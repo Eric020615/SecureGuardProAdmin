@@ -14,6 +14,7 @@ import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialo
 import { useVisitor } from '@store/visitor/useVisitor'
 import { GetVisitorDto } from '@dtos/visitor/visitor.dto'
 import { convertDateStringToFormattedString } from '@lib/time'
+import { tableStyles } from '@screen/style'
 
 const VisitorManagementPage = () => {
     const {
@@ -29,7 +30,7 @@ const VisitorManagementPage = () => {
         {
             id: 'select',
             header: ({ table }) => (
-                <div className="flex items-center justify-center h-full">
+                <div className={tableStyles.headerStyle}>
                     <Checkbox
                         checked={
                             table.getIsAllPageRowsSelected() ||
@@ -43,7 +44,7 @@ const VisitorManagementPage = () => {
                 </div>
             ),
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full">
+                <div className={tableStyles.dateCellStyle}>
                     <Checkbox
                         checked={row.getIsSelected()}
                         onCheckedChange={(value) => row.toggleSelected(!!value)}
@@ -57,7 +58,7 @@ const VisitorManagementPage = () => {
         {
             accessorKey: 'visitorId',
             header: ({ column }) => (
-                <div className="flex items-center justify-center h-full">
+                <div className={tableStyles.headerStyle}>
                     <Button
                         variant="ghost"
                         onClick={() =>
@@ -70,7 +71,7 @@ const VisitorManagementPage = () => {
                 </div>
             ),
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full">
+                <div className={tableStyles.dateCellStyle}>
                     {row.getValue('visitorId')}
                 </div>
             ),
@@ -78,10 +79,10 @@ const VisitorManagementPage = () => {
         {
             accessorKey: 'visitorName',
             header: () => (
-                <div className="flex items-center justify-center h-full">Name</div>
+                <div className={tableStyles.headerStyle}>Name</div>
             ),
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full capitalize">
+                <div className={`${tableStyles.dateCellStyle} capitalize`}>
                     {row.getValue('visitorName')}
                 </div>
             ),
@@ -89,10 +90,10 @@ const VisitorManagementPage = () => {
         {
             accessorKey: 'visitorCategory',
             header: () => (
-                <div className="flex items-center justify-center h-full">Category</div>
+                <div className={tableStyles.headerStyle}>Category</div>
             ),
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full capitalize">
+                <div className={tableStyles.dateCellStyle}>
                     {row.getValue('visitorCategory')}
                 </div>
             ),
@@ -100,12 +101,12 @@ const VisitorManagementPage = () => {
         {
             accessorKey: 'visitorContactNumber',
             header: () => (
-                <div className="flex items-center justify-center h-full">
+                <div className={tableStyles.headerStyle}>
                     Contact Number
                 </div>
             ),
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full capitalize">
+                <div className={tableStyles.dateCellStyle}>
                     {row.getValue('visitorContactNumber')}
                 </div>
             ),
@@ -113,7 +114,7 @@ const VisitorManagementPage = () => {
         {
             accessorKey: 'visitDateTime',
             header: ({ column }) => (
-                <div className="flex items-center justify-center h-full">
+                <div className={tableStyles.headerStyle}>
                     <Button
                         variant="ghost"
                         onClick={() =>
@@ -126,7 +127,7 @@ const VisitorManagementPage = () => {
                 </div>
             ),
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full capitalize">
+                <div className={tableStyles.dateCellStyle}>
                     {convertDateStringToFormattedString(
                         row.getValue('visitDateTime'),
                         ITimeFormat.dateTime
@@ -137,7 +138,7 @@ const VisitorManagementPage = () => {
         {
             accessorKey: 'status',
             header: () => (
-                <div className="flex items-center justify-center h-full">Status</div>
+                <div className={tableStyles.headerStyle}>Status</div>
             ),
             cell: ({ row }) => {
                 const statusValue = row.getValue('status') as string
@@ -162,7 +163,7 @@ const VisitorManagementPage = () => {
                     }
                 }
                 return (
-                    <div className="flex items-center justify-center h-full">
+                    <div className={tableStyles.dateCellStyle}>
                         <div className="w-[100px]">
                             <Badge
                                 className={`w-full ${

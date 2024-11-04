@@ -27,7 +27,7 @@ export const getCookies = async (name: string) => {
         }
         return cookieValue
     } catch (error) {
-        console.log(error)
+        throw new Error('Unauthorized')
     }
 }
 

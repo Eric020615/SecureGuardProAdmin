@@ -27,6 +27,39 @@ export interface IPaginatedResponse<T> {
     }
 }
 
+export const handleApiRequest = async <T>(
+    path: string,
+    type: string,
+    data: any,
+    token?: string,
+    params?: any,
+    pathVariables?: { placeholder: string; value: string } // Optional parameter for path variable replacement
+): Promise<IResponse<T>> => {
+    try {
+        if (pathVariables) {
+            path = path.replace(pathVariables.placeholder, pathVariables.value)
+        }
+        const [success, response] = await GlobalHandler({
+            path,
+            type,
+            data,
+            _token: token,
+            params,
+        })
+        return {
+            success,
+            msg: success ? 'success' : response?.message,
+            data: success ? response?.data : undefined,
+        }
+    } catch (error) {
+        return {
+            success: false,
+            msg: error instanceof Error ? error.message : String(error),
+            data: null,
+        } as IResponse<T>
+    }
+}
+
 const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
     const _handler = async (payload: IHandler): Promise<[boolean, any]> => {
         try {
@@ -44,7 +77,7 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
                         // Perform the API request
                         if (type === 'get') {
                             response = await Axios.get(baseURL, {
-                                params: data,
+                                params: payload.params,
                                 responseType: isBloob ? 'blob' : 'json',
                                 paramsSerializer: (params) => parseParams(params),
                                 headers: {

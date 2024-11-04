@@ -1,141 +1,96 @@
 import { getCookies } from '@lib/cookies'
-import GlobalHandler, { IResponse } from '../globalHandler'
 import { listUrl } from '../listUrl'
 import {
     GetUserDetailsByUserGuidDto,
     GetUserDto,
 } from '@dtos/user-management/userManagement.dto'
+import { handleApiRequest, IResponse } from '../globalHandler'
 import { PaginationDirection } from '@config/constant'
 
+// Function to get a list of users
 export const getUserList = async (
     isActive: boolean,
     direction: PaginationDirection,
     id: number,
     limit: number
-): Promise<IResponse<any>> => {
-    try {
-        const cookieValue = await getCookies('token')
-        const [success, response] = await GlobalHandler({
-            path: listUrl.userManagement.getUsers.path,
-            type: listUrl.userManagement.getUsers.type,
-            _token: cookieValue as string,
-            data: { isActive, direction, id, limit },
-        })
-        const result: IResponse<GetUserDto[]> = {
-            success,
-            msg: success ? 'success' : response?.message,
-            data: success ? response?.data : undefined,
-        }
-        return result
-    } catch (error: any) {
-        const result: IResponse<any> = {
-            success: false,
-            msg: error,
-            data: null,
-        }
-        return result
-    }
+): Promise<IResponse<GetUserDto[] | null>> => {
+    const cookieValue = await getCookies('token')
+    const response = await handleApiRequest<GetUserDto[]>(
+        listUrl.userManagement.getAll.path,
+        listUrl.userManagement.getAll.type,
+        {},
+        cookieValue as string,
+        { isActive, direction, id, limit }
+    )
+    return response
 }
 
+// Function to get user details by ID
 export const getUserDetailsById = async (
     userGuid: string
 ): Promise<IResponse<GetUserDetailsByUserGuidDto>> => {
-    try {
-        const cookieValue = await getCookies('token')
-        const [success, response] = await GlobalHandler({
-            path: listUrl.userManagement.getUserDetailsById.path,
-            type: listUrl.userManagement.getUserDetailsById.type,
-            _token: cookieValue as string,
-            data: { userGuid },
-        })
-        const result: IResponse<GetUserDetailsByUserGuidDto> = {
-            success,
-            msg: success ? 'success' : response?.message,
-            data: success ? response?.data : undefined,
+    const cookieValue = await getCookies('token')
+    const response = await handleApiRequest<GetUserDetailsByUserGuidDto>(
+        listUrl.userManagement.getById.path,
+        listUrl.userManagement.getById.type,
+        {},
+        cookieValue as string,
+        {},
+        {
+            placeholder: ':id',
+            value: userGuid,
         }
-        return result
-    } catch (error: any) {
-        const result: IResponse<any> = {
-            success: false,
-            msg: error,
-            data: null,
-        }
-        return result
-    }
+    )
+    return response
 }
 
+// Function to activate a user by ID
 export const activateUserById = async (userGuid: string): Promise<IResponse<any>> => {
-    try {
-        const cookieValue = await getCookies('token')
-        const [success, response] = await GlobalHandler({
-            path: listUrl.userManagement.activateUserById.path,
-            type: listUrl.userManagement.activateUserById.type,
-            _token: cookieValue as string,
-            params: { userGuid },
-        })
-        const result: IResponse<any> = {
-            success,
-            msg: success ? 'success' : response?.message,
-            data: success ? response?.data : undefined,
+    const cookieValue = await getCookies('token')
+    const response = await handleApiRequest<any>(
+        listUrl.userManagement.activate.path,
+        listUrl.userManagement.activate.type,
+        {},
+        cookieValue as string,
+        {},
+        {
+            placeholder: ':id',
+            value: userGuid,
         }
-        return result
-    } catch (error: any) {
-        const result: IResponse<any> = {
-            success: false,
-            msg: error,
-            data: null,
-        }
-        return result
-    }
+    )
+    return response
 }
 
+// Function to deactivate a user by ID
 export const deactivateUserById = async (userGuid: string): Promise<IResponse<any>> => {
-    try {
-        const cookieValue = await getCookies('token')
-        const [success, response] = await GlobalHandler({
-            path: listUrl.userManagement.deactivateUserById.path,
-            type: listUrl.userManagement.deactivateUserById.type,
-            _token: cookieValue as string,
-            params: { userGuid },
-        })
-        const result: IResponse<any> = {
-            success,
-            msg: success ? 'success' : response?.message,
-            data: success ? response?.data : undefined,
+    const cookieValue = await getCookies('token')
+    const response = await handleApiRequest<any>(
+        listUrl.userManagement.deactivate.path,
+        listUrl.userManagement.deactivate.type,
+        {},
+        cookieValue as string,
+        {},
+        {
+            placeholder: ':id',
+            value: userGuid,
         }
-        return result
-    } catch (error: any) {
-        const result: IResponse<any> = {
-            success: false,
-            msg: error,
-            data: null,
-        }
-        return result
-    }
+    )
+    return response
 }
 
+// Function to delete a user by ID
 export const deleteUserById = async (userGuid: string): Promise<IResponse<any>> => {
-    try {
-        const cookieValue = await getCookies('token')
-        console.log(userGuid)
-        const [success, response] = await GlobalHandler({
-            path: listUrl.userManagement.deleteUserById.path,
-            type: listUrl.userManagement.deleteUserById.type,
-            _token: cookieValue as string,
-            params: { userGuid },
-        })
-        const result: IResponse<any> = {
-            success,
-            msg: success ? 'success' : response?.message,
-            data: success ? response?.data : undefined,
+    const cookieValue = await getCookies('token')
+    const response = await handleApiRequest<any>(
+        listUrl.userManagement.delete.path,
+        listUrl.userManagement.delete.type,
+        {},
+        cookieValue as string,
+        {},
+        {
+            placeholder: ':id',
+            value: userGuid,
         }
-        return result
-    } catch (error: any) {
-        const result: IResponse<any> = {
-            success: false,
-            msg: error,
-            data: null,
-        }
-        return result
-    }
+    )
+    return response
 }

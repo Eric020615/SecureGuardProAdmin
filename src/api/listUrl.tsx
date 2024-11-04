@@ -1,130 +1,130 @@
-import { IType } from '@config/index'
+import { IType } from '@config/index';
 
 export const listUrl = {
     auth: {
         logIn: {
-            path: 'auth/log-in',
+            path: 'auth/login',
             type: IType.post,
         },
         signUp: {
-            path: 'auth/sign-up/',
+            path: 'auth/signup',
             type: IType.post,
         },
         resetPassword: {
-            path: 'auth/reset-password/',
+            path: 'auth/reset-password',
             type: IType.post
         },
-        requestResetPasswordEmail: {
+        requestPasswordReset: {
             path: 'auth/reset-password/request',
             type: IType.post
         },
-        checkJwtAuth: {
-            path: 'auth/check-auth',
+        checkAuth: {
+            path: 'auth/check',
             type: IType.get,
         },
         checkSubUserAuth: {
-            path: 'auth/check-auth/sub-user',
+            path: 'auth/check/sub-user',
             type: IType.get,
         },
     },
     faceAuth: {
-        create: {
+        upload: {
             path: 'face-auth/user/upload',
             type: IType.post,
         },
     },
-    user: {
-        createUser: {
-            path: 'user/create/',
+    users: {
+        create: {
+            path: 'users',
             type: IType.post,
         },
-        getUserProfileById: {
-            path: 'user/profile/',
+        getById: {
+            path: 'users/details',
             type: IType.get,
         },
-        editUserProfileById: {
-            path: 'user/profile/',
+        update: {
+            path: 'users',
             type: IType.put,
         },
     },
-    facility: {
+    facilities: {
         book: {
-            path: 'facility/create',
+            path: 'facilities',
             type: IType.post,
         },
         getBookingHistory: {
-            path: 'facility/admin',
+            path: 'facilities/admin/bookings',
             type: IType.get,
         },
-        getFacilityBookingDetails: {
-            path: 'facility/details',
+        getDetails: {
+            path: 'facilities/:id/details',
             type: IType.get,
         },
         cancelBooking: {
-            path: 'facility/cancel',
+            path: 'facilities/bookings/:id/cancel',
             type: IType.put,
         },
-        checkAvailabilitySlot: {
-            path: 'facility/available-slot/check',
+        checkAvailability: {
+            path: 'facilities/availability',
             type: IType.get,
         },
     },
-    notice: {
+    noticeManagement: {
         create: {
-            path: 'notice/create',
+            path: 'notices/admin',
             type: IType.post,
         },
-        getNotices: {
-            path: 'notice/admin',
+        getAll: {
+            path: 'notices/admin',
             type: IType.get,
         },
-        getNoticeById: {
-            path: 'notice/details',
+        getById: {
+            path: 'notices/admin/:id/details',
             type: IType.get,
         },
-        editNoticeById: {
-            path: 'notice/edit/',
+        update: {
+            path: 'notices/admin/:id',
             type: IType.put,
         },
-        deleteNoticeById: {
-            path: 'notice/delete/',
+        delete: {
+            path: 'notices/admin/:id',
             type: IType.delete,
         },
     },
     userManagement: {
-        getUsers: {
-            path: 'user/admin/user-list',
+        getAll: {
+            path: 'users/admin',
             type: IType.get,
         },
-        getUserDetailsById: {
-            path: 'user/details/',
+        getById: {
+            path: 'users/admin/:id/details',
             type: IType.get,
         },
-        activateUserById: {
-            path: 'user/activate/',
+        activate: {
+            path: 'users/admin/:id/activate',
             type: IType.put,
         },
-        deactivateUserById: {
-            path: 'user/deactivate/',
+        deactivate: {
+            path: 'users/admin/:id/deactivate',
             type: IType.put,
         },
-        deleteUserById: {
-            path: 'user/admin/delete/',
+        delete: {
+            path: 'users/admin/:id',
             type: IType.delete,
         }
     },
-    vistorManagement: {
-        getVisitors: {
-            path: 'visitor/admin',
+    visitorManagement: {
+        getAll: {
+            path: 'visitors/admin',
             type: IType.get,
         },
-        getVisitorDetailsById: {
-            path: 'visitor/details',
+        getById: {
+            path: 'visitors/admin/:id/details',
             type: IType.get,
         },
-        getVisitorAnalytics: {
-            path: 'visitor/admin/analytics',
+        getAnalytics: {
+            path: 'visitors/admin/analytics',
             type: IType.get,
         }
     }
-}
+};

@@ -2,8 +2,8 @@ import { create } from 'zustand'
 import {
     createNotice,
     deleteNoticeById,
-    getNotice,
     getNoticeDetailsById,
+    getNoticeList,
     updateNoticeById,
 } from '@api/noticeService/noticeService'
 import { generalAction } from '@store/application/useApplication'
@@ -28,8 +28,11 @@ interface State {
 interface Actions {
     createNoticeAction: (notice: CreateNoticeDto) => Promise<any>
     getNoticeDetailsByIdAction: (noticeGuid: string) => Promise<any>
-    updateNoticeByIdAction: (noticeForm: EditNoticeDto) => Promise<any>
-    deleteNoticeByIdAction: (deleteNotice: DeleteNoticeDto) => Promise<any>
+    updateNoticeByIdAction: (
+        noticeForm: EditNoticeDto,
+        noticeGuid: string
+    ) => Promise<any>
+    deleteNoticeByIdAction: (noticeGuid: string) => Promise<any>
     getNoticeAction: (
         direction: PaginationDirection,
         limit: number
@@ -54,13 +57,13 @@ export const useNotice = create<State & Actions>((set, get) => ({
                     const lastId =
                         notices.length > 0 ? notices[notices.length - 1].noticeId : 0 // If no history, pass 0 or handle accordingly
 
-                    response = await getNotice(direction, lastId, limit)
+                    response = await getNoticeList(direction, lastId, limit)
                     set({ currentPage: currentPage + 1 })
                 } else {
                     // Pass the first booking ID from the current list for previous pagination
                     const firstId = notices.length > 0 ? notices[0].noticeId : 0 // If no history, pass 0 or handle accordingly
 
-                    response = await getNotice(direction, firstId, limit)
+                    response = await getNoticeList(direction, firstId, limit)
                     set({ currentPage: Math.max(currentPage - 1, 1) })
                 }
                 if (!response.success) {
@@ -96,7 +99,11 @@ export const useNotice = create<State & Actions>((set, get) => ({
         return generalAction(
             async () => {
                 const response = await getNoticeDetailsById(noticeGuid)
-                set({ noticeDetails: response.data })
+                set({
+                    noticeDetails: response.data
+                        ? response.data
+                        : ({} as GetNoticeDetailsByIdDto),
+                })
                 console.log(response)
                 if (!response.success) {
                     throw new Error(response.msg)
@@ -107,12 +114,12 @@ export const useNotice = create<State & Actions>((set, get) => ({
             'Failed to retrieve notice. Please try again.'
         )
     },
-    updateNoticeByIdAction: async (noticeForm: EditNoticeDto) => {
+    updateNoticeByIdAction: async (noticeForm: EditNoticeDto, noticeGuid: string) => {
         return generalAction(
             async () => {
                 const { deletedAttachments } = get()
                 noticeForm.deletedAttachments = deletedAttachments
-                const response = await updateNoticeById(noticeForm)
+                const response = await updateNoticeById(noticeForm, noticeGuid)
                 if (!response.success) {
                     throw new Error(response.msg)
                 }
@@ -122,10 +129,10 @@ export const useNotice = create<State & Actions>((set, get) => ({
             'Failed to update notice. Please try again.'
         )
     },
-    deleteNoticeByIdAction: async (deleteNotice: DeleteNoticeDto) => {
+    deleteNoticeByIdAction: async (noticeGuid: string) => {
         return generalAction(
             async () => {
-                const response = await deleteNoticeById(deleteNotice)
+                const response = await deleteNoticeById(noticeGuid)
                 if (!response.success) {
                     throw new Error(response.msg)
                 }

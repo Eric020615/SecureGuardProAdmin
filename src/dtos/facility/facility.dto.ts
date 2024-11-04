@@ -45,6 +45,5 @@ export interface GetFacilityBookingDetailsDto {
 }
 
 export interface CancelFacilityBookingDto {
-    bookingGuid: string
     cancelRemark: string
 }

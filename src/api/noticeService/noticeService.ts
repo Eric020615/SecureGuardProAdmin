@@ -1,135 +1,95 @@
 import { getCookies } from '@lib/cookies'
-import GlobalHandler, { IResponse } from '../globalHandler'
 import { listUrl } from '../listUrl'
-import { CreateNoticeDto, DeleteNoticeDto, EditNoticeDto } from '@dtos/notice/notice.dto'
+import {
+    CreateNoticeDto,
+    GetNoticeDto,
+    EditNoticeDto,
+    GetNoticeDetailsByIdDto,
+} from '@dtos/notice/notice.dto'
+import { handleApiRequest, IResponse } from '../globalHandler'
 import { PaginationDirection } from '@config/constant'
 
-export const createNotice = async (notice: CreateNoticeDto): Promise<any> => {
-    try {
-        const cookieValue = await getCookies('token')
-        const [success, response] = await GlobalHandler({
-            path: listUrl.notice.create.path,
-            type: listUrl.notice.create.type,
-            data: notice,
-            _token: cookieValue as string,
-        })
-        const result: IResponse<any> = {
-            success,
-            msg: success ? 'success' : response?.message,
-            data: success ? response?.data : undefined,
-        }
-        return result
-    } catch (error: any) {
-        const result: IResponse<any> = {
-            success: false,
-            msg: error,
-            data: null,
-        }
-        return result
-    }
+// Function to create a notice
+export const createNotice = async (notice: CreateNoticeDto): Promise<IResponse<any>> => {
+    const cookieValue = await getCookies('token')
+    const response = await handleApiRequest<any>(
+        listUrl.noticeManagement.create.path,
+        listUrl.noticeManagement.create.type,
+        notice,
+        cookieValue as string
+    )
+    return response
 }
 
-export const getNotice = async (
+// Function to get a list of notices
+export const getNoticeList = async (
     direction: PaginationDirection,
     id: number,
     limit: number
+): Promise<IResponse<GetNoticeDto[] | null>> => {
+    const cookieValue = await getCookies('token')
+    const response = await handleApiRequest<GetNoticeDto[]>(
+        listUrl.noticeManagement.getAll.path,
+        listUrl.noticeManagement.getAll.type,
+        {},
+        cookieValue as string,
+        { direction, id, limit }
+    )
+    return response
+}
+
+// Function to get notice details by ID
+export const getNoticeDetailsById = async (
+    noticeGuid: string
+): Promise<IResponse<GetNoticeDetailsByIdDto | null>> => {
+    const cookieValue = await getCookies('token')
+    const response = await handleApiRequest<GetNoticeDetailsByIdDto>(
+        listUrl.noticeManagement.getById.path,
+        listUrl.noticeManagement.getById.type,
+        {},
+        cookieValue as string,
+        {},
+        {
+            placeholder: ':id',
+            value: noticeGuid,
+        }
+    )
+    return response
+}
+
+// Function to update a notice by ID
+export const updateNoticeById = async (
+    notice: EditNoticeDto,
+    noticeGuid: string
 ): Promise<IResponse<any>> => {
-    try {
-        const cookieValue = await getCookies('token')
-        const [success, response] = await GlobalHandler({
-            path: listUrl.notice.getNotices.path,
-            type: listUrl.notice.getNotices.type,
-            _token: cookieValue as string,
-            data: { direction, id, limit },
-        })
-        const result: IResponse<any> = {
-            success,
-            msg: success ? 'success' : response?.message,
-            data: success ? response?.data : undefined,
+    const cookieValue = await getCookies('token')
+    const response = await handleApiRequest<any>(
+        listUrl.noticeManagement.update.path,
+        listUrl.noticeManagement.update.type,
+        notice,
+        cookieValue as string,
+        {},
+        {
+            placeholder: ':id',
+            value: noticeGuid,
         }
-        return result
-    } catch (error: any) {
-        const result: IResponse<any> = {
-            success: false,
-            msg: error,
-            data: null,
-        }
-        return result
-    }
+    )
+    return response
 }
 
-export const getNoticeDetailsById = async (noticeGuid: string): Promise<any> => {
-    try {
-        const cookieValue = await getCookies('token')
-        const [success, response] = await GlobalHandler({
-            path: listUrl.notice.getNoticeById.path,
-            type: listUrl.notice.getNoticeById.type,
-            data: { noticeGuid },
-            _token: cookieValue as string,
-        })
-        const result: IResponse<any> = {
-            success,
-            msg: success ? 'success' : response?.message,
-            data: success ? response?.data : undefined,
+// Function to delete a notice by ID
+export const deleteNoticeById = async (noticeGuid: string): Promise<IResponse<any>> => {
+    const cookieValue = await getCookies('token')
+    const response = await handleApiRequest<any>(
+        listUrl.noticeManagement.delete.path,
+        listUrl.noticeManagement.delete.type,
+        {},
+        cookieValue as string,
+        {},
+        {
+            placeholder: ':id',
+            value: noticeGuid,
         }
-        return result
-    } catch (error: any) {
-        const result: IResponse<any> = {
-            success: false,
-            msg: error,
-            data: null,
-        }
-        return result
-    }
-}
-
-export const updateNoticeById = async (editNotice: EditNoticeDto): Promise<any> => {
-    try {
-        const cookieValue = await getCookies('token')
-        const [success, response] = await GlobalHandler({
-            isUrlencoded: false,
-            path: listUrl.notice.editNoticeById.path,
-            type: listUrl.notice.editNoticeById.type,
-            data: editNotice,
-            _token: cookieValue as string,
-        })
-        const result: IResponse<any> = {
-            success,
-            msg: success ? 'success' : response?.message,
-            data: success ? response?.data : undefined,
-        }
-        return result
-    } catch (error: any) {
-        const result: IResponse<any> = {
-            success: false,
-            msg: error,
-            data: null,
-        }
-        return result
-    }
-}
-
-export const deleteNoticeById = async (deleteNotice: DeleteNoticeDto): Promise<any> => {
-    try {
-        const cookieValue = await getCookies('token')
-        const [success, response] = await GlobalHandler({
-            path: listUrl.notice.deleteNoticeById.path,
-            type: listUrl.notice.deleteNoticeById.type,
-            _token: cookieValue as string,
-            data: deleteNotice,
-        })
-        const result: IResponse<any> = {
-            success,
-            msg: success ? 'success' : response?.message,
-            data: success ? response?.data : undefined,
-        }
-        return result
-    } catch (error: any) {
-        const result: IResponse<any> = {
-            success: false,
-            msg: error,
-            data: null,
-        }
-        return result
-    }
+    )
+    return response
 }

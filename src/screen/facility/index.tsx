@@ -16,6 +16,7 @@ import {
     convertDateStringToFormattedString,
     getCurrentDate,
 } from '@lib/time'
+import { tableStyles } from '@screen/style'
 
 const FacilityBookingManagementPage = () => {
     const {
@@ -31,7 +32,7 @@ const FacilityBookingManagementPage = () => {
         {
             id: 'select',
             header: ({ table }) => (
-                <div className="flex items-center justify-center h-full">
+                <div className={tableStyles.headerStyle}>
                     <Checkbox
                         checked={
                             table.getIsAllPageRowsSelected() ||
@@ -45,7 +46,7 @@ const FacilityBookingManagementPage = () => {
                 </div>
             ),
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full">
+                <div className={tableStyles.dateCellStyle}>
                     <Checkbox
                         checked={row.getIsSelected()}
                         onCheckedChange={(value) => row.toggleSelected(!!value)}
@@ -58,22 +59,18 @@ const FacilityBookingManagementPage = () => {
         },
         {
             accessorKey: 'bookingId',
-            header: () => (
-                <div className="flex items-center justify-center h-full">Id</div>
-            ),
+            header: () => <div className={tableStyles.headerStyle}>Id</div>,
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full">
+                <div className={tableStyles.dateCellStyle}>
                     {row.getValue('bookingId')}
                 </div>
             ),
         },
         {
             accessorKey: 'facilityName',
-            header: () => (
-                <div className="flex items-center justify-center h-full">Facility</div>
-            ),
+            header: () => <div className={tableStyles.headerStyle}>Facility</div>,
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full capitalize">
+                <div className={`${tableStyles.dateCellStyle} capitalize`}>
                     {row.getValue('facilityName') as string}
                 </div>
             ),
@@ -82,7 +79,7 @@ const FacilityBookingManagementPage = () => {
             accessorKey: 'startDate',
             header: ({ column }) => {
                 return (
-                    <div className="flex items-center justify-center h-full">
+                    <div className={tableStyles.headerStyle}>
                         <Button
                             variant="ghost"
                             onClick={() =>
@@ -96,7 +93,7 @@ const FacilityBookingManagementPage = () => {
                 )
             },
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full capitalize">
+                <div className={`${tableStyles.dateCellStyle} capitalize`}>
                     {convertDateStringToFormattedString(
                         row.getValue('startDate'),
                         ITimeFormat.dateTime
@@ -108,7 +105,7 @@ const FacilityBookingManagementPage = () => {
             accessorKey: 'endDate',
             header: ({ column }) => {
                 return (
-                    <div className="flex items-center justify-center h-full">
+                    <div className={tableStyles.headerStyle}>
                         <Button
                             variant="ghost"
                             onClick={() =>
@@ -122,7 +119,7 @@ const FacilityBookingManagementPage = () => {
                 )
             },
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full capitalize">
+                <div className={`${tableStyles.dateCellStyle} capitalize`}>
                     {convertDateStringToFormattedString(
                         row.getValue('endDate'),
                         ITimeFormat.dateTime
@@ -132,28 +129,22 @@ const FacilityBookingManagementPage = () => {
         },
         {
             accessorKey: 'bookedBy',
-            header: () => (
-                <div className="flex items-center justify-center h-full">Booked By</div>
-            ),
+            header: () => <div className={tableStyles.headerStyle}>Booked By</div>,
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full capitalize">
+                <div className={`${tableStyles.dateCellStyle} capitalize`}>
                     {row.getValue('bookedBy')}
                 </div>
             ),
         },
         {
             accessorKey: 'isCancelled',
-            header: () => (
-                <div className="flex items-center justify-center h-full">
-                    Booking Status
-                </div>
-            ),
+            header: () => <div className={tableStyles.headerStyle}>Booking Status</div>,
             cell: ({ row }) => {
                 const startDate = row.getValue('startDate')
                     ? convertDateStringToDate(row.getValue('startDate'))
                     : null
                 return (
-                    <div className="flex items-center justify-center h-full">
+                    <div className={tableStyles.dateCellStyle}>
                         {startDate &&
                             (startDate > getCurrentDate() ? (
                                 row.getValue('isCancelled') ? (
@@ -176,9 +167,7 @@ const FacilityBookingManagementPage = () => {
         },
         {
             accessorKey: 'status',
-            header: () => (
-                <div className="flex items-center justify-center h-full">Status</div>
-            ),
+            header: () => <div className={tableStyles.headerStyle}>Status</div>,
             cell: ({ row }) => {
                 const statusValue = row.getValue('status') as string
 
@@ -202,7 +191,7 @@ const FacilityBookingManagementPage = () => {
                     }
                 }
                 return (
-                    <div className="flex items-center justify-center h-full">
+                    <div className={tableStyles.dateCellStyle}>
                         <div className="w-[100px]">
                             <Badge
                                 className={`w-full ${

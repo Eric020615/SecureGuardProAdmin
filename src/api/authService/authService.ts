@@ -1,4 +1,4 @@
-import GlobalHandler, { IResponse } from '../globalHandler'
+import { handleApiRequest, IResponse } from '../globalHandler'
 import { listUrl } from '../listUrl'
 import { getCookies, setCookies } from '@lib/cookies'
 import { RoleEnum } from '@config/constant/user'
@@ -11,181 +11,93 @@ import {
     UserSignUpFormDto,
 } from '@dtos/auth/auth.dto'
 
+// Sign up a new user
 export const signUp = async (
     ISignUp: UserSignUpFormDto,
     role: RoleEnum
-): Promise<any> => {
-    try {
-        const [success, response] = await GlobalHandler({
-            path: listUrl.auth.signUp.path,
-            type: listUrl.auth.signUp.type,
-            data: ISignUp,
-			params: { role: role },
-        })
-        const result: IResponse<any> = {
-            success,
-            msg: success ? 'success' : response?.message,
-            data: success ? response?.data : undefined,
-        }
-        return result
-    } catch (error: any) {
-        const result: IResponse<any> = {
-            success: false,
-            msg: error,
-            data: null,
-        }
-        return result
-    }
+): Promise<IResponse<any>> => {
+    return handleApiRequest<any>(
+        listUrl.auth.signUp.path,
+        listUrl.auth.signUp.type,
+        ISignUp,
+        undefined,
+        { role }
+    )
 }
 
-export const signIn = async (ISignIn: SignInFormDto): Promise<any> => {
-    try {
-        const [success, response] = await GlobalHandler({
-            path: listUrl.auth.logIn.path,
-            type: listUrl.auth.logIn.type,
-            data: ISignIn,
-        })
-        const result: IResponse<any> = {
-            success,
-            msg: success ? 'success' : response?.message,
-            data: success ? response?.data : undefined,
-        }
-        await setCookies('token', response?.data)
-        return result
-    } catch (error: any) {
-        const result: IResponse<any> = {
-            success: false,
-            msg: error,
-            data: null,
-        }
-        return result
+// Sign in an existing user
+export const signIn = async (ISignIn: SignInFormDto): Promise<IResponse<any>> => {
+    const response = await handleApiRequest<any>(
+        listUrl.auth.logIn.path,
+        listUrl.auth.logIn.type,
+        ISignIn
+    )
+
+    if (response.success) {
+        await setCookies('token', response.data)
     }
+
+    return response
 }
 
-export const requestResetPassword = async (
+// forgot password
+export const forgotPassword = async (
     requestResetPasswordDto: RequestResetPasswordDto
 ): Promise<IResponse<any>> => {
-    try {
-        const [success, response] = await GlobalHandler({
-            path: listUrl.auth.requestResetPasswordEmail.path,
-            type: listUrl.auth.requestResetPasswordEmail.type,
-            data: requestResetPasswordDto,
-        })
-        const result: IResponse<any> = {
-            success,
-            msg: success ? 'success' : response?.message,
-            data: success ? response?.data : undefined,
-        }
-        return result
-    } catch (error: any) {
-        const result: IResponse<any> = {
-            success: false,
-            msg: error,
-            data: null,
-        }
-        return result
-    }
+    return handleApiRequest<any>(
+        listUrl.auth.requestPasswordReset.path,
+        listUrl.auth.requestPasswordReset.type,
+        requestResetPasswordDto
+    )
 }
 
+// Reset password
 export const resetPassword = async (
     resetPasswordDto: ResetPasswordDto
 ): Promise<IResponse<any>> => {
-    try {
-        const cookieValue = await getCookies('token')
-        const [success, response] = await GlobalHandler({
-            path: listUrl.auth.resetPassword.path,
-            type: listUrl.auth.resetPassword.type,
-            data: resetPasswordDto,
-            _token: cookieValue as string,
-        })
-        const result: IResponse<any> = {
-            success,
-            msg: success ? 'success' : response?.message,
-            data: success ? response?.data : undefined,
-        }
-        return result
-    } catch (error: any) {
-        const result: IResponse<any> = {
-            success: false,
-            msg: error,
-            data: null,
-        }
-        return result
-    }
+    const cookieValue = await getCookies('token')
+    return handleApiRequest<any>(
+        listUrl.auth.resetPassword.path,
+        listUrl.auth.resetPassword.type,
+        resetPasswordDto,
+        cookieValue as string
+    )
 }
 
+// Check authentication
 export const checkAuth = async (
     token: string,
     check: boolean
 ): Promise<IResponse<AuthTokenPayloadDto>> => {
-    try {
-        const [success, response] = await GlobalHandler({
-            path: listUrl.auth.checkJwtAuth.path,
-            type: listUrl.auth.checkJwtAuth.type,
-            _token: token,
-            data: { check: check },
-        })
-        const result: IResponse<any> = {
-            success,
-            msg: success ? 'success' : response?.message,
-            data: success ? response?.data : undefined,
-        }
-        return result
-    } catch (error: any) {
-        const result: IResponse<any> = {
-            success: false,
-            msg: error,
-            data: null,
-        }
-        return result
-    }
+    return handleApiRequest<AuthTokenPayloadDto>(
+        listUrl.auth.checkAuth.path,
+        listUrl.auth.checkAuth.type,
+        { check },
+        token
+    )
 }
 
+// Check sub-user authentication
 export const checkSubUserAuth = async (
     token: string
 ): Promise<IResponse<SubUserAuthTokenPayloadDto>> => {
-    try {
-        const [success, response] = await GlobalHandler({
-            path: listUrl.auth.checkSubUserAuth.path,
-            type: listUrl.auth.checkSubUserAuth.type,
-            _token: token,
-        })
-        const result: IResponse<SubUserAuthTokenPayloadDto> = {
-            success,
-            msg: success ? 'success' : response?.message,
-            data: success ? response?.data : undefined,
-        }
-        return result
-    } catch (error: any) {
-        const result: IResponse<any> = {
-            success: false,
-            msg: error,
-            data: null,
-        }
-        return result
-    }
+    return handleApiRequest<SubUserAuthTokenPayloadDto>(
+        listUrl.auth.checkSubUserAuth.path,
+        listUrl.auth.checkSubUserAuth.type,
+        {},
+        token
+    )
 }
 
-export const signUpSubUser = async (ISignUp: UserSignUpFormDto): Promise<any> => {
-    try {
-        const [success, response] = await GlobalHandler({
-            path: listUrl.auth.signUp.path,
-            type: listUrl.auth.signUp.type,
-            data: ISignUp,
-            params: { role: RoleEnum.RESIDENT_SUBUSER },
-        })
-        const result: IResponse<any> = {
-            success,
-            msg: success ? 'success' : response?.message,
-            data: success ? response?.data : undefined,
-        }
-        return result
-    } catch (error: any) {
-        const result: IResponse<any> = {
-            success: false,
-            msg: error,
-            data: null,
-        }
-        return result
-    }
+// Sign up a sub-user
+export const signUpSubUser = async (
+    ISignUp: UserSignUpFormDto
+): Promise<IResponse<any>> => {
+    return handleApiRequest<any>(
+        listUrl.auth.signUp.path,
+        listUrl.auth.signUp.type,
+        ISignUp,
+        undefined,
+        { role: RoleEnum.RESIDENT_SUBUSER }
+    )
 }

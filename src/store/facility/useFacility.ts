@@ -34,6 +34,7 @@ interface Actions {
     getFacilityBookingDetailsAction: (facilityBookingGuid: string) => Promise<any>
     resetFacilityBookingHistoryAction: () => void
     cancelBookingAction: (
+        facilityBookingGuid: string,
         cancelBookingForm: CancelFacilityBookingDto
     ) => Promise<IResponse<any>>
     checkAvailabilitySlotAction: (
@@ -106,7 +107,7 @@ export const useFacility = create<State & Actions>((set, get) => ({
     resetFacilityBookingHistoryAction() {
         set({
             facilityBookingHistory: [],
-			currentPage: 0,
+            currentPage: 0,
             totalFacilityBookingHistory: 0,
         })
     },
@@ -124,10 +125,16 @@ export const useFacility = create<State & Actions>((set, get) => ({
             'Failed to retrieve booking details. Please try again.'
         )
     },
-    cancelBookingAction: async (cancelBookingForm: CancelFacilityBookingDto) => {
+    cancelBookingAction: async (
+        facilityBookingGuid: string,
+        cancelBookingForm: CancelFacilityBookingDto
+    ) => {
         return generalAction(
             async () => {
-                const response = await cancelBooking(cancelBookingForm)
+                const response = await cancelBooking(
+                    facilityBookingGuid,
+                    cancelBookingForm
+                )
                 if (!response.success) {
                     throw new Error(response.msg)
                 }

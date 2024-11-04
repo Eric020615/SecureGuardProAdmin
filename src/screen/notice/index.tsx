@@ -64,7 +64,7 @@ const NoticeManagementPage = () => {
         {
             accessorKey: 'description',
             header: () => (
-                <div className={`${tableStyles.headerStyle} max-w-[200px]`}>
+                <div className={`${tableStyles.headerStyle}`}>
                     Description
                 </div>
             ),

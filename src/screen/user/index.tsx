@@ -10,9 +10,9 @@ import { Checkbox } from '@components/ui/checkbox'
 import { ColumnDef, Row } from '@tanstack/react-table'
 import { GetUserDto } from '@dtos/user-management/userManagement.dto'
 import { Button } from '@components/ui/button'
-import { DocumentStatus, ITimeFormat, PaginationDirection } from '@config/constant'
-import { convertDateStringToFormattedString } from '@lib/time'
+import { DocumentStatus, PaginationDirection } from '@config/constant'
 import { Badge } from '@components/ui/badge'
+import { tableStyles } from '@screen/style'
 
 const UserManagementPage = () => {
     const {
@@ -40,7 +40,7 @@ const UserManagementPage = () => {
         {
             id: 'select',
             header: ({ table }) => (
-                <div className="flex items-center justify-center h-full">
+                <div className={tableStyles.headerStyle}>
                     <Checkbox
                         checked={
                             table.getIsAllPageRowsSelected() ||
@@ -54,7 +54,7 @@ const UserManagementPage = () => {
                 </div>
             ),
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full">
+                <div className={tableStyles.dateCellStyle}>
                     <Checkbox
                         checked={row.getIsSelected()}
                         onCheckedChange={(value) => row.toggleSelected(!!value)}
@@ -68,7 +68,7 @@ const UserManagementPage = () => {
         {
             accessorKey: 'userId',
             header: ({ column }) => (
-                <div className="flex items-center justify-center h-full">
+                <div className={tableStyles.headerStyle}>
                     <Button
                         variant="ghost"
                         onClick={() =>
@@ -81,146 +81,83 @@ const UserManagementPage = () => {
                 </div>
             ),
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full">
+                <div className={tableStyles.dateCellStyle}>
                     {row.getValue('userId') as string}
                 </div>
             ),
         },
         {
             accessorKey: 'userName',
-            header: () => (
-                <div className="flex items-center justify-center h-full">Username</div>
-            ),
+            header: () => <div className={tableStyles.headerStyle}>Username</div>,
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full capitalize">
+                <div className={`${tableStyles.dateCellStyle} capitalize`}>
                     {row.getValue('userName') as string}
                 </div>
             ),
         },
         {
             accessorKey: 'firstName',
-            header: () => (
-                <div className="flex items-center justify-center h-full">First Name</div>
-            ),
+            header: () => <div className={tableStyles.headerStyle}>First Name</div>,
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full capitalize">
+                <div className={`${tableStyles.dateCellStyle} capitalize`}>
                     {row.getValue('firstName') as string}
                 </div>
             ),
         },
         {
             accessorKey: 'lastName',
-            header: () => (
-                <div className="flex items-center justify-center h-full">Last Name</div>
-            ),
+            header: () => <div className={tableStyles.headerStyle}>Last Name</div>,
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full capitalize">
+                <div className={`${tableStyles.dateCellStyle} capitalize`}>
                     {row.getValue('lastName') as string}
                 </div>
             ),
         },
         {
             accessorKey: 'gender',
-            header: () => (
-                <div className="flex items-center justify-center h-full">Gender</div>
-            ),
+            header: () => <div className={tableStyles.headerStyle}>Gender</div>,
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full capitalize">
+                <div className={`${tableStyles.dateCellStyle} capitalize`}>
                     {row.getValue('gender') as string}
                 </div>
             ),
         },
         {
             accessorKey: 'contactNumber',
-            header: () => (
-                <div className="flex items-center justify-center h-full">
-                    Contact Number
-                </div>
-            ),
+            header: () => <div className={tableStyles.headerStyle}>Contact Number</div>,
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full capitalize">
+                <div className={`${tableStyles.dateCellStyle} capitalize`}>
                     {row.getValue('contactNumber') as string}
                 </div>
             ),
         },
         {
             accessorKey: 'role',
-            header: () => (
-                <div className="flex items-center justify-center h-full">Role</div>
-            ),
+            header: () => <div className={tableStyles.headerStyle}>Role</div>,
             cell: ({ row }) => (
-                <div className="flex items-center justify-center h-full capitalize">
+                <div className={`${tableStyles.dateCellStyle} capitalize`}>
                     {row.getValue('role') as string}
                 </div>
             ),
         },
         {
             accessorKey: 'userStatus',
-            header: () => (
-                <div className="flex items-center justify-center h-full">User Status</div>
-            ),
+            header: () => <div className={tableStyles.headerStyle}>User Status</div>,
             cell: ({ row }) => {
+                const statusValue = row.getValue('userStatus') as string
                 return (
-                    <div className="flex items-center justify-center h-full">
-                        <div className="w-[100px]">
-                            <Badge
-                                className={`w-full ${
-                                    row.getValue('userStatus') === 'Active'
-                                        ? 'bg-green-500'
-                                        : row.getValue('userStatus') === 'Inactive'
-                                          ? 'bg-orange-500'
-                                          : 'bg-gray-500' // Default color for other statuses
-                                } flex justify-center`}
-                            >
-                                <span>{row.getValue('userStatus')}</span>
-                            </Badge>
-                        </div>
-                    </div>
-                )
-            },
-        },
-        {
-            accessorKey: 'status',
-            header: () => (
-                <div className="flex items-center justify-center h-full">Status</div>
-            ),
-            cell: ({ row }) => {
-                const statusValue = row.getValue('status') as string
-
-                // Function to get status name from DocumentStatus enum
-                const getStatusName = (value: string): string => {
-                    switch (value) {
-                        case DocumentStatus.Active:
-                            return 'Active'
-                        case DocumentStatus.SoftDeleted:
-                            return 'Soft Deleted'
-                        case DocumentStatus.Archived:
-                            return 'Archived'
-                        case DocumentStatus.Pending:
-                            return 'Pending'
-                        case DocumentStatus.Draft:
-                            return 'Draft'
-                        case DocumentStatus.Suspended:
-                            return 'Suspended'
-                        default:
-                            return 'Unknown'
-                    }
-                }
-                return (
-                    <div className="flex items-center justify-center h-full">
-                        <div className="w-[100px]">
-                            <Badge
-                                className={`w-full ${
-                                    statusValue === DocumentStatus.SoftDeleted
-                                        ? 'bg-orange-500'
-                                        : statusValue === DocumentStatus.Active
-                                          ? 'bg-green-500'
-                                          : 'bg-gray-500' // Default color for other statuses
-                                } flex justify-center`}
-                            >
-                                <span>{getStatusName(statusValue)}</span>
-                            </Badge>
-                        </div>
+                    <div className={tableStyles.dateCellStyle}>
+                        <Badge
+                            className={`w-full ${
+                                statusValue === DocumentStatus.SoftDeleted
+                                    ? tableStyles.badgeColor.softDeleted
+                                    : statusValue === DocumentStatus.Active
+                                      ? tableStyles.badgeColor.active
+                                      : tableStyles.badgeColor.default
+                            } flex justify-center`}
+                        >
+                            <span>{statusValue}</span>
+                        </Badge>
                     </div>
                 )
             },
@@ -236,6 +173,7 @@ const UserManagementPage = () => {
                 <Tabs
                     defaultValue="active"
                     onValueChange={(value) => {
+                        resetUserListAction()
                         fetchUserList(PaginationDirection.Next, value === 'active')
                     }}
                 >
