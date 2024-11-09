@@ -13,7 +13,7 @@ export const getUserList = async (
     direction: PaginationDirection,
     id: number,
     limit: number
-): Promise<IResponse<GetUserDto[] | null>> => {
+): Promise<IResponse<GetUserDto[]>> => {
     const cookieValue = await getCookies('token')
     const response = await handleApiRequest<GetUserDto[]>(
         listUrl.userManagement.getAll.path,

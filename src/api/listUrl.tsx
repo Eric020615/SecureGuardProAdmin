@@ -29,7 +29,7 @@ export const listUrl = {
     },
     faceAuth: {
         upload: {
-            path: 'face-auth/user/upload',
+            path: 'face-auth',
             type: IType.post,
         },
     },

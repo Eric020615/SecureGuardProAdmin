@@ -5,7 +5,7 @@ import {
     getNoticeDetailsById,
     getNoticeList,
     updateNoticeById,
-} from '@api/noticeService/noticeService'
+} from '@api/noticeManagementService/noticeManagementService'
 import { generalAction } from '@store/application/useApplication'
 import { IResponse } from '@api/globalHandler'
 import {

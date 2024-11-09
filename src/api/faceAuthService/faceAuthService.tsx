@@ -8,8 +8,8 @@ export const uploadUserFaceAuth = async (
 ): Promise<IResponse<any>> => {
     const cookieValue = await getCookies('token')
     return handleApiRequest<any>(
-        listUrl.noticeManagement.create.path,
-        listUrl.noticeManagement.create.type,
+        listUrl.faceAuth.upload.path,
+        listUrl.faceAuth.upload.type,
         createUserFaceAuthDto,
         cookieValue as string
     )

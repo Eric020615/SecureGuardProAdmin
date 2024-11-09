@@ -14,8 +14,8 @@ export const createBooking = async (
 ): Promise<any> => {
     const cookieValue = await getCookies('token')
     const response = await handleApiRequest<any>(
-        listUrl.facilities.cancelBooking.path,
-        listUrl.facilities.cancelBooking.type,
+        listUrl.facilities.book.path,
+        listUrl.facilities.book.type,
         bookingForm,
         cookieValue as string
     )
@@ -84,13 +84,13 @@ export const checkAvailabilitySlot = async (
     const response = await handleApiRequest<any>(
         listUrl.facilities.checkAvailability.path,
         listUrl.facilities.checkAvailability.type,
+        {},
+        cookieValue as string,
         {
             facilityId,
             startDate,
             endDate,
-        },
-        cookieValue as string,
-        {}
+        }
     )
     return response
 }
