@@ -69,12 +69,14 @@ export const checkAuth = async (
     token: string,
     check: boolean
 ): Promise<IResponse<AuthTokenPayloadDto>> => {
-    return handleApiRequest<AuthTokenPayloadDto>(
+    const response = await handleApiRequest<AuthTokenPayloadDto>(
         listUrl.auth.checkAuth.path,
         listUrl.auth.checkAuth.type,
-        { check },
-        token
+        undefined,
+        token,
     )
+    console.log(response)
+    return response
 }
 
 // Check sub-user authentication

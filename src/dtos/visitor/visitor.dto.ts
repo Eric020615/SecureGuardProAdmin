@@ -1,7 +1,6 @@
-import { DocumentStatus } from "@config/constant";
-
 export interface CreateVisitorDto {
     visitorName: string;
+    visitorEmail: string;
     visitorCategory: string;
     visitorContactNumber: string;
     visitDateTime: string;
@@ -9,6 +8,7 @@ export interface CreateVisitorDto {
 
 export interface EditVisitorByIdDto {
     visitorName: string;
+    visitorEmail: string;
     visitorCategory: string;
     visitorContactNumber: string;
     visitDateTime: string;
@@ -18,6 +18,7 @@ export interface GetVisitorDto {
     visitorId: number;
     visitorGuid: string;
     visitorName: string;
+    visitorEmail: string;
     visitorCategory: string;
     visitorContactNumber: string;
     visitDateTime: string;
@@ -28,6 +29,7 @@ export interface GetVisitorDetailsDto {
     visitorId: number;
     visitorGuid: string;
     visitorName: string;
+    visitorEmail: string;
     visitorCategory: string;
     visitorContactNumber: string;
     visitDateTime: string;

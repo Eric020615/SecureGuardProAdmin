@@ -151,8 +151,8 @@ const UserDetailsPage = () => {
                         className="w-full"
                         defaultValue={[
                             'Personal Information',
-                            'Role',
                             'Role Information',
+                            'Card Information',
                             'Supported Documents',
                         ]}
                     >
@@ -269,6 +269,23 @@ const UserDetailsPage = () => {
                                     ) : (
                                         <></>
                                     )}
+                                </div>
+                            </AccordionContent>
+                        </AccordionItem>
+                        <AccordionItem value="Card Information">
+                            <AccordionTrigger className="py-2 px-4 bg-slate-100">
+                                <h2>Card Information</h2>
+                            </AccordionTrigger>
+                            <AccordionContent className="p-4 bg-slate-50">
+                                <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-sm font-semibold">
+                                            BadgeNumber:
+                                        </span>
+                                        <span className="text-sm">
+                                            {userDetails.badgeNumber ? userDetails.badgeNumber : 'No badge number'}
+                                        </span>
+                                    </div>
                                 </div>
                             </AccordionContent>
                         </AccordionItem>

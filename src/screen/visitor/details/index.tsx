@@ -123,6 +123,14 @@ const VisitorDetailsPage = () => {
                                     </div>
                                     <div className="flex flex-col gap-1">
                                         <span className="text-sm font-semibold">
+                                            Email:
+                                        </span>
+                                        <span className="text-sm">
+                                            {visitorDetails.visitorEmail}
+                                        </span>
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-sm font-semibold">
                                             Contact Number:
                                         </span>
                                         <span className="text-sm">

@@ -88,6 +88,17 @@ const VisitorManagementPage = () => {
             ),
         },
         {
+            accessorKey: 'visitorEmail',
+            header: () => (
+                <div className={tableStyles.headerStyle}>Email</div>
+            ),
+            cell: ({ row }) => (
+                <div className={`${tableStyles.dateCellStyle}`}>
+                    {row.getValue('visitorEmail')}
+                </div>
+            ),
+        },
+        {
             accessorKey: 'visitorCategory',
             header: () => (
                 <div className={tableStyles.headerStyle}>Category</div>

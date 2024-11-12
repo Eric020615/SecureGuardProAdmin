@@ -46,10 +46,6 @@ const menuList = [
                 link: '/profile',
                 text: 'Profile',
             },
-            {
-                link: '/settings',
-                text: 'Settings',
-            },
         ],
     },
 ]

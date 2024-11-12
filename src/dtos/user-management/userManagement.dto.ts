@@ -27,6 +27,7 @@ export interface GetUserDetailsByUserGuidDto {
     roleInformation: ResidentInformationDto | SystemAdminInformationDto
     dateOfBirth: string
     isActive: boolean
+    badgeNumber: string
     status: string
     createdBy: string
     createdDateTime: string
