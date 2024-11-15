@@ -5,6 +5,7 @@ import {
     createBooking,
     getBookingHistory,
     getFacilityBookingDetails,
+    getFacilityBookingUser,
 } from '@api/facilityService/facilityService'
 import { generalAction } from '@store/application/useApplication'
 import { IResponse } from '@api/globalHandler'
@@ -13,6 +14,7 @@ import {
     FacilityBookingFormDto,
     GetFacilityBookingDetailsDto,
     GetFacilityBookingHistoryDto,
+    GetFacilityBookingUserDto,
     SpaceAvailabilityDto,
 } from '@dtos/facility/facility.dto'
 import { PaginationDirection } from '@config/constant'
@@ -23,6 +25,7 @@ interface State {
     facilityBookingDetails: GetFacilityBookingDetailsDto
     currentPage: number
     totalFacilityBookingHistory: number
+    facilityBookingUser: GetFacilityBookingUserDto[]
 }
 
 interface Actions {
@@ -42,6 +45,7 @@ interface Actions {
         startDate: string,
         endDate: string
     ) => Promise<any>
+    getFacilityBookingUserAction: () => Promise<any>
 }
 
 export const useFacility = create<State & Actions>((set, get) => ({
@@ -50,6 +54,7 @@ export const useFacility = create<State & Actions>((set, get) => ({
     facilityBookingDetails: {} as GetFacilityBookingDetailsDto,
     currentPage: 0,
     totalFacilityBookingHistory: 0,
+    facilityBookingUser: [],
     submitBookingAction: async (facilityBookingForm: FacilityBookingFormDto) => {
         return generalAction(
             async () => {
@@ -144,7 +149,6 @@ export const useFacility = create<State & Actions>((set, get) => ({
             'Failed to cancel booking. Please try again.'
         )
     },
-
     checkAvailabilitySlotAction: async (
         facilityId: string,
         startDate: string,
@@ -165,6 +169,20 @@ export const useFacility = create<State & Actions>((set, get) => ({
             },
             '',
             'Failed to check slot availability. Please try again.'
+        )
+    },
+    getFacilityBookingUserAction: async () => {
+        return generalAction(
+            async () => {
+                const response = await getFacilityBookingUser()
+                if (!response.success) {
+                    throw new Error(response.msg)
+                }
+                set({ facilityBookingUser: response.data })
+                return response
+            },
+            '',
+            'Failed to retrieve booking user. Please try again.'
         )
     },
 }))

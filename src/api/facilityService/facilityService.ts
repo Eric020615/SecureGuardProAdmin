@@ -5,6 +5,7 @@ import {
     CancelFacilityBookingDto,
     FacilityBookingFormDto,
     GetFacilityBookingDetailsDto,
+    GetFacilityBookingUserDto,
     SpaceAvailabilityDto,
 } from '@dtos/facility/facility.dto'
 import { PaginationDirection } from '@config/constant'
@@ -91,6 +92,19 @@ export const checkAvailabilitySlot = async (
             startDate,
             endDate,
         }
+    )
+    return response
+}
+
+export const getFacilityBookingUser = async (): Promise<
+    IResponse<GetFacilityBookingUserDto[]>
+> => {
+    const cookieValue = await getCookies('token')
+    const response = await handleApiRequest<GetFacilityBookingUserDto[]>(
+        listUrl.facilities.getFacilityBookingUser.path,
+        listUrl.facilities.getFacilityBookingUser.type,
+        {},
+        cookieValue as string
     )
     return response
 }

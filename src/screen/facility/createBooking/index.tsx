@@ -12,9 +12,7 @@ import {
 } from '@config/listOption/facility' // Make sure DurationOptions is defined
 import { useFacility } from '@store/facility/useFacility'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
-import {
-    convertDateStringToFormattedString,
-} from '@lib/time'
+import { convertDateStringToFormattedString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
 import CustomForm, { CustomField } from '@components/form/element/CustomForm'
 import moment from 'moment'
@@ -40,8 +38,13 @@ const formSchema = z.object({
 
 const CreateBookingPage = () => {
     const router = useRouter()
-    const { submitBookingAction, checkAvailabilitySlotAction, availabilitySlot } =
-        useFacility()
+    const {
+        submitBookingAction,
+        checkAvailabilitySlotAction,
+        getFacilityBookingUserAction,
+        availabilitySlot,
+        facilityBookingUser,
+    } = useFacility()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -78,6 +81,13 @@ const CreateBookingPage = () => {
     }
 
     useEffect(() => {
+        const fetchFacilityBookingUser = async () => {
+            await getFacilityBookingUserAction()
+        }
+        fetchFacilityBookingUser()
+    }, [])
+
+    useEffect(() => {
         const facilityId = form.getValues('facilityId')
         const startDate = form.getValues('startDate')
         const duration = form.getValues('duration')
@@ -89,7 +99,10 @@ const CreateBookingPage = () => {
             const fetchAvailableSlots = async () => {
                 await checkAvailabilitySlotAction(
                     facilityId,
-                    convertDateStringToFormattedString(startDate, ITimeFormat.isoDateTime),
+                    convertDateStringToFormattedString(
+                        startDate,
+                        ITimeFormat.isoDateTime
+                    ),
                     convertDateStringToFormattedString(endDate, ITimeFormat.isoDateTime)
                 )
             }
@@ -98,7 +111,14 @@ const CreateBookingPage = () => {
     }, [form.watch('startDate'), form.watch('duration'), form.watch('facilityId')])
 
     const fields: Record<string, CustomField> = {
-        user: { type: 'text', label: 'User' },
+        user: {
+            type: 'select',
+            label: 'User',
+            options: facilityBookingUser.map((item) => ({
+                label: item.email,
+                value: item.userGuid,
+            })),
+        },
         facilityId: {
             type: 'select',
             label: 'Facility',

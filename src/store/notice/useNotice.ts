@@ -104,7 +104,6 @@ export const useNotice = create<State & Actions>((set, get) => ({
                         ? response.data
                         : ({} as GetNoticeDetailsByIdDto),
                 })
-                console.log(response)
                 if (!response.success) {
                     throw new Error(response.msg)
                 }

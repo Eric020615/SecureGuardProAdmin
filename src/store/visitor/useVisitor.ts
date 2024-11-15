@@ -71,7 +71,6 @@ export const useVisitor = create<State & Actions>((set, get) => ({
                 if (!response.success) {
                     throw new Error(response.msg)
                 }
-                console.log(response.data)
                 set({
                     visitorHistory: response.data.list,
                     totalVisitorHistory: response.data.count,

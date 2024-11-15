@@ -68,6 +68,10 @@ export const listUrl = {
             path: 'facilities/availability',
             type: IType.get,
         },
+        getFacilityBookingUser: {
+            path: 'facilities/admin/bookings/users',
+            type: IType.get,
+        }
     },
     noticeManagement: {
         create: {

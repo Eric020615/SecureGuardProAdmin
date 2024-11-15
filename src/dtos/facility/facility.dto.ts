@@ -47,3 +47,8 @@ export interface GetFacilityBookingDetailsDto {
 export interface CancelFacilityBookingDto {
     cancelRemark: string
 }
+
+export interface GetFacilityBookingUserDto {
+    userGuid: string
+	email: string
+}

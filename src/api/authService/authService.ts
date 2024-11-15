@@ -75,7 +75,6 @@ export const checkAuth = async (
         undefined,
         token,
     )
-    console.log(response)
     return response
 }
 

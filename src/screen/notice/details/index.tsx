@@ -118,7 +118,6 @@ const NoticeDetailsPage = () => {
                 uploadedFiles: noticeDetails.attachments || [], // Update with received attachments
             },
         }))
-        console.log(noticeDetails)
     }, [noticeDetails && pageMode === 'edit'])
 
     useEffect(() => {

@@ -102,22 +102,24 @@ const FacilityBookingDetailsPage = () => {
                                             Facility Booking Status:
                                         </span>
                                         <span className="text-sm">
-                                            {facilityBookingDetails.isCancelled ? (
-                                                <Badge className="w-[80px] bg-red-500 flex justify-center text-white">
-                                                    Cancelled
-                                                </Badge>
-                                            ) : facilityBookingDetails.startDate &&
-                                              convertDateStringToDate(
-                                                  facilityBookingDetails.startDate
-                                              ) > getCurrentDate() ? (
-                                                <Badge className="w-[80px] bg-gray-500 flex justify-center text-white">
-                                                    Expired
-                                                </Badge>
-                                            ) : (
-                                                <Badge className="w-[80px] bg-green-500 flex justify-center text-white">
-                                                    Valid
-                                                </Badge>
-                                            )}
+                                            {facilityBookingDetails.startDate &&
+                                                (convertDateStringToDate(
+                                                    facilityBookingDetails.startDate
+                                                ) > getCurrentDate() ? (
+                                                    facilityBookingDetails.isCancelled ? (
+                                                        <Badge className="w-[80px] bg-red-500 flex justify-center text-white">
+                                                            <span>Cancelled</span>
+                                                        </Badge>
+                                                    ) : (
+                                                        <Badge className="w-[80px] bg-green-500 flex justify-center text-white">
+                                                            Valid
+                                                        </Badge>
+                                                    )
+                                                ) : (
+                                                    <Badge className="w-[80px] bg-gray-500 flex justify-center text-white">
+                                                        <span>Expired</span>
+                                                    </Badge>
+                                                ))}
                                         </span>
                                     </div>
                                     <div className="flex flex-col gap-1">
