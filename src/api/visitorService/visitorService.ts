@@ -1,7 +1,11 @@
 import { handleApiRequest, IResponse } from '@api/globalHandler'
 import { listUrl } from '@api/listUrl'
 import { PaginationDirection } from '@config/constant'
-import { GetVisitorByDateDto, GetVisitorDto } from '@dtos/visitor/visitor.dto'
+import {
+    GetVisitorByDateDto,
+    GetVisitorDto,
+    GetVisitorPassDetailsDto,
+} from '@dtos/visitor/visitor.dto'
 import { getCookies } from '@lib/cookies'
 
 // Get a list of visitors with pagination
@@ -50,5 +54,17 @@ export const getVisitorAnalytics = async (
         {},
         cookieValue as string,
         { startDate, endDate }
+    )
+}
+
+// Get visitor pass details
+export const getVisitorPassDetails = async (
+    token: string
+): Promise<IResponse<GetVisitorPassDetailsDto>> => {
+    return handleApiRequest<GetVisitorPassDetailsDto>(
+        listUrl.visitor.getVisitorPass.path,
+        listUrl.visitor.getVisitorPass.type,
+        {},
+        token
     )
 }

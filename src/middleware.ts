@@ -7,7 +7,8 @@ export const middleware = async (request: NextRequest) => {
       request.nextUrl.pathname.startsWith("/sign-in") ||
       request.nextUrl.pathname.startsWith("/sign-up") ||
       request.nextUrl.pathname.startsWith("/user-information") ||
-      request.nextUrl.pathname.startsWith("/sub-user")
+      request.nextUrl.pathname.startsWith("/sub-user") ||
+      request.nextUrl.pathname.startsWith("/resident/visitor")
     ) {
       return
     }

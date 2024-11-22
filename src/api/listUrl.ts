@@ -1,4 +1,4 @@
-import { IType } from '@config/index';
+import { IType } from '@config/index'
 
 export const listUrl = {
     auth: {
@@ -12,11 +12,11 @@ export const listUrl = {
         },
         resetPassword: {
             path: 'auth/reset-password',
-            type: IType.post
+            type: IType.post,
         },
         requestPasswordReset: {
             path: 'auth/reset-password/request',
-            type: IType.post
+            type: IType.post,
         },
         checkAuth: {
             path: 'auth/check',
@@ -71,7 +71,7 @@ export const listUrl = {
         getFacilityBookingUser: {
             path: 'facilities/admin/bookings/users',
             type: IType.get,
-        }
+        },
     },
     noticeManagement: {
         create: {
@@ -115,7 +115,7 @@ export const listUrl = {
         delete: {
             path: 'users/admin/:id',
             type: IType.delete,
-        }
+        },
     },
     visitorManagement: {
         getAll: {
@@ -129,6 +129,12 @@ export const listUrl = {
         getAnalytics: {
             path: 'visitors/admin/analytics',
             type: IType.get,
-        }
-    }
-};
+        },
+    },
+    visitor: {
+        getVisitorPass: {
+            path: 'visitors/pass',
+            type: IType.get,
+        },
+    },
+}

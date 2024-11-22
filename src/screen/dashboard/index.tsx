@@ -12,14 +12,14 @@ import {
     getCurrentDateString,
     initializeDateAtBoundary,
 } from '@lib/time'
-import { useVisitor } from '@store/visitor/useVisitor'
+import { useVisitorManagement } from '@store/visitorManagement/useVisitorManagement'
 import React, { useState } from 'react'
 import { CSVLink } from 'react-csv'
 
 const DashboardPage = () => {
     const [startDate, setStartDate] = useState<Date | undefined>(getCurrentDate())
     const [endDate, setEndDate] = useState<Date | undefined>(getCurrentDate())
-    const { visitorAnalytics, getVisitorAnalyticsAction } = useVisitor()
+    const { visitorAnalytics, getVisitorAnalyticsAction } = useVisitorManagement()
 
     // Function to handle date validation and filtering
     const filterData = async () => {

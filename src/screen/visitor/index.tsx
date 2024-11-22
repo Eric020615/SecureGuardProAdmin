@@ -11,7 +11,7 @@ import { useRouter } from 'nextjs-toploader/app'
 import { Badge } from '@components/ui/badge'
 import { DocumentStatus, ITimeFormat, PaginationDirection } from '@config/constant'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
-import { useVisitor } from '@store/visitor/useVisitor'
+import { useVisitorManagement } from '@store/visitorManagement/useVisitorManagement'
 import { GetVisitorDto } from '@dtos/visitor/visitor.dto'
 import { convertDateStringToFormattedString } from '@lib/time'
 import { tableStyles } from '@screen/style'
@@ -23,7 +23,7 @@ const VisitorManagementPage = () => {
         totalVisitorHistory,
         getVisitorHistoryAction,
         resetVisitorHistoryAction,
-    } = useVisitor()
+    } = useVisitorManagement()
     const router = useRouter()
 
     const columns: ColumnDef<GetVisitorDto>[] = [

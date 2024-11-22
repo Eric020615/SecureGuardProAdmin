@@ -9,9 +9,9 @@ import {
 } from '@components/ui/accordion'
 import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
-import { DocumentStatus, getDocumentStatusLabel, ITimeFormat } from '@config/constant'
+import { DocumentStatus, ITimeFormat } from '@config/constant'
 import { convertDateStringToFormattedString } from '@lib/time'
-import { useVisitor } from '@store/visitor/useVisitor'
+import { useVisitorManagement } from '@store/visitorManagement/useVisitorManagement'
 import { ArrowLeft } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
@@ -20,7 +20,7 @@ import Avatar from 'react-avatar'
 const VisitorDetailsPage = () => {
     const params = useParams<{ visitorGuid: string }>()
     const router = useRouter()
-    const { visitorDetails, getVisitorDetailsByIdAction } = useVisitor()
+    const { visitorDetails, getVisitorDetailsByIdAction } = useVisitorManagement()
 
     const getVisitorDetailsById = async () => {
         await getVisitorDetailsByIdAction(params.visitorGuid)
