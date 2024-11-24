@@ -35,10 +35,14 @@ interface Actions {
     ) => Promise<any>
     resetPasswordAction: (resetPasswordDto: ResetPasswordDto) => Promise<any>
     logOutAction: () => void
-    checkJwtAuthAction: (token: string, check?: boolean) => Promise<any>
+    checkJwtAuthAction: (
+        token: string,
+        check?: boolean
+    ) => Promise<IResponse<AuthTokenPayloadDto>>
     checkSubUserAuthAction: (
         token: string
     ) => Promise<IResponse<SubUserAuthTokenPayloadDto>>
+    setAuthTokenPayload: (payload: AuthTokenPayloadDto) => void
 }
 
 export const useAuth = create<State & Actions>((set) => ({
@@ -148,4 +152,8 @@ export const useAuth = create<State & Actions>((set) => ({
             'Authentication failed. Please log in again.' // Custom error message
         )
     },
+
+    setAuthTokenPayload: (payload) => set({ authTokenPayload: payload }),
 }))
+
+export const { checkJwtAuthAction } = useAuth.getState()

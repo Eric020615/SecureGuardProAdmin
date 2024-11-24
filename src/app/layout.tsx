@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { cn } from '@lib/utils'
 import TopLoader from '@components/loadingBar/LoadingBar'
+import { SessionProvider } from '../context/SessionContext'
 
 const inter = Inter({
     subsets: ['latin'],
@@ -25,7 +26,7 @@ export default function RootLayout({
             <body className={cn('font-inter antialiased', inter.variable)}>
                 <div className="w-full">
                     <TopLoader />
-                    {children}
+                    <SessionProvider children={children} />
                 </div>
             </body>
         </html>

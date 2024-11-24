@@ -1,31 +1,59 @@
-import type { NextRequest } from "next/server";
-import { getCookies } from "@lib/cookies";
+import { NextResponse, type NextRequest } from 'next/server'
+import { getCookies } from '@lib/cookies'
+import { checkJwtAuthAction } from '@store/auth/useAuth'
+
+export const roles = {
+    SA: 'SA', // Super Admin
+    STF: 'STF', // Staff
+    RES: 'RES', // Resident
+    SUB: 'SUB', // Sub User
+} as const // Makes roles a readonly type with literal values
+
+type Role = keyof typeof roles // 'SA' | 'STF' | 'RES' | 'SUB'
+
+export const rolePermissions: Record<Role, string[]> = {
+    SA: ['/', '/facility', '/notice', '/profile', '/user', '/visitor'], // SA can access all pages
+    STF: ['/', '/visitor/check-in'], // STF can only access pageC
+    RES: [],
+    SUB: [],
+}
 
 export const middleware = async (request: NextRequest) => {
-  try {
-    if (
-      request.nextUrl.pathname.startsWith("/sign-in") ||
-      request.nextUrl.pathname.startsWith("/sign-up") ||
-      request.nextUrl.pathname.startsWith("/user-information") ||
-      request.nextUrl.pathname.startsWith("/sub-user") ||
-      request.nextUrl.pathname.startsWith("/resident/visitor")
-    ) {
-      return
+    try {
+        const path = request.nextUrl.pathname
+        if (
+            path.startsWith('/403') ||
+            path.startsWith('/sign-in') ||
+            path.startsWith('/sign-up') ||
+            path.startsWith('/user-information') ||
+            path.startsWith('/sub-user') ||
+            path.startsWith('/resident/visitor')
+        ) {
+            return
+        }
+        const currentToken = await getCookies('token')
+        const response = await checkJwtAuthAction(currentToken as string, true)
+        if (!response.success) {
+            throw new Error('Unauthorized')
+        }
+        const allowedRoutes = rolePermissions[response.data.role] || []
+        // Check if the requested path is in the allowed routes
+        if (!allowedRoutes.includes(path)) {
+            return Response.redirect(new URL('/403', request.url))
+        }
+        // Set authTokenPayload as a cookie for client-side usage
+        const newResponse = NextResponse.next()
+        newResponse.cookies.set(
+            'authTokenPayload',
+            JSON.stringify(response.data), // Store the payload
+            { path: '/', httpOnly: true } // Securely store it in HttpOnly cookie
+        )
+        return newResponse
+    } catch (error) {
+        return Response.redirect(new URL('/sign-in', request.url))
     }
-    const currentToken = await getCookies("token");
-    if (currentToken && !request.nextUrl.pathname.startsWith("/")) {
-      return Response.redirect(new URL("/", request.url));
-    }
-  } catch (error) {
-    console.error(error);
-    console.error(request.url);
-    console.error(new URL("/sign-in", request.url))
-    return Response.redirect(new URL("/sign-in", request.url));
-  }
-};
+}
 
 export const config = {
-  matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ],
-};
+    matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+}

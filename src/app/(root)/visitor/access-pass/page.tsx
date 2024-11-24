@@ -1,4 +1,4 @@
-import VisitorPassDetailsPage from '@screen/visitor/pass'
+import VisitorPassDetailsPage from '@screen/visitor/access-pass'
 import React from 'react'
 
 const VisitorPassDetails = () => {

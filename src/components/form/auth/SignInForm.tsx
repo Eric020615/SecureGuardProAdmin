@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useAuth } from '@store/auth/useAuth'
 import { SignInFormDto } from '@dtos/auth/auth.dto'
-import { RoleEnum } from '@config/constant/user'
 import CustomForm, { CustomField } from '@components/form/element/CustomForm'
 
 const formSchema = z.object({
@@ -39,7 +38,6 @@ const SignInForm = () => {
         await signInAction({
             email: values.email,
             password: values.password,
-            role: [RoleEnum.SYSTEM_ADMIN],
         } as SignInFormDto)
     }
 
