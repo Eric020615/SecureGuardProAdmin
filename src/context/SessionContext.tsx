@@ -21,7 +21,6 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
             if (authCookie) {
                 const { userGuid, role } = JSON.parse(decodeURIComponent(authCookie))
                 setAuthTokenPayload({ userGuid, role })
-                console.log(userGuid)
             }
         }
         fetchAuthTokenPayload()

@@ -5,6 +5,7 @@ import { convertDateStringToFormattedString } from '@lib/time'
 import { useVisitor } from '@store/visitor/useVisitor'
 import { useSearchParams } from 'next/navigation'
 import React, { useEffect } from 'react'
+import QRCode from 'react-qr-code'
 
 const VisitorPassDetailsPage = () => {
     const { visitorPassDetails, getVisitorPassDetailsAction } = useVisitor()
@@ -45,17 +46,10 @@ const VisitorPassDetailsPage = () => {
                 </p>
             </div>
 
-            {visitorPassDetails.qrCode && (
-                <div className="mt-8 bg-white p-6 shadow-md rounded-lg">
-                    <img
-                        src={`data:image/png;base64,${visitorPassDetails.qrCode.data}`}
-                        alt="QR Code"
-                    />
-                    <p className="mt-4 text-sm text-gray-500">
-                        Scan this QR code for entry
-                    </p>
-                </div>
-            )}
+            <div className="mt-8 bg-white p-6 shadow-md rounded-lg">
+                <QRCode value={token as string} />
+                <p className="mt-4 text-sm text-gray-500">Scan this QR code for entry</p>
+            </div>
         </div>
     )
 }

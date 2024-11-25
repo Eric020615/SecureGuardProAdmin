@@ -136,5 +136,9 @@ export const listUrl = {
             path: 'visitors/pass',
             type: IType.get,
         },
+        verifyToken: {
+            path: 'visitors/verify-token',
+            type: IType.get,
+        },
     },
 }

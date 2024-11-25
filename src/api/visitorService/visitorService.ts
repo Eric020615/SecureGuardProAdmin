@@ -3,6 +3,7 @@ import { listUrl } from '@api/listUrl'
 import { PaginationDirection } from '@config/constant'
 import {
     GetVisitorByDateDto,
+    GetVisitorDetailsByTokenDto,
     GetVisitorDto,
     GetVisitorPassDetailsDto,
 } from '@dtos/visitor/visitor.dto'
@@ -64,6 +65,18 @@ export const getVisitorPassDetails = async (
     return handleApiRequest<GetVisitorPassDetailsDto>(
         listUrl.visitor.getVisitorPass.path,
         listUrl.visitor.getVisitorPass.type,
+        {},
+        token
+    )
+}
+
+// Verify visitor token
+export const verifyVisitorToken = async (
+    token: string
+): Promise<IResponse<GetVisitorDetailsByTokenDto>> => {
+    return handleApiRequest<GetVisitorDetailsByTokenDto>(
+        listUrl.visitor.verifyToken.path,
+        listUrl.visitor.verifyToken.type,
         {},
         token
     )
