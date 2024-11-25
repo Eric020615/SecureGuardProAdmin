@@ -13,7 +13,7 @@ type Role = keyof typeof roles // 'SA' | 'STF' | 'RES' | 'SUB'
 
 export const rolePermissions: Record<Role, string[]> = {
     SA: ['/', '/facility', '/notice', '/profile', '/user', '/visitor'], // SA can access all pages
-    STF: ['/', '/visitor/check-in'], // STF can only access pageC
+    STF: ['/', '/visitor/check-in', '/profile'], // STF can only access pageC
     RES: [],
     SUB: [],
 }
@@ -27,7 +27,7 @@ export const middleware = async (request: NextRequest) => {
             path.startsWith('/sign-up') ||
             path.startsWith('/user-information') ||
             path.startsWith('/sub-user') ||
-            path.startsWith('/resident/visitor')
+            path.startsWith('/visitor/access-pass')
         ) {
             return
         }

@@ -3,7 +3,7 @@
 import Navbar from '@components/navbar/Navbar'
 import Sidebar from '@components/sidebar/Sidebar'
 import React, { useEffect, useState } from 'react'
-import { LayoutDashboard, Newspaper, Building, CircleUser, Users } from 'lucide-react'
+import { LayoutDashboard, Newspaper, Building, CircleUser, Users, ScanBarcode } from 'lucide-react'
 import { useApplication } from '@store/application/useApplication'
 import CustomLoader from '@components/loader/Loader'
 import { useMediaQuery } from 'usehooks-ts'
@@ -18,6 +18,12 @@ const fullMenuList = [
                 text: 'Dashboard',
                 icon: <LayoutDashboard className="mr-2 h-5 w-5" />,
                 roles: ['SA', 'STF'], // Allowed roles
+            },
+            {
+                link: '/visitor/check-in',
+                text: 'Check-In',
+                icon: <ScanBarcode className="mr-2 h-5 w-5" />,
+                roles: ['STF'], // Allowed roles
             },
             {
                 link: '/facility',
