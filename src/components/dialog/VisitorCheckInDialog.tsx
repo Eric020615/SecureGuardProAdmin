@@ -2,12 +2,13 @@ import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } fr
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@components/ui/dialog'
 import { IDetectedBarcode, Scanner } from '@yudiel/react-qr-scanner'
 import Webcam from 'react-webcam'
-import { getBase64FromImage } from '@lib/file'
+import { convertImageToGeneralFile, getBase64FromImage } from '@lib/file'
 import { useFaceAuth } from '@store/faceAuth/useFaceAuth'
 import { Button } from '@components/ui/button'
 import { Camera, Repeat, Upload } from 'lucide-react'
 import { useVisitor } from '@store/visitor/useVisitor'
 import { DialogDescription } from '@radix-ui/react-dialog'
+import { CreateUpdateVisitorFaceAuthDto } from '@dtos/faceAuth/faceAuth.dto'
 
 interface VisitorCheckInDialogProps {
     open: boolean
@@ -20,12 +21,11 @@ const VisitorCheckInDialog = ({ open, setOpen }: VisitorCheckInDialogProps) => {
     const [webcamError, setWebcamError] = useState<string | null>(null)
     const [scannerError, setScannerError] = useState<string | null>(null)
     const [isWebcamAvailable, setIsWebcamAvailable] = useState<boolean>(false)
-    const [isLoading, setIsLoading] = useState<boolean>(true)
     const [faceImage, setFaceImage] = useState<string>('')
 
     const webcamRef = useRef<Webcam>(null)
 
-    const { uploadUserFaceAuthAction } = useFaceAuth()
+    const { uploadVisitorFaceAuthAction } = useFaceAuth()
     const { visitorDetails, verifyVisitorTokenAction, isValid, resetVisitorDetails } =
         useVisitor()
 
@@ -41,7 +41,11 @@ const VisitorCheckInDialog = ({ open, setOpen }: VisitorCheckInDialogProps) => {
     const uploadImage = async () => {
         if (faceImage) {
             const base64 = await getBase64FromImage(faceImage)
-            await uploadUserFaceAuthAction({ faceData: base64 })
+            const file = await convertImageToGeneralFile(base64)
+            await uploadVisitorFaceAuthAction({
+                visitorDetails: visitorDetails,
+                faceData: file,
+            } as CreateUpdateVisitorFaceAuthDto)
             setOpen(false)
         }
     }
@@ -52,8 +56,7 @@ const VisitorCheckInDialog = ({ open, setOpen }: VisitorCheckInDialogProps) => {
             if (stream) setIsWebcamAvailable(true)
         } catch (error: any) {
             setWebcamError(error.message)
-        } finally {
-            setIsLoading(false)
+            setScannerError(error.message)
         }
     }
 
@@ -144,19 +147,16 @@ const VisitorCheckInDialog = ({ open, setOpen }: VisitorCheckInDialogProps) => {
             )
         }
 
-        if (isLoading) {
-            return (
-                <div className="flex items-center justify-center w-full h-96">
-                    <span className="text-gray-500">Loading Webcam...</span>
-                </div>
-            )
+        if (isWebcamAvailable) {
+            <Scanner
+                onScan={onScan}
+                onError={(error) => handleError(error, 'scanner')}
+            />
         }
 
-        return isWebcamAvailable ? (
-            <Scanner onScan={onScan} onError={(error) => handleError(error, 'scanner')} />
-        ) : (
-            <div className="text-center text-red-500">
-                No camera detected. Please connect a camera.
+        return (
+            <div className="flex items-center justify-center w-full h-96">
+                <span className="text-gray-500">Loading Webcam...</span>
             </div>
         )
     }

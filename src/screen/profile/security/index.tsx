@@ -10,14 +10,26 @@ import { Button } from '@components/ui/button'
 import { Camera, Key } from 'lucide-react'
 import FaceIDDialog from '@components/dialog/FaceIdDialog'
 import ResetPasswordDialog from '@components/dialog/auth/ResetPasswordDialog'
+import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 
 const SecurityPage = () => {
     const [openFaceIDDialog, setOpenFaceIDDialog] = useState(false)
     const [openResetPasswordDialog, setOpenResetPasswordDialog] = useState(false)
     return (
         <>
-            <FaceIDDialog open={openFaceIDDialog} setOpen={setOpenFaceIDDialog}/>
-            <ResetPasswordDialog open={openResetPasswordDialog} setOpen={setOpenResetPasswordDialog}/>
+            <ActionConfirmationDialog
+                onSuccessConfirm={() => {
+                    setOpenFaceIDDialog(false)
+                }}
+                onFailedConfirm={() => {
+                    setOpenFaceIDDialog(false)
+                }}
+            />
+            <FaceIDDialog open={openFaceIDDialog} setOpen={setOpenFaceIDDialog} />
+            <ResetPasswordDialog
+                open={openResetPasswordDialog}
+                setOpen={setOpenResetPasswordDialog}
+            />
             <div className="h-full">
                 <div className="grid gap-5">
                     <div className="grid gap-4 my-2">

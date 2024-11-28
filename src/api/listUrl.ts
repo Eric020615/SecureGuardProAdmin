@@ -1,4 +1,5 @@
 import { IType } from '@config/index'
+import path from 'path'
 
 export const listUrl = {
     auth: {
@@ -32,6 +33,10 @@ export const listUrl = {
             path: 'face-auth',
             type: IType.post,
         },
+        uploadVisitor: {
+            path: 'face-auth/visitors',
+            type: IType.post,
+        }
     },
     users: {
         create: {

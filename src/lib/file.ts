@@ -31,3 +31,22 @@ export const getBase64FromImage = (image: string): Promise<string> => {
     const data = base64.split(',')[1]
     return Promise.resolve(data)
 }
+
+export const convertImageToGeneralFile = async (
+    image: string,
+    fileName: string = 'captured-image.jpg'
+): Promise<GeneralFileDto> => {
+    try {
+        const base64 = image
+        const data = base64.split(',')[1]
+        const file: GeneralFileDto = {
+            fileName: fileName,
+            fileData: data,
+            contentType: 'image/jpeg', // Assuming JPEG for captured images
+            size: data.length * (3 / 4), // Approximation: base64 size (in bytes)
+        }
+        return file
+    } catch (error: any) {
+        throw new Error(error)
+    }
+}
