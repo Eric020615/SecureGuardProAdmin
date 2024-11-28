@@ -9,7 +9,7 @@ import {
 } from '@components/ui/dialog'
 import { useFaceAuth } from '@store/faceAuth/useFaceAuth'
 import { convertImageToGeneralFile } from '@lib/file'
-import SharedWebcam from '@components/webcam/Webcam'
+import SharedWebcam from '@components/camera/Webcam'
 
 interface FaceIDDialogProps {
     open: boolean
@@ -47,8 +47,6 @@ const FaceIDDialog = ({ open, setOpen }: FaceIDDialogProps) => {
                     faceImage={faceImage}
                     setFaceImage={setFaceImage}
                     onUpload={uploadImage}
-                    height={600}
-                    width={600}
                 />
             </DialogContent>
         </Dialog>
