@@ -25,6 +25,7 @@ const SharedWebcam: React.FC<SharedWebcamProps> = ({
     const webcamRef = useRef<Webcam>(null)
     const [webcamError, setWebcamError] = useState<string | null>(null)
     const [isWebcamAvailable, setIsWebcamAvailable] = useState<boolean>(false)
+    const mediaStreamRef = useRef<MediaStream | null>(null) // To store the media stream
 
     const capture = useCallback(() => {
         if (!webcamRef.current) return
@@ -36,32 +37,28 @@ const SharedWebcam: React.FC<SharedWebcamProps> = ({
     const retake = () => {
         setFaceImage('')
     }
-
     const checkWebcamAvailability = async () => {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true })
-            if (stream) setIsWebcamAvailable(true)
+            const constraints = {
+                video: {
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 },
+                    exposureMode: 'manual', // Try adjusting exposure
+                    exposureCompensation: -1, // Lower brightness
+                },
+            }
+            const stream = await navigator.mediaDevices.getUserMedia(constraints)
+            mediaStreamRef.current = stream
+            setIsWebcamAvailable(true)
         } catch (error: any) {
             setWebcamError(error.message)
         }
     }
 
-    const handleError = (error: unknown) => {
-        const errorMessage =
-            error instanceof Error ? error.message : 'An unknown error occurred'
-        setWebcamError(errorMessage)
-    }
-
-    useEffect(() => {
-        setFaceImage('')
-        setWebcamError(null)
-        checkWebcamAvailability()
-    }, [])
-
     const stopWebcam = () => {
-        if (webcamRef.current?.stream) {
-            webcamRef.current.stream.getTracks().forEach((track) => track.stop())
-            webcamRef.current.stream = null
+        if (mediaStreamRef.current) {
+            mediaStreamRef.current.getTracks().forEach((track) => track.stop()) // Stop all tracks
+            mediaStreamRef.current = null
         }
     }
 
@@ -84,6 +81,12 @@ const SharedWebcam: React.FC<SharedWebcamProps> = ({
         }
     }, [onClose])
 
+    const handleError = (error: unknown) => {
+        const errorMessage =
+            error instanceof Error ? error.message : 'An unknown error occurred'
+        setWebcamError(errorMessage)
+    }
+
     const renderWebcam = () => {
         if (webcamError) {
             return (
@@ -101,7 +104,6 @@ const SharedWebcam: React.FC<SharedWebcamProps> = ({
                     ref={webcamRef}
                     mirrored
                     screenshotFormat="image/jpeg"
-                    screenshotQuality={screenshotQuality}
                     onError={(error) => handleError(error)}
                 />
             )
