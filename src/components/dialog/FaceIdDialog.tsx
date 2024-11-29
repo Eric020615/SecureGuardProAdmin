@@ -29,8 +29,17 @@ const FaceIDDialog = ({ open, setOpen }: FaceIDDialogProps) => {
         setOpen(false)
     }
 
+    const onCloseWebcam = () => {
+        return
+    }
+
     useEffect(() => {
-        setFaceImage('')
+        return () => {
+            if (!open) {
+                setFaceImage('')
+                onCloseWebcam()
+            }
+        }
     }, [open])
 
     return (
@@ -47,6 +56,7 @@ const FaceIDDialog = ({ open, setOpen }: FaceIDDialogProps) => {
                     faceImage={faceImage}
                     setFaceImage={setFaceImage}
                     onUpload={uploadImage}
+                    onClose={onCloseWebcam}
                 />
             </DialogContent>
         </Dialog>

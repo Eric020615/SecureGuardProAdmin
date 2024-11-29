@@ -28,8 +28,7 @@ const VisitorCheckInDialog = ({ open, setOpen }: VisitorCheckInDialogProps) => {
 
     const uploadImage = async () => {
         if (faceImage) {
-            const base64 = await getBase64FromImage(faceImage)
-            const file = await convertImageToGeneralFile(base64)
+            const file = await convertImageToGeneralFile(faceImage)
             await uploadVisitorFaceAuthAction({
                 visitorDetails: visitorDetails,
                 faceData: file,
@@ -47,6 +46,10 @@ const VisitorCheckInDialog = ({ open, setOpen }: VisitorCheckInDialogProps) => {
         }
     }
 
+    const closeScanner = () => {
+        return
+    }
+
     useEffect(() => {
         return () => {
             if (!open) {
@@ -54,6 +57,7 @@ const VisitorCheckInDialog = ({ open, setOpen }: VisitorCheckInDialogProps) => {
                 setIsVerified(false)
                 setFaceImage('')
                 resetVisitorDetails()
+                closeScanner()
             }
         }
     }, [open])
@@ -97,6 +101,7 @@ const VisitorCheckInDialog = ({ open, setOpen }: VisitorCheckInDialogProps) => {
                             <SharedScanner
                                 scannedText={scanned}
                                 setScannedText={setScannedText}
+                                onClose={closeScanner}
                             />
                         </div>
                     </div>

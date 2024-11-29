@@ -10,15 +10,17 @@ interface SharedWebcamProps {
     screenshotQuality?: number // Allow customization of quality if needed
     height?: number
     width?: number
+    onClose?: () => void // Optional: Trigger when closes
 }
 
 const SharedWebcam: React.FC<SharedWebcamProps> = ({
     faceImage,
     setFaceImage,
     onUpload,
-    screenshotQuality = 0.5,
+    screenshotQuality = 1.0,
     height = 600,
     width = 600,
+    onClose = () => {},
 }) => {
     const webcamRef = useRef<Webcam>(null)
     const [webcamError, setWebcamError] = useState<string | null>(null)
@@ -55,6 +57,32 @@ const SharedWebcam: React.FC<SharedWebcamProps> = ({
         setWebcamError(null)
         checkWebcamAvailability()
     }, [])
+
+    const stopWebcam = () => {
+        if (webcamRef.current?.stream) {
+            webcamRef.current.stream.getTracks().forEach((track) => track.stop())
+            webcamRef.current.stream = null
+        }
+    }
+
+    useEffect(() => {
+        setFaceImage('')
+        setWebcamError(null)
+        checkWebcamAvailability()
+
+        // Cleanup on unmount
+        return () => {
+            stopWebcam()
+        }
+    }, [])
+
+    useEffect(() => {
+        // Stop webcam when modal closes
+        if (onClose) {
+            onClose()
+            stopWebcam()
+        }
+    }, [onClose])
 
     const renderWebcam = () => {
         if (webcamError) {
