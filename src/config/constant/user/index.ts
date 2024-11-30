@@ -1,7 +1,8 @@
 export enum RoleEnum {
     'SYSTEM_ADMIN' = 'SA',
     'RESIDENT' = 'RES',
-    'RESIDENT_SUBUSER' = 'SUB'
+    'RESIDENT_SUBUSER' = 'SUB',
+    'STAFF' = 'STF'
 }
 
 export enum GenderEnum {
