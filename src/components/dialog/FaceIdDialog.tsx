@@ -7,7 +7,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@components/ui/dialog'
-import { useFaceAuth } from '@store/faceAuth/useFaceAuth'
+import { useCard } from '@store/card/useCard'
 import { convertImageToGeneralFile } from '@lib/file'
 import SharedWebcam from '@components/camera/Webcam'
 
@@ -18,7 +18,7 @@ interface FaceIDDialogProps {
 
 const FaceIDDialog = ({ open, setOpen }: FaceIDDialogProps) => {
     const [faceImage, setFaceImage] = useState<string>()
-    const { uploadUserFaceAuthAction } = useFaceAuth()
+    const { uploadUserFaceAuthAction } = useCard()
 
     const uploadImage = async () => {
         if (faceImage == null) return

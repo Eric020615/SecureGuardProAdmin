@@ -28,15 +28,23 @@ export const listUrl = {
             type: IType.get,
         },
     },
-    faceAuth: {
+    cards: {
+        createCards: {
+            path: 'cards',
+            type: IType.post,
+        },
+        getCards: {
+            path: 'cards',
+            type: IType.get,
+        },
         upload: {
-            path: 'face-auth',
+            path: 'cards/face-auth',
             type: IType.post,
         },
         uploadVisitor: {
-            path: 'face-auth/visitors',
+            path: 'cards/face-auth/visitors',
             type: IType.post,
-        }
+        },
     },
     users: {
         create: {

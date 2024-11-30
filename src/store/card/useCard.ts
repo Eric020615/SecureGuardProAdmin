@@ -1,27 +1,27 @@
 import { create } from 'zustand'
 import {
+    createUserCard,
+    getUserCard,
     uploadUserFaceAuth,
     uploadVisitorFaceAuth,
-} from '@api/faceAuthService/faceAuthService'
+} from '@api/cardService/cardService'
 import { generalAction } from '@store/application/useApplication'
 import {
     CreateUpdateVisitorFaceAuthDto,
     CreateUserFaceAuthDto,
-} from '@dtos/faceAuth/faceAuth.dto'
-
-interface faceAuthState {
-    error: string | null
-    uploadUserFaceAuthAction: (
-        createUserFaceAuthDto: CreateUserFaceAuthDto
-    ) => Promise<any>
-    setError: (error: string | null) => void
-}
+    GetCardByUserDto,
+} from '@dtos/card/card.dto'
+import { IResponse } from '@api/globalHandler'
+import { deleteCookies, setCookies } from '@lib/cookies'
 
 interface State {
+    card: GetCardByUserDto
     image: string
 }
 
 interface Actions {
+    createCardAction: () => Promise<IResponse<any>>
+    getCardAction: () => Promise<IResponse<GetCardByUserDto>>
     uploadUserFaceAuthAction: (
         createUserFaceAuthDto: CreateUserFaceAuthDto
     ) => Promise<any>
@@ -30,8 +30,39 @@ interface Actions {
     ) => Promise<any>
 }
 
-export const useFaceAuth = create<State & Actions>(() => ({
+export const useCard = create<State & Actions>((set) => ({
+    card: {} as GetCardByUserDto,
     image: '',
+    createCardAction: async () => {
+        return generalAction(
+            async () => {
+                const response = await createUserCard()
+                if (!response?.success) {
+                    throw new Error(response.msg)
+                }
+                return response
+            },
+            'Card created successfully.', // Custom success message
+            'Card creation failed. Please try again.' // Custom error message
+        )
+    },
+    getCardAction: async () => {
+        return generalAction(
+            async () => {
+                const response = await getUserCard()
+                if (!response?.success) {
+                    set({ card: {} as GetCardByUserDto })
+                    deleteCookies('card')
+                    throw new Error(response.msg)
+                }
+                setCookies('card', response.data.badgeNumber)
+                set({ card: response.data })
+                return response
+            },
+            '', // Custom success message
+            'Card fetch failed. Please try again.' // Custom error message
+        )
+    },
     uploadUserFaceAuthAction: async (createUserFaceAuthDto: CreateUserFaceAuthDto) => {
         return generalAction(
             async () => {

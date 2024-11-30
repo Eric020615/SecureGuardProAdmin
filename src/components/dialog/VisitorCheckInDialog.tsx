@@ -3,12 +3,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@components/ui
 import { IDetectedBarcode, Scanner } from '@yudiel/react-qr-scanner'
 import Webcam from 'react-webcam'
 import { convertImageToGeneralFile, getBase64FromImage } from '@lib/file'
-import { useFaceAuth } from '@store/faceAuth/useFaceAuth'
+import { useCard } from '@store/card/useCard'
 import { Button } from '@components/ui/button'
 import { Camera, Repeat, Upload } from 'lucide-react'
 import { useVisitor } from '@store/visitor/useVisitor'
 import { DialogDescription } from '@radix-ui/react-dialog'
-import { CreateUpdateVisitorFaceAuthDto } from '@dtos/faceAuth/faceAuth.dto'
+import { CreateUpdateVisitorFaceAuthDto } from '@dtos/card/card.dto'
 import SharedWebcam from '@components/camera/Webcam'
 import SharedScanner from '@components/camera/Scanner'
 
@@ -22,7 +22,7 @@ const VisitorCheckInDialog = ({ open, setOpen }: VisitorCheckInDialogProps) => {
     const [isVerified, setIsVerified] = useState(false)
     const [faceImage, setFaceImage] = useState<string | undefined>('')
 
-    const { uploadVisitorFaceAuthAction } = useFaceAuth()
+    const { uploadVisitorFaceAuthAction } = useCard()
     const { visitorDetails, verifyVisitorTokenAction, isValid, resetVisitorDetails } =
         useVisitor()
 
