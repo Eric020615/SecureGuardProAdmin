@@ -22,7 +22,13 @@ import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialo
 const subUserRegistrationSchema = z
     .object({
         email: z.string().email().min(1, { message: 'Email is required' }),
-        password: z.string().min(1, { message: 'Password is required' }),
+        password: z
+            .string()
+            .min(8, 'Password must be at least 8 characters long')
+            .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+            .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+            .regex(/\d/, 'Password must contain at least one number')
+            .regex(/[@$!%*?&]/, 'Password must contain at least one special character'),
         confirmPassword: z.string().min(1, { message: 'Confirm password is required' }),
     })
     .refine((data) => data.password === data.confirmPassword, {

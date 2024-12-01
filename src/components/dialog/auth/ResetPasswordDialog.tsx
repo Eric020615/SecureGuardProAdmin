@@ -23,9 +23,16 @@ interface ResetPasswordDialogProps {
 const formSchema = z
     .object({
         currentPassword: z.string(),
-        newPassword: z.string().min(6, {
-            message: 'Password must be at least 6 characters long',
-        }),
+        newPassword: z
+            .string()
+            .min(8, 'New password must be at least 8 characters long')
+            .regex(/[A-Z]/, 'New password must contain at least one uppercase letter')
+            .regex(/[a-z]/, 'New password must contain at least one lowercase letter')
+            .regex(/\d/, 'New password must contain at least one number')
+            .regex(
+                /[@$!%*?&]/,
+                'New password must contain at least one special character'
+            ),
     })
     .refine((data) => data.newPassword !== data.currentPassword, {
         message: 'New password cannot be the same as the current password',

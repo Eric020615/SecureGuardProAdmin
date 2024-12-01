@@ -13,7 +13,13 @@ import { useRouter } from 'nextjs-toploader/app'
 const formSchema = z
     .object({
         email: z.string().email().min(1, { message: 'Email is required' }),
-        password: z.string().min(1, { message: 'Password is required' }),
+        password: z
+            .string()
+            .min(8, 'Password must be at least 8 characters long')
+            .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+            .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+            .regex(/\d/, 'Password must contain at least one number')
+            .regex(/[@$!%*?&]/, 'Password must contain at least one special character'),
         confirmPassword: z.string().min(1, { message: 'Confirm password is required' }),
     })
     .refine((data) => data.password === data.confirmPassword, {
@@ -60,9 +66,11 @@ const SignUpForm = () => {
 
     return (
         <section className="auth-form w-full bg-white p-8 rounded-3xl">
-            <ActionConfirmationDialog onSuccessConfirm={() => {
-                router.replace('user-information')
-            }}/>
+            <ActionConfirmationDialog
+                onSuccessConfirm={() => {
+                    router.replace('user-information')
+                }}
+            />
             <header className="flex flex-col gap-2 md:gap-3 mb-5">
                 <Link href="/" className="font-bold text-4xl">
                     Secure Guard Pro
