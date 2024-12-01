@@ -12,6 +12,7 @@ import FaceIDDialog from '@components/dialog/FaceIdDialog'
 import ResetPasswordDialog from '@components/dialog/auth/ResetPasswordDialog'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import { useCard } from '@store/card/useCard'
+import { RiIdCardFill } from 'react-icons/ri'
 
 const SecurityPage = () => {
     const [openFaceIDDialog, setOpenFaceIDDialog] = useState(false)
@@ -71,19 +72,22 @@ const SecurityPage = () => {
                                     </div>
                                 ) : (
                                     <div>
-                                        <p className="text-sm text-gray-500">
+                                        <Button
+                                            type="button"
+                                            className="w-fit h-fit"
+                                            onClick={
+                                                async () => {
+                                                    await createCard()
+                                                }
+                                            }
+                                        >
+                                            <RiIdCardFill className="mr-2 h-5 w-5" />
+                                            Create Card
+                                        </Button>
+                                        <p className="mt-2 text-sm text-gray-500">
                                             No card found. Please create a card to access
                                             the features.
                                         </p>
-                                        <Button
-                                            type="button"
-                                            className="bg-primary w-fit h-fit"
-                                            onClick={async () => {
-                                                await createCard()
-                                            }}
-                                        >
-                                            Create Card
-                                        </Button>
                                     </div>
                                 )}
                             </CardContent>
