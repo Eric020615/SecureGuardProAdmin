@@ -1,8 +1,9 @@
 import { DocumentStatus } from '@config/constant'
+import { FacilityEnum } from '@config/constant/facility'
 
 export interface FacilityBookingFormDto {
     bookedBy: string
-    facilityId: string
+    facilityId: FacilityEnum
     startDate: string
     endDate: string
     numOfGuest: number

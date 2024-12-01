@@ -9,13 +9,14 @@ import {
     FacilitySelect,
     DurationOptions,
     NumOfGuestOptions,
-} from '@config/listOption/facility' // Make sure DurationOptions is defined
+} from '@config/listOption/facility'
 import { useFacility } from '@store/facility/useFacility'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import { convertDateStringToFormattedString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
 import CustomForm, { CustomField } from '@components/form/element/CustomForm'
 import moment from 'moment'
+import { FacilityEnum } from '@config/constant/facility'
 
 const formSchema = z.object({
     user: z.string().min(1, {
@@ -59,7 +60,11 @@ const CreateBookingPage = () => {
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         const response = await submitBookingAction({
-            facilityId: values.facilityId,
+            facilityId: Object.values(FacilityEnum).includes(
+                values.facilityId as FacilityEnum
+            )
+                ? (values.facilityId as FacilityEnum)
+                : FacilityEnum.BC,
             bookedBy: values.user,
             startDate: convertDateStringToFormattedString(
                 values.startDate,
