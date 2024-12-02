@@ -84,6 +84,7 @@ export const useUserManagement = create<State & Actions>((set, get) => ({
         return generalAction(
             async () => {
                 const response = await getUserDetailsById(userGuid)
+                console.log(response)
                 if (!response.success) {
                     throw new Error(response.msg)
                 }

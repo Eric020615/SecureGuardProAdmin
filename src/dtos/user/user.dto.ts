@@ -1,6 +1,6 @@
 import { GenderEnum, RoleEnum } from "@config/constant/user"
-import { SystemAdminInformationDto } from "../user-management/userManagement.dto"
 import { GeneralFileDto } from "@dtos/application/application.dto"
+import { StaffInformationDto } from "@dtos/user-management/userManagement.dto"
 
 export interface UserInformationFormDto {
     firstName: string
@@ -30,7 +30,7 @@ export interface GetUserProfileByIdDto {
     contactNumber: string
     gender: GenderEnum
     role: RoleEnum
-    roleInformation?: SystemAdminInformationDto
+    roleInformation?: StaffInformationDto
     dateOfBirth: string
     isActive?: boolean
     createdBy: string

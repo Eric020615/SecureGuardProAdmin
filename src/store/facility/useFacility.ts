@@ -58,6 +58,7 @@ export const useFacility = create<State & Actions>((set, get) => ({
     submitBookingAction: async (facilityBookingForm: FacilityBookingFormDto) => {
         return generalAction(
             async () => {
+                console.log(facilityBookingForm)
                 const response = await createBooking(facilityBookingForm)
                 if (!response.success) {
                     throw new Error(response.msg)

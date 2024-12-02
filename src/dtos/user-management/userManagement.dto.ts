@@ -22,8 +22,8 @@ export interface GetUserDetailsByUserGuidDto {
     userName: string
     email: string
     contactNumber: string
-    gender: GenderEnum
-    role: RoleEnum
+    gender: string
+    role: string
     roleInformation: ResidentInformationDto | StaffInformationDto
     dateOfBirth: string
     isActive: boolean

@@ -119,7 +119,7 @@ const UserManagementPage = () => {
             header: () => <div className={tableStyles.headerStyle}>Gender</div>,
             cell: ({ row }) => (
                 <div className={`${tableStyles.dateCellStyle} capitalize`}>
-                    {GenderDescriptionEnum[row.getValue('gender') as keyof typeof GenderDescriptionEnum]}
+                    {row.getValue('gender')}
                 </div>
             ),
         },
@@ -137,7 +137,7 @@ const UserManagementPage = () => {
             header: () => <div className={tableStyles.headerStyle}>Role</div>,
             cell: ({ row }) => (
                 <div className={`${tableStyles.dateCellStyle} capitalize`}>
-                    {RoleDescriptionEnum[row.getValue('role') as keyof typeof RoleDescriptionEnum]}
+                    {row.getValue('role')}
                 </div>
             ),
         },

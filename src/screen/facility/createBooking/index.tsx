@@ -60,11 +60,7 @@ const CreateBookingPage = () => {
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         const response = await submitBookingAction({
-            facilityId: Object.values(FacilityEnum).includes(
-                values.facilityId as FacilityEnum
-            )
-                ? (values.facilityId as FacilityEnum)
-                : FacilityEnum.BC,
+            facilityId: values.facilityId as keyof typeof FacilityEnum,
             bookedBy: values.user,
             startDate: convertDateStringToFormattedString(
                 values.startDate,

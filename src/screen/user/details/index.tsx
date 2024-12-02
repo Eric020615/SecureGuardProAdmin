@@ -56,6 +56,7 @@ const UserDetailsPage = () => {
     } = useUserManagement()
     const getUserDetailsById = async () => {
         await getUserDetailsAction(params.userGuid)
+        console.log(userDetails)
     }
     useEffect(() => {
         getUserDetailsById()
@@ -221,7 +222,7 @@ const UserDetailsPage = () => {
                                             Gender:
                                         </span>
                                         <span className="text-sm">
-                                            {GenderDescriptionEnum[userDetails.gender]}
+                                            {userDetails.gender}
                                         </span>
                                     </div>
                                     <div className="flex flex-col gap-1">
@@ -250,9 +251,7 @@ const UserDetailsPage = () => {
                                         </span>
                                         <span className="text-sm">
                                             {
-                                                RoleDescriptionEnum[
-                                                    userDetails.role as unknown as keyof typeof RoleDescriptionEnum
-                                                ]
+                                                userDetails.role
                                             }
                                         </span>
                                     </div>
