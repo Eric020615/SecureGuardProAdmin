@@ -1,24 +1,30 @@
-export enum RoleEnum {
-    'SYSTEM_ADMIN' = 'SA',
-    'RESIDENT' = 'RES',
-    'RESIDENT_SUBUSER' = 'SUB',
-    'STAFF' = 'STF'
-}
-
 export enum GenderEnum {
-    'MALE' = 'M',
-    'FEMALE' = 'F'
+    MALE = 'M',
+    FEMALE = 'F',
 }
 
-export const RoleConst = {
-    "RES": "Resident",
-    "SUB": "Resident Sub User",
-    "SA": "System Admin",
+export enum GenderDescriptionEnum {
+    M = "Male",
+    F = 'Female',
+}
+
+export enum RoleEnum {
+    SYSTEM_ADMIN = 'SA',
+    RESIDENT = 'RES',
+    RESIDENT_SUBUSER = 'SUB',
+    STAFF = 'STF',
+}
+
+export enum RoleDescriptionEnum {
+    RES = 'Resident',
+    SUB = 'Resident Sub User',
+    SA = 'System Admin',
+    STF = 'Staff',
 }
 
 export const GenderConst = {
-    "M": "Male",
-    "F": "Female"
+    M: 'Male',
+    F: 'Female',
 }
 
 export const userInformationConst = {
@@ -29,5 +35,5 @@ export const userInformationConst = {
     phoneNumber: '',
     gender: '',
     dateOfBirth: '',
-    files: []
+    files: [],
 }

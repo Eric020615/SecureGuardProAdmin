@@ -24,10 +24,11 @@ export interface GetUserDetailsByUserGuidDto {
     contactNumber: string
     gender: GenderEnum
     role: RoleEnum
-    roleInformation: ResidentInformationDto | SystemAdminInformationDto
+    roleInformation: ResidentInformationDto | StaffInformationDto
     dateOfBirth: string
     isActive: boolean
     badgeNumber: string
+    supportedDocuments: GeneralFileResponseDto[]
     status: string
     createdBy: string
     createdDateTime: string
@@ -38,10 +39,8 @@ export interface GetUserDetailsByUserGuidDto {
 export interface ResidentInformationDto {
     floor: string
     unit: string
-    supportedDocuments: GeneralFileResponseDto[]
 }
 
-export interface SystemAdminInformationDto {
+export interface StaffInformationDto {
     staffId: string
-    supportedDocuments: GeneralFileResponseDto[]
 }

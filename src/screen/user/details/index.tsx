@@ -8,10 +8,10 @@ import {
 import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
 import { ITimeFormat } from '@config/constant'
-import { GenderConst, RoleConst, RoleEnum } from '@config/constant/user'
+import { GenderConst, GenderDescriptionEnum, RoleDescriptionEnum, RoleEnum } from '@config/constant/user'
 import {
     ResidentInformationDto,
-    SystemAdminInformationDto,
+    StaffInformationDto,
 } from '@dtos/user-management/userManagement.dto'
 import { convertDateStringToFormattedString } from '@lib/time'
 import { useUserManagement } from '@store/userManagement/useUserManagement'
@@ -35,7 +35,7 @@ const RenderResidentRoleInformation = (roleInfo: ResidentInformationDto) => (
 )
 
 // Method to render System Admin Information
-const RenderSystemAdminInformation = (roleInfo: SystemAdminInformationDto) => (
+const RenderStaffInformation = (roleInfo: StaffInformationDto) => (
     <>
         <div className="flex flex-col gap-1">
             <span className="text-sm font-semibold">Staff Id:</span>
@@ -52,7 +52,7 @@ const UserDetailsPage = () => {
         getUserDetailsAction,
         activateUserByIdAction,
         deactivateUserByIdAction,
-        deleteUserByIdAction
+        deleteUserByIdAction,
     } = useUserManagement()
     const getUserDetailsById = async () => {
         await getUserDetailsAction(params.userGuid)
@@ -88,7 +88,7 @@ const UserDetailsPage = () => {
                     <h1 className="text-3xl font-bold">User Details</h1>
                 </div>
                 <div>
-                    <div className='flex gap-2'>
+                    <div className="flex gap-2">
                         {userDetails.isActive ? (
                             <Button
                                 type="submit"
@@ -221,7 +221,7 @@ const UserDetailsPage = () => {
                                             Gender:
                                         </span>
                                         <span className="text-sm">
-                                            {GenderConst[userDetails.gender]}
+                                            {GenderDescriptionEnum[userDetails.gender]}
                                         </span>
                                     </div>
                                     <div className="flex flex-col gap-1">
@@ -249,7 +249,11 @@ const UserDetailsPage = () => {
                                             Role:
                                         </span>
                                         <span className="text-sm">
-                                            {RoleConst[userDetails.role]}
+                                            {
+                                                RoleDescriptionEnum[
+                                                    userDetails.role as unknown as keyof typeof RoleDescriptionEnum
+                                                ]
+                                            }
                                         </span>
                                     </div>
                                     {userDetails.roleInformation &&
@@ -262,8 +266,8 @@ const UserDetailsPage = () => {
                                     ) : userDetails.roleInformation &&
                                       userDetails.role == RoleEnum.SYSTEM_ADMIN ? (
                                         <>
-                                            {RenderSystemAdminInformation(
-                                                userDetails.roleInformation as SystemAdminInformationDto
+                                            {RenderStaffInformation(
+                                                userDetails.roleInformation as StaffInformationDto
                                             )}
                                         </>
                                     ) : (
@@ -283,7 +287,9 @@ const UserDetailsPage = () => {
                                             BadgeNumber:
                                         </span>
                                         <span className="text-sm">
-                                            {userDetails.badgeNumber ? userDetails.badgeNumber : 'No badge number'}
+                                            {userDetails.badgeNumber
+                                                ? userDetails.badgeNumber
+                                                : 'No badge number'}
                                         </span>
                                     </div>
                                 </div>
@@ -295,10 +301,9 @@ const UserDetailsPage = () => {
                             </AccordionTrigger>
                             <AccordionContent className="p-4 bg-slate-50">
                                 <div className="grid gap-1">
-                                    {userDetails.roleInformation?.supportedDocuments &&
-                                    userDetails.roleInformation?.supportedDocuments
-                                        .length > 0 ? (
-                                        userDetails.roleInformation.supportedDocuments.map(
+                                    {userDetails.supportedDocuments &&
+                                    userDetails.supportedDocuments.length > 0 ? (
+                                        userDetails.supportedDocuments.map(
                                             (document, index) => (
                                                 <div
                                                     key={index}
