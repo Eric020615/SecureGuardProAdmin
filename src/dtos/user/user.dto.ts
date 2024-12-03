@@ -1,4 +1,4 @@
-import { GenderEnum, RoleEnum } from "@config/constant/user"
+import { GenderDescriptionEnum, RoleDescriptionEnum } from "@config/constant/user"
 import { GeneralFileDto } from "@dtos/application/application.dto"
 import { StaffInformationDto } from "@dtos/user-management/userManagement.dto"
 
@@ -7,7 +7,7 @@ export interface UserInformationFormDto {
     lastName: string
     userName: string
     contactNumber: string
-    gender: GenderEnum
+    gender: keyof typeof GenderDescriptionEnum
     dateOfBirth: string
 }
 
@@ -28,8 +28,8 @@ export interface GetUserProfileByIdDto {
     userName: string
     email: string
     contactNumber: string
-    gender: GenderEnum
-    role: RoleEnum
+    gender: keyof typeof GenderDescriptionEnum
+    role: keyof typeof RoleDescriptionEnum
     roleInformation?: StaffInformationDto
     dateOfBirth: string
     isActive?: boolean
@@ -45,6 +45,6 @@ export interface EditUserDetailsByIdDto {
     userName: string
     email: string
     contactNumber: string
-    gender: string
+    gender: keyof typeof GenderDescriptionEnum
     dateOfBirth: string
 }

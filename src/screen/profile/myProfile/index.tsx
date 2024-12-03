@@ -5,7 +5,13 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useUser } from '@store/user/useUser'
 import Avatar from 'react-avatar'
-import { GenderConst, GenderEnum } from '@config/constant/user'
+import {
+    GenderConst,
+    GenderDescriptionEnum,
+    GenderEnum,
+    RoleDescriptionEnum,
+    RoleEnum,
+} from '@config/constant/user'
 import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
 import { Edit } from 'lucide-react'
@@ -84,7 +90,7 @@ const MyProfilePage = () => {
             lastName: values.lastName,
             userName: values.userName,
             contactNumber: values.phoneNumber,
-            gender: values.gender,
+            gender: values.gender as keyof typeof GenderDescriptionEnum,
             dateOfBirth: convertDateStringToFormattedString(
                 values.dateOfBirth,
                 ITimeFormat.isoDateTime
@@ -160,7 +166,9 @@ const MyProfilePage = () => {
                                     )}
                                 </div>
                                 <p className="text-sm">
-                                    {userProfile?.role ? userProfile.role : ''}
+                                    {userProfile?.role
+                                        ? RoleDescriptionEnum[userProfile.role]
+                                        : ''}
                                 </p>
                                 <Button
                                     type="button"
@@ -219,7 +227,7 @@ const MyProfilePage = () => {
                                     <span className="text-sm font-semibold">Gender:</span>
                                     <span className="text-sm">
                                         {userProfile?.gender
-                                            ? userProfile.gender
+                                            ? GenderDescriptionEnum[userProfile.gender]
                                             : ''}
                                     </span>
                                 </div>
