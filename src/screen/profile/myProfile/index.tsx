@@ -6,11 +6,8 @@ import { z } from 'zod'
 import { useUser } from '@store/user/useUser'
 import Avatar from 'react-avatar'
 import {
-    GenderConst,
     GenderDescriptionEnum,
-    GenderEnum,
     RoleDescriptionEnum,
-    RoleEnum,
 } from '@config/constant/user'
 import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'

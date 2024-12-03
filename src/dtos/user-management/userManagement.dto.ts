@@ -1,4 +1,4 @@
-import { GenderEnum, RoleEnum } from "@config/constant/user"
+import { GenderDescriptionEnum, RoleDescriptionEnum } from "@config/constant/user"
 import { GeneralFileResponseDto } from "@dtos/application/application.dto"
 
 export interface GetUserDto {
@@ -8,8 +8,8 @@ export interface GetUserDto {
     lastName: string
     userName: string
     contactNumber: string
-    gender: GenderEnum
-    role: RoleEnum
+    gender: keyof typeof GenderDescriptionEnum
+    role: keyof typeof RoleDescriptionEnum
     userStatus: string
     status: string
 }

@@ -15,7 +15,7 @@ import { z } from 'zod'
 import { Input } from '@components/ui/input'
 import { useRouter } from 'nextjs-toploader/app'
 import { useAuth } from '@store/auth/useAuth'
-import { GenderEnum, userInformationConst } from '@config/constant/user'
+import { GenderDescriptionEnum, userInformationConst } from '@config/constant/user'
 import { useDropzone, FileWithPath } from 'react-dropzone'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
@@ -23,7 +23,7 @@ import { getGeneralFileDto } from '@lib/file'
 import { useUser } from '@store/user/useUser'
 import { ITimeFormat } from '@config/constant'
 import CustomSelect from '@components/select/Select'
-import { GenderList } from '@config/listOption/user'
+import { GenderOptions } from '@config/listOption/user'
 import { convertDateStringToFormattedString } from '@lib/time'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 
@@ -59,7 +59,7 @@ const UserInformationForm = () => {
                 lastName: values.lastName,
                 userName: values.userName,
                 contactNumber: values.phoneNumber,
-                gender: values.gender as GenderEnum,
+                gender: values.gender as keyof typeof GenderDescriptionEnum,
                 staffId: values.staffId,
                 dateOfBirth: convertDateStringToFormattedString(
                     values.dateOfBirth,
@@ -192,7 +192,7 @@ const UserInformationForm = () => {
                                     <CustomSelect
                                         title="Gender"
                                         selectLabel="Gender"
-                                        selectItem={GenderList}
+                                        selectItem={GenderOptions}
                                         onDataChange={onChange}
                                         value={value}
                                     />

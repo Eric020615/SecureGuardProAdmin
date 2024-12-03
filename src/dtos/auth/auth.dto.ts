@@ -1,4 +1,4 @@
-import { RoleEnum } from "@config/constant/user"
+import { RoleDescriptionEnum } from "@config/constant/user"
 
 export interface UserSignUpFormDto {
     email: string
@@ -13,7 +13,7 @@ export interface SignInFormDto {
 
 export interface AuthTokenPayloadDto {
     userGuid: string
-    role: RoleEnum
+    role: keyof typeof RoleDescriptionEnum
 }
 
 export interface SubUserAuthTokenPayloadDto {
