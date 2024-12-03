@@ -9,7 +9,8 @@ import {
 } from '@components/ui/accordion'
 import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
-import { DocumentStatusEnum, ITimeFormat } from '@config/constant'
+import { DocumentStatusDescriptionEnum, DocumentStatusEnum, ITimeFormat } from '@config/constant'
+import { VisitorCategoryDescriptionEnum } from '@config/constant/visitor'
 import { convertDateStringToFormattedString } from '@lib/time'
 import { useVisitorManagement } from '@store/visitorManagement/useVisitorManagement'
 import { ArrowLeft } from 'lucide-react'
@@ -109,7 +110,7 @@ const VisitorDetailsPage = () => {
                                                           : 'bg-gray-500' // Default color for other statuses
                                                 } flex justify-center`}
                                             >
-                                                <span>{visitorDetails.status}</span>
+                                                <span>{DocumentStatusDescriptionEnum[visitorDetails.status]}</span>
                                             </Badge>
                                         </span>
                                     </div>
@@ -164,7 +165,7 @@ const VisitorDetailsPage = () => {
                                             Visitor Category:
                                         </span>
                                         <span className="text-sm">
-                                            {visitorDetails.visitorCategory}
+                                            {VisitorCategoryDescriptionEnum[visitorDetails.visitorCategory]}
                                         </span>
                                     </div>
                                 </div>

@@ -13,7 +13,7 @@ import { Button } from '@components/ui/button'
 import { DocumentStatusEnum, PaginationDirectionEnum } from '@config/constant'
 import { Badge } from '@components/ui/badge'
 import { tableStyles } from '@screen/style'
-import { GenderDescriptionEnum } from '@config/constant/user'
+import { GenderDescriptionEnum, RoleDescriptionEnum } from '@config/constant/user'
 
 const UserManagementPage = () => {
     const {
@@ -142,8 +142,8 @@ const UserManagementPage = () => {
             cell: ({ row }) => (
                 <div className={`${tableStyles.dateCellStyle} capitalize`}>
                     {
-                        GenderDescriptionEnum[
-                            row.getValue('role') as keyof typeof GenderDescriptionEnum
+                        RoleDescriptionEnum[
+                            row.getValue('role') as keyof typeof RoleDescriptionEnum
                         ]
                     }
                 </div>

@@ -1,7 +1,10 @@
+import { DocumentStatusDescriptionEnum } from "@config/constant"
+import { VisitorCategoryDescriptionEnum } from "@config/constant/visitor"
+
 export interface CreateVisitorDto {
     visitorName: string
     visitorEmail: string
-    visitorCategory: string
+    visitorCategory: keyof typeof VisitorCategoryDescriptionEnum
     visitorContactNumber: string
     visitDateTime: string
 }
@@ -9,7 +12,7 @@ export interface CreateVisitorDto {
 export interface EditVisitorByIdDto {
     visitorName: string
     visitorEmail: string
-    visitorCategory: string
+    visitorCategory: keyof typeof VisitorCategoryDescriptionEnum
     visitorContactNumber: string
     visitDateTime: string
 }
@@ -19,10 +22,10 @@ export interface GetVisitorDto {
     visitorGuid: string
     visitorName: string
     visitorEmail: string
-    visitorCategory: string
+    visitorCategory: keyof typeof VisitorCategoryDescriptionEnum
     visitorContactNumber: string
     visitDateTime: string
-    status: string
+    status: keyof typeof DocumentStatusDescriptionEnum
 }
 
 export interface GetVisitorDetailsDto {
@@ -30,10 +33,10 @@ export interface GetVisitorDetailsDto {
     visitorGuid: string
     visitorName: string
     visitorEmail: string
-    visitorCategory: string
+    visitorCategory: keyof typeof VisitorCategoryDescriptionEnum
     visitorContactNumber: string
     visitDateTime: string
-    status: string
+    status: keyof typeof DocumentStatusDescriptionEnum
     createdBy: string
     updatedBy: string
     createdDateTime: string
@@ -55,7 +58,7 @@ export interface GetVisitorPassDetailsDto {
     visitorGuid: string
     visitorName: string
     visitorEmail: string
-    visitorCategory: string
+    visitorCategory: keyof typeof VisitorCategoryDescriptionEnum
     visitorContactNumber: string
     visitDateTime: string
 }
@@ -65,7 +68,7 @@ export interface GetVisitorDetailsByTokenDto {
 	visitorGuid: string
 	visitorName: string
 	visitorEmail: string
-	visitorCategory: string
+    visitorCategory: keyof typeof VisitorCategoryDescriptionEnum
 	visitorContactNumber: string
 	visitDateTime: string
 }

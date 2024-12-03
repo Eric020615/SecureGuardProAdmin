@@ -9,12 +9,17 @@ import { Checkbox } from '@components/ui/checkbox'
 import CustomTable from '@components/table/Table'
 import { useRouter } from 'nextjs-toploader/app'
 import { Badge } from '@components/ui/badge'
-import { DocumentStatusEnum, ITimeFormat, PaginationDirectionEnum } from '@config/constant'
+import {
+    DocumentStatusEnum,
+    ITimeFormat,
+    PaginationDirectionEnum,
+} from '@config/constant'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import { useVisitorManagement } from '@store/visitorManagement/useVisitorManagement'
 import { GetVisitorDto } from '@dtos/visitor/visitor.dto'
 import { convertDateStringToFormattedString } from '@lib/time'
 import { tableStyles } from '@screen/style'
+import { VisitorCategoryDescriptionEnum } from '@config/constant/visitor'
 
 const VisitorManagementPage = () => {
     const {
@@ -78,9 +83,7 @@ const VisitorManagementPage = () => {
         },
         {
             accessorKey: 'visitorName',
-            header: () => (
-                <div className={tableStyles.headerStyle}>Name</div>
-            ),
+            header: () => <div className={tableStyles.headerStyle}>Name</div>,
             cell: ({ row }) => (
                 <div className={`${tableStyles.dateCellStyle} capitalize`}>
                     {row.getValue('visitorName')}
@@ -89,9 +92,7 @@ const VisitorManagementPage = () => {
         },
         {
             accessorKey: 'visitorEmail',
-            header: () => (
-                <div className={tableStyles.headerStyle}>Email</div>
-            ),
+            header: () => <div className={tableStyles.headerStyle}>Email</div>,
             cell: ({ row }) => (
                 <div className={`${tableStyles.dateCellStyle}`}>
                     {row.getValue('visitorEmail')}
@@ -100,22 +101,22 @@ const VisitorManagementPage = () => {
         },
         {
             accessorKey: 'visitorCategory',
-            header: () => (
-                <div className={tableStyles.headerStyle}>Category</div>
-            ),
+            header: () => <div className={tableStyles.headerStyle}>Category</div>,
             cell: ({ row }) => (
                 <div className={tableStyles.dateCellStyle}>
-                    {row.getValue('visitorCategory')}
+                    {
+                        VisitorCategoryDescriptionEnum[
+                            row.getValue(
+                                'visitorCategory'
+                            ) as keyof typeof VisitorCategoryDescriptionEnum
+                        ]
+                    }
                 </div>
             ),
         },
         {
             accessorKey: 'visitorContactNumber',
-            header: () => (
-                <div className={tableStyles.headerStyle}>
-                    Contact Number
-                </div>
-            ),
+            header: () => <div className={tableStyles.headerStyle}>Contact Number</div>,
             cell: ({ row }) => (
                 <div className={tableStyles.dateCellStyle}>
                     {row.getValue('visitorContactNumber')}
@@ -148,9 +149,7 @@ const VisitorManagementPage = () => {
         },
         {
             accessorKey: 'status',
-            header: () => (
-                <div className={tableStyles.headerStyle}>Status</div>
-            ),
+            header: () => <div className={tableStyles.headerStyle}>Status</div>,
             cell: ({ row }) => {
                 const statusValue = row.getValue('status') as string
 
@@ -210,15 +209,6 @@ const VisitorManagementPage = () => {
             <ActionConfirmationDialog />
             <div className="flex flex-row justify-between">
                 <h3 className="text-3xl font-bold text-black">Visitors</h3>
-                <Button
-                    className="flex items-center gap-1"
-                    onClick={() => {
-                        router.push('/visitor/create') // Adjust route as necessary
-                    }}
-                >
-                    <RiAddBoxLine className="text-xl" />
-                    <p className="flex items-center text-center">Create</p>
-                </Button>
             </div>
             <div className="mt-5 w-full">
                 <CustomTable
