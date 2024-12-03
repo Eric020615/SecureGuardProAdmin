@@ -59,24 +59,6 @@ export enum DocumentStatusDescriptionEnum {
     DRAFT = 'Draft',
     SUSPENDED = 'Suspended',
 }
-export const getDocumentStatusLabel = (status: DocumentStatusEnum): string => {
-    switch (status) {
-        case DocumentStatusEnum.Active:
-            return 'Active'
-        case DocumentStatusEnum.SoftDeleted:
-            return 'Deleted'
-        case DocumentStatusEnum.Archived:
-            return 'Archived'
-        case DocumentStatusEnum.Pending:
-            return 'Pending Approval'
-        case DocumentStatusEnum.Draft:
-            return 'Draft'
-        case DocumentStatusEnum.Suspended:
-            return 'Suspended'
-        default:
-            return 'Unknown Status'
-    }
-}
 
 export enum PaginationDirectionEnum {
     Next = 'next',

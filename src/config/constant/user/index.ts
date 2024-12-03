@@ -1,8 +1,3 @@
-export enum GenderEnum {
-    MALE = 'M',
-    FEMALE = 'F',
-}
-
 export enum GenderDescriptionEnum {
     M = "Male",
     F = 'Female',
@@ -20,11 +15,6 @@ export enum RoleDescriptionEnum {
     SUB = 'Resident Sub User',
     SA = 'System Admin',
     STF = 'Staff',
-}
-
-export const GenderConst = {
-    M: 'Male',
-    F: 'Female',
 }
 
 export const userInformationConst = {
