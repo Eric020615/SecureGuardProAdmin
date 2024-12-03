@@ -9,7 +9,7 @@ import { Checkbox } from '@components/ui/checkbox'
 import CustomTable from '@components/table/Table'
 import { useNotice } from '@store/notice/useNotice'
 import { useRouter } from 'nextjs-toploader/app'
-import { DocumentStatus, ITimeFormat, PaginationDirection } from '@config/constant'
+import { DocumentStatusEnum, ITimeFormat, PaginationDirectionEnum } from '@config/constant'
 import { GetNoticeDto } from '@dtos/notice/notice.dto'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import { convertDateStringToFormattedString } from '@lib/time'
@@ -134,20 +134,20 @@ const NoticeManagementPage = () => {
             cell: ({ row }) => {
                 const statusValue = row.getValue('status') as string
 
-                // Function to get status name from DocumentStatus enum
+                // Function to get status name from DocumentStatusEnum enum
                 const getStatusName = (value: string): string => {
                     switch (value) {
-                        case DocumentStatus.Active:
+                        case DocumentStatusEnum.Active:
                             return 'Active'
-                        case DocumentStatus.SoftDeleted:
+                        case DocumentStatusEnum.SoftDeleted:
                             return 'Soft Deleted'
-                        case DocumentStatus.Archived:
+                        case DocumentStatusEnum.Archived:
                             return 'Archived'
-                        case DocumentStatus.Pending:
+                        case DocumentStatusEnum.Pending:
                             return 'Pending'
-                        case DocumentStatus.Draft:
+                        case DocumentStatusEnum.Draft:
                             return 'Draft'
-                        case DocumentStatus.Suspended:
+                        case DocumentStatusEnum.Suspended:
                             return 'Suspended'
                         default:
                             return 'Unknown'
@@ -157,9 +157,9 @@ const NoticeManagementPage = () => {
                     <div className={tableStyles.dateCellStyle}>
                         <Badge
                             className={`w-full ${
-                                statusValue === DocumentStatus.SoftDeleted
+                                statusValue === DocumentStatusEnum.SoftDeleted
                                     ? tableStyles.badgeColor.softDeleted
-                                    : statusValue === DocumentStatus.Active
+                                    : statusValue === DocumentStatusEnum.Active
                                       ? tableStyles.badgeColor.active
                                       : tableStyles.badgeColor.default // Default color for other statuses
                             } flex justify-center`}
@@ -182,7 +182,7 @@ const NoticeManagementPage = () => {
     }, [])
 
     const fetchNotice = async (
-        direction: PaginationDirection = PaginationDirection.Next
+        direction: PaginationDirectionEnum = PaginationDirectionEnum.Next
     ) => {
         await getNoticeAction(direction, 10)
     }
@@ -217,10 +217,10 @@ const NoticeManagementPage = () => {
                     totalRecords={totalNotices}
                     recordsPerPage={10}
                     fetchNext={() => {
-                        fetchNotice(PaginationDirection.Next)
+                        fetchNotice(PaginationDirectionEnum.Next)
                     }}
                     fetchPrev={() => {
-                        fetchNotice(PaginationDirection.Previous)
+                        fetchNotice(PaginationDirectionEnum.Previous)
                     }}
                 />
             </div>

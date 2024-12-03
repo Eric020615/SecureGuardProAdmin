@@ -8,7 +8,7 @@ import {
     GetFacilityBookingUserDto,
     SpaceAvailabilityDto,
 } from '@dtos/facility/facility.dto'
-import { PaginationDirection } from '@config/constant'
+import { PaginationDirectionEnum } from '@config/constant'
 
 export const createBooking = async (
     bookingForm: FacilityBookingFormDto
@@ -24,7 +24,7 @@ export const createBooking = async (
 }
 
 export const getBookingHistory = async (
-    direction: PaginationDirection,
+    direction: PaginationDirectionEnum,
     id: number,
     limit: number
 ): Promise<IResponse<any>> => {

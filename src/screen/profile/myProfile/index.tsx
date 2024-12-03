@@ -5,16 +5,16 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useUser } from '@store/user/useUser'
 import Avatar from 'react-avatar'
-import { GenderConst, GenderEnum, RoleConst } from '@config/constant/user'
+import { GenderConst, GenderEnum } from '@config/constant/user'
 import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
 import { Edit } from 'lucide-react'
 import 'react-phone-number-input/style.css'
-import { GenderList } from '@config/listOption/user'
 import { ITimeFormat } from '@config/constant'
 import { convertDateStringToFormattedString } from '@lib/time'
 import CustomForm, { CustomField } from '@components/form/element/CustomForm'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
+import { GenderOptions } from '@config/listOption/user'
 
 const formSchema = z.object({
     firstName: z.string().min(1, { message: 'First Name is required' }),
@@ -65,7 +65,7 @@ const MyProfilePage = () => {
         gender: {
             label: 'Gender',
             type: 'select',
-            options: GenderList,
+            options: GenderOptions,
         },
         dateOfBirth: {
             label: 'Date of Birth',
@@ -84,7 +84,7 @@ const MyProfilePage = () => {
             lastName: values.lastName,
             userName: values.userName,
             contactNumber: values.phoneNumber,
-            gender: values.gender as GenderEnum,
+            gender: values.gender,
             dateOfBirth: convertDateStringToFormattedString(
                 values.dateOfBirth,
                 ITimeFormat.isoDateTime
@@ -160,7 +160,7 @@ const MyProfilePage = () => {
                                     )}
                                 </div>
                                 <p className="text-sm">
-                                    {userProfile?.role ? RoleConst[userProfile.role] : ''}
+                                    {userProfile?.role ? userProfile.role : ''}
                                 </p>
                                 <Button
                                     type="button"
@@ -219,7 +219,7 @@ const MyProfilePage = () => {
                                     <span className="text-sm font-semibold">Gender:</span>
                                     <span className="text-sm">
                                         {userProfile?.gender
-                                            ? GenderConst[userProfile.gender]
+                                            ? userProfile.gender
                                             : ''}
                                     </span>
                                 </div>

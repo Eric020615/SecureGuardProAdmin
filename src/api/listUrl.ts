@@ -1,5 +1,4 @@
-import { IType } from '@config/index'
-import path from 'path'
+import { IType } from "@config/constant";
 
 export const listUrl = {
     auth: {

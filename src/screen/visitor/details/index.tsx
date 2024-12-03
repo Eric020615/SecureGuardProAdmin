@@ -9,7 +9,7 @@ import {
 } from '@components/ui/accordion'
 import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
-import { DocumentStatus, ITimeFormat } from '@config/constant'
+import { DocumentStatusEnum, ITimeFormat } from '@config/constant'
 import { convertDateStringToFormattedString } from '@lib/time'
 import { useVisitorManagement } from '@store/visitorManagement/useVisitorManagement'
 import { ArrowLeft } from 'lucide-react'
@@ -101,10 +101,10 @@ const VisitorDetailsPage = () => {
                                             <Badge
                                                 className={`w-[80px] ${
                                                     visitorDetails.status ===
-                                                    DocumentStatus.SoftDeleted
+                                                    DocumentStatusEnum.SoftDeleted
                                                         ? 'bg-orange-500'
                                                         : visitorDetails.status ===
-                                                            DocumentStatus.Active
+                                                            DocumentStatusEnum.Active
                                                           ? 'bg-green-500'
                                                           : 'bg-gray-500' // Default color for other statuses
                                                 } flex justify-center`}

@@ -17,7 +17,7 @@ import {
     GetFacilityBookingUserDto,
     SpaceAvailabilityDto,
 } from '@dtos/facility/facility.dto'
-import { PaginationDirection } from '@config/constant'
+import { PaginationDirectionEnum } from '@config/constant'
 
 interface State {
     availabilitySlot: SpaceAvailabilityDto[]
@@ -31,7 +31,7 @@ interface State {
 interface Actions {
     submitBookingAction: (facilityBookingForm: FacilityBookingFormDto) => Promise<any>
     getFacilityBookingHistoryAction: (
-        direction: PaginationDirection,
+        direction: PaginationDirectionEnum,
         limit: number
     ) => Promise<any>
     getFacilityBookingDetailsAction: (facilityBookingGuid: string) => Promise<any>
@@ -70,14 +70,14 @@ export const useFacility = create<State & Actions>((set, get) => ({
         )
     },
     getFacilityBookingHistoryAction: async (
-        direction: PaginationDirection,
+        direction: PaginationDirectionEnum,
         limit: number
     ) => {
         return generalAction(
             async () => {
                 let response: any
                 const { facilityBookingHistory, currentPage } = get()
-                if (direction === PaginationDirection.Next) {
+                if (direction === PaginationDirectionEnum.Next) {
                     // Pass the last booking ID from the current list for next pagination
                     const lastId =
                         facilityBookingHistory.length > 0

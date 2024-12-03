@@ -1,9 +1,9 @@
-import { DocumentStatus } from '@config/constant'
-import { FacilityEnum } from '@config/constant/facility'
+import { DocumentStatusDescriptionEnum, DocumentStatusEnum } from '@config/constant'
+import { FacilityDescriptionEnum } from '@config/constant/facility'
 
 export interface FacilityBookingFormDto {
     bookedBy: string
-    facilityId: keyof typeof FacilityEnum
+    facilityId: keyof typeof FacilityDescriptionEnum
     startDate: string
     endDate: string
     numOfGuest: number
@@ -20,25 +20,25 @@ export interface SpaceAvailabilityDto {
 export interface GetFacilityBookingHistoryDto {
     bookingId: number
     bookingGuid: string
-    facilityName: string
+    facilityId: keyof typeof FacilityDescriptionEnum
     startDate: string
     endDate: string
     bookedBy: string
     isCancelled: boolean
-    status: string
+    status: keyof typeof DocumentStatusDescriptionEnum
 }
 
 export interface GetFacilityBookingDetailsDto {
     bookingId: number
     bookingGuid: string
-    facilityName: string
+    facilityId: keyof typeof FacilityDescriptionEnum
     startDate: string
     endDate: string
     bookedBy: string
     numOfGuest: number
     isCancelled: boolean
     cancelRemark: string
-    status: DocumentStatus
+    status: keyof typeof DocumentStatusDescriptionEnum
     createdBy: string
     createdDateTime: string
     updatedBy: string

@@ -17,9 +17,14 @@ import {
     convertDateStringToFormattedString,
     getCurrentDate,
 } from '@lib/time'
-import { DocumentStatus, ITimeFormat } from '@config/constant'
+import {
+    DocumentStatusDescriptionEnum,
+    DocumentStatusEnum,
+    ITimeFormat,
+} from '@config/constant'
 import CancelBookingDialog from '@components/dialog/CancelBookingDialog'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
+import { FacilityDescriptionEnum } from '@config/constant/facility'
 
 const FacilityBookingDetailsPage = () => {
     const params = useParams<{ facilityBookingGuid: string }>()
@@ -86,7 +91,11 @@ const FacilityBookingDetailsPage = () => {
                                             Facility:
                                         </span>
                                         <span className="text-sm">
-                                            {facilityBookingDetails.facilityName}
+                                            {
+                                                FacilityDescriptionEnum[
+                                                    facilityBookingDetails.facilityId
+                                                ]
+                                            }
                                         </span>
                                     </div>
                                     <div className="flex flex-col gap-1">
@@ -130,16 +139,20 @@ const FacilityBookingDetailsPage = () => {
                                             <Badge
                                                 className={`w-[80px] ${
                                                     facilityBookingDetails.status ===
-                                                    DocumentStatus.SoftDeleted
+                                                    DocumentStatusEnum.SoftDeleted
                                                         ? 'bg-orange-500'
                                                         : facilityBookingDetails.status ===
-                                                            DocumentStatus.Active
+                                                            DocumentStatusEnum.Active
                                                           ? 'bg-green-500'
                                                           : 'bg-gray-500' // Default color for other statuses
                                                 } flex justify-center`}
                                             >
                                                 <span>
-                                                    {facilityBookingDetails.status}
+                                                    {
+                                                        DocumentStatusDescriptionEnum[
+                                                            facilityBookingDetails.status
+                                                        ]
+                                                    }
                                                 </span>
                                             </Badge>
                                         </span>

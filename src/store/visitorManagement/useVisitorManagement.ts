@@ -6,7 +6,7 @@ import {
     getVisitors,
 } from '@api/visitorService/visitorService'
 import { GetVisitorByDateDto, GetVisitorDto } from '@dtos/visitor/visitor.dto'
-import { PaginationDirection } from '@config/constant'
+import { PaginationDirectionEnum } from '@config/constant'
 
 interface State {
     visitorDetails: GetVisitorDto
@@ -19,7 +19,7 @@ interface State {
 interface Actions {
     getVisitorDetailsByIdAction: (visitorGuid: string) => Promise<any>
     getVisitorHistoryAction: (
-        direction: PaginationDirection,
+        direction: PaginationDirectionEnum,
         limit: number
     ) => Promise<any>
     resetVisitorHistoryAction: () => void
@@ -46,12 +46,12 @@ export const useVisitorManagement = create<State & Actions>((set, get) => ({
             'Failed to retrieve visitor details. Please try again.'
         )
     },
-    getVisitorHistoryAction: async (direction: PaginationDirection, limit: number) => {
+    getVisitorHistoryAction: async (direction: PaginationDirectionEnum, limit: number) => {
         return generalAction(
             async () => {
                 let response: any
                 const { visitorHistory, currentPage } = get()
-                if (direction === PaginationDirection.Next) {
+                if (direction === PaginationDirectionEnum.Next) {
                     // Pass the last booking ID from the current list for next pagination
                     const lastId =
                         visitorHistory.length > 0

@@ -5,12 +5,12 @@ import {
     GetUserDto,
 } from '@dtos/user-management/userManagement.dto'
 import { handleApiRequest, IResponse } from '../globalHandler'
-import { PaginationDirection } from '@config/constant'
+import { PaginationDirectionEnum } from '@config/constant'
 
 // Function to get a list of users
 export const getUserList = async (
     isActive: boolean,
-    direction: PaginationDirection,
+    direction: PaginationDirectionEnum,
     id: number,
     limit: number
 ): Promise<IResponse<GetUserDto[]>> => {

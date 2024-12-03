@@ -1,6 +1,6 @@
 import { handleApiRequest, IResponse } from '@api/globalHandler'
 import { listUrl } from '@api/listUrl'
-import { PaginationDirection } from '@config/constant'
+import { PaginationDirectionEnum } from '@config/constant'
 import {
     GetVisitorByDateDto,
     GetVisitorDetailsByTokenDto,
@@ -11,7 +11,7 @@ import { getCookies } from '@lib/cookies'
 
 // Get a list of visitors with pagination
 export const getVisitors = async (
-    direction: PaginationDirection,
+    direction: PaginationDirectionEnum,
     id: number,
     limit: number
 ): Promise<IResponse<GetVisitorDto>> => {

@@ -8,7 +8,11 @@ import CustomTable from '@components/table/Table'
 import { useFacility } from '@store/facility/useFacility'
 import { useRouter } from 'nextjs-toploader/app'
 import { Badge } from '@components/ui/badge'
-import { DocumentStatus, ITimeFormat, PaginationDirection } from '@config/constant'
+import {
+    DocumentStatusEnum,
+    ITimeFormat,
+    PaginationDirectionEnum,
+} from '@config/constant'
 import { GetFacilityBookingHistoryDto } from '@dtos/facility/facility.dto'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import {
@@ -17,6 +21,7 @@ import {
     getCurrentDate,
 } from '@lib/time'
 import { tableStyles } from '@screen/style'
+import { FacilityDescriptionEnum } from '@config/constant/facility'
 
 const FacilityBookingManagementPage = () => {
     const {
@@ -67,11 +72,17 @@ const FacilityBookingManagementPage = () => {
             ),
         },
         {
-            accessorKey: 'facilityName',
+            accessorKey: 'facilityId',
             header: () => <div className={tableStyles.headerStyle}>Facility</div>,
             cell: ({ row }) => (
                 <div className={`${tableStyles.dateCellStyle} capitalize`}>
-                    {row.getValue('facilityName') as string}
+                    {
+                        FacilityDescriptionEnum[
+                            row.getValue(
+                                'facilityId'
+                            ) as keyof typeof FacilityDescriptionEnum
+                        ]
+                    }
                 </div>
             ),
         },
@@ -171,20 +182,20 @@ const FacilityBookingManagementPage = () => {
             cell: ({ row }) => {
                 const statusValue = row.getValue('status') as string
 
-                // Function to get status name from DocumentStatus enum
+                // Function to get status name from DocumentStatusEnum enum
                 const getStatusName = (value: string): string => {
                     switch (value) {
-                        case DocumentStatus.Active:
+                        case DocumentStatusEnum.Active:
                             return 'Active'
-                        case DocumentStatus.SoftDeleted:
+                        case DocumentStatusEnum.SoftDeleted:
                             return 'Soft Deleted'
-                        case DocumentStatus.Archived:
+                        case DocumentStatusEnum.Archived:
                             return 'Archived'
-                        case DocumentStatus.Pending:
+                        case DocumentStatusEnum.Pending:
                             return 'Pending'
-                        case DocumentStatus.Draft:
+                        case DocumentStatusEnum.Draft:
                             return 'Draft'
-                        case DocumentStatus.Suspended:
+                        case DocumentStatusEnum.Suspended:
                             return 'Suspended'
                         default:
                             return 'Unknown'
@@ -195,9 +206,9 @@ const FacilityBookingManagementPage = () => {
                         <div className="w-[100px]">
                             <Badge
                                 className={`w-full ${
-                                    statusValue === DocumentStatus.SoftDeleted
+                                    statusValue === DocumentStatusEnum.SoftDeleted
                                         ? 'bg-orange-500'
-                                        : statusValue === DocumentStatus.Active
+                                        : statusValue === DocumentStatusEnum.Active
                                           ? 'bg-green-500'
                                           : 'bg-gray-500' // Default color for other statuses
                                 } flex justify-center`}
@@ -217,7 +228,7 @@ const FacilityBookingManagementPage = () => {
     }, [])
 
     const fetchFacilityBookingHistory = async (
-        direction: PaginationDirection = PaginationDirection.Next
+        direction: PaginationDirectionEnum = PaginationDirectionEnum.Next
     ) => {
         await getFacilityBookingHistoryAction(direction, 10)
     }
@@ -248,10 +259,10 @@ const FacilityBookingManagementPage = () => {
                     totalRecords={totalFacilityBookingHistory}
                     recordsPerPage={10}
                     fetchNext={() => {
-                        fetchFacilityBookingHistory(PaginationDirection.Next)
+                        fetchFacilityBookingHistory(PaginationDirectionEnum.Next)
                     }}
                     fetchPrev={() => {
-                        fetchFacilityBookingHistory(PaginationDirection.Previous)
+                        fetchFacilityBookingHistory(PaginationDirectionEnum.Previous)
                     }}
                 />
             </div>

@@ -9,7 +9,7 @@ import { Checkbox } from '@components/ui/checkbox'
 import CustomTable from '@components/table/Table'
 import { useRouter } from 'nextjs-toploader/app'
 import { Badge } from '@components/ui/badge'
-import { DocumentStatus, ITimeFormat, PaginationDirection } from '@config/constant'
+import { DocumentStatusEnum, ITimeFormat, PaginationDirectionEnum } from '@config/constant'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import { useVisitorManagement } from '@store/visitorManagement/useVisitorManagement'
 import { GetVisitorDto } from '@dtos/visitor/visitor.dto'
@@ -154,20 +154,20 @@ const VisitorManagementPage = () => {
             cell: ({ row }) => {
                 const statusValue = row.getValue('status') as string
 
-                // Function to get status name from DocumentStatus enum
+                // Function to get status name from DocumentStatusEnum enum
                 const getStatusName = (value: string): string => {
                     switch (value) {
-                        case DocumentStatus.Active:
+                        case DocumentStatusEnum.Active:
                             return 'Active'
-                        case DocumentStatus.SoftDeleted:
+                        case DocumentStatusEnum.SoftDeleted:
                             return 'Soft Deleted'
-                        case DocumentStatus.Archived:
+                        case DocumentStatusEnum.Archived:
                             return 'Archived'
-                        case DocumentStatus.Pending:
+                        case DocumentStatusEnum.Pending:
                             return 'Pending'
-                        case DocumentStatus.Draft:
+                        case DocumentStatusEnum.Draft:
                             return 'Draft'
-                        case DocumentStatus.Suspended:
+                        case DocumentStatusEnum.Suspended:
                             return 'Suspended'
                         default:
                             return 'Unknown'
@@ -178,9 +178,9 @@ const VisitorManagementPage = () => {
                         <div className="w-[100px]">
                             <Badge
                                 className={`w-full ${
-                                    statusValue === DocumentStatus.SoftDeleted
+                                    statusValue === DocumentStatusEnum.SoftDeleted
                                         ? 'bg-orange-500'
-                                        : statusValue === DocumentStatus.Active
+                                        : statusValue === DocumentStatusEnum.Active
                                           ? 'bg-green-500'
                                           : 'bg-gray-500' // Default color for other statuses
                                 } flex justify-center`}
@@ -200,7 +200,7 @@ const VisitorManagementPage = () => {
     }, [])
 
     const fetchVisitorHistory = async (
-        direction: PaginationDirection = PaginationDirection.Next
+        direction: PaginationDirectionEnum = PaginationDirectionEnum.Next
     ) => {
         await getVisitorHistoryAction(direction, 10)
     }
@@ -231,10 +231,10 @@ const VisitorManagementPage = () => {
                     totalRecords={totalVisitorHistory}
                     recordsPerPage={10}
                     fetchNext={() => {
-                        fetchVisitorHistory(PaginationDirection.Next)
+                        fetchVisitorHistory(PaginationDirectionEnum.Next)
                     }}
                     fetchPrev={() => {
-                        fetchVisitorHistory(PaginationDirection.Previous)
+                        fetchVisitorHistory(PaginationDirectionEnum.Previous)
                     }}
                 />
             </div>

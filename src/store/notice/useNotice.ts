@@ -15,7 +15,7 @@ import {
     GetNoticeDetailsByIdDto,
     GetNoticeDto,
 } from '@dtos/notice/notice.dto'
-import { PaginationDirection } from '@config/constant'
+import { PaginationDirectionEnum } from '@config/constant'
 
 interface State {
     noticeDetails: GetNoticeDetailsByIdDto
@@ -34,7 +34,7 @@ interface Actions {
     ) => Promise<any>
     deleteNoticeByIdAction: (noticeGuid: string) => Promise<any>
     getNoticeAction: (
-        direction: PaginationDirection,
+        direction: PaginationDirectionEnum,
         limit: number
     ) => Promise<IResponse<any>>
     resetNoticeAction: () => void
@@ -47,12 +47,12 @@ export const useNotice = create<State & Actions>((set, get) => ({
     currentPage: 0,
     totalNotices: 0,
     deletedAttachments: [],
-    getNoticeAction: async (direction: PaginationDirection, limit: number) => {
+    getNoticeAction: async (direction: PaginationDirectionEnum, limit: number) => {
         return generalAction(
             async () => {
                 let response: any
                 const { notices, currentPage } = get()
-                if (direction === PaginationDirection.Next) {
+                if (direction === PaginationDirectionEnum.Next) {
                     // Pass the last booking ID from the current list for next pagination
                     const lastId =
                         notices.length > 0 ? notices[notices.length - 1].noticeId : 0 // If no history, pass 0 or handle accordingly

@@ -9,21 +9,18 @@ import {
     AccordionTrigger,
 } from '@components/ui/accordion'
 import { useNotice } from '@store/notice/useNotice'
-import { ArrowLeft, Download } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { Button } from '@components/ui/button'
 import { Badge } from '@components/ui/badge'
 import {
-    convertDateStringToDate,
     convertDateStringToFormattedString,
-    getCurrentDate,
 } from '@lib/time'
-import { DocumentStatus, ITimeFormat } from '@config/constant'
+import { DocumentStatusDescriptionEnum, DocumentStatusEnum, ITimeFormat } from '@config/constant'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import CustomForm, { CustomField } from '@components/form/element/CustomForm'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
-import { DeleteNoticeDto } from '@dtos/notice/notice.dto'
 import { getGeneralFileDto } from '@lib/file'
 
 const formSchema = z
@@ -263,15 +260,15 @@ const NoticeDetailsPage = () => {
                                             <Badge
                                                 className={`w-[80px] ${
                                                     noticeDetails.status ===
-                                                    DocumentStatus.SoftDeleted
+                                                    DocumentStatusEnum.SoftDeleted
                                                         ? 'bg-orange-500'
                                                         : noticeDetails.status ===
-                                                            DocumentStatus.Active
+                                                            DocumentStatusEnum.Active
                                                           ? 'bg-green-500'
                                                           : 'bg-gray-500' // Default color for other statuses
                                                 } flex justify-center`}
                                             >
-                                                <span>{noticeDetails.status}</span>
+                                                <span>{DocumentStatusDescriptionEnum[noticeDetails.status]}</span>
                                             </Badge>
                                         </span>
                                     </div>

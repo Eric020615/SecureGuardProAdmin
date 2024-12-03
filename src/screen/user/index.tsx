@@ -10,10 +10,10 @@ import { Checkbox } from '@components/ui/checkbox'
 import { ColumnDef, Row } from '@tanstack/react-table'
 import { GetUserDto } from '@dtos/user-management/userManagement.dto'
 import { Button } from '@components/ui/button'
-import { DocumentStatus, PaginationDirection } from '@config/constant'
+import { DocumentStatusEnum, PaginationDirectionEnum } from '@config/constant'
 import { Badge } from '@components/ui/badge'
 import { tableStyles } from '@screen/style'
-import { GenderDescriptionEnum, GenderEnum, RoleDescriptionEnum } from '@config/constant/user'
+import { GenderDescriptionEnum } from '@config/constant/user'
 
 const UserManagementPage = () => {
     const {
@@ -31,7 +31,7 @@ const UserManagementPage = () => {
     }, [])
 
     const fetchUserList = async (
-        direction = PaginationDirection.Next,
+        direction = PaginationDirectionEnum.Next,
         isActive = true
     ) => {
         await getUserListAction(isActive, direction, 10)
@@ -119,7 +119,11 @@ const UserManagementPage = () => {
             header: () => <div className={tableStyles.headerStyle}>Gender</div>,
             cell: ({ row }) => (
                 <div className={`${tableStyles.dateCellStyle} capitalize`}>
-                    {row.getValue('gender')}
+                    {
+                        GenderDescriptionEnum[
+                            row.getValue('gender') as keyof typeof GenderDescriptionEnum
+                        ]
+                    }
                 </div>
             ),
         },
@@ -137,7 +141,11 @@ const UserManagementPage = () => {
             header: () => <div className={tableStyles.headerStyle}>Role</div>,
             cell: ({ row }) => (
                 <div className={`${tableStyles.dateCellStyle} capitalize`}>
-                    {row.getValue('role')}
+                    {
+                        GenderDescriptionEnum[
+                            row.getValue('role') as keyof typeof GenderDescriptionEnum
+                        ]
+                    }
                 </div>
             ),
         },
@@ -150,11 +158,9 @@ const UserManagementPage = () => {
                     <div className={tableStyles.dateCellStyle}>
                         <Badge
                             className={`w-full ${
-                                statusValue === DocumentStatus.SoftDeleted
-                                    ? tableStyles.badgeColor.softDeleted
-                                    : statusValue === DocumentStatus.Active
-                                      ? tableStyles.badgeColor.active
-                                      : tableStyles.badgeColor.default
+                                statusValue === 'Active'
+                                    ? tableStyles.badgeColor.active
+                                    : tableStyles.badgeColor.default
                             } flex justify-center`}
                         >
                             <span>{statusValue}</span>
@@ -175,7 +181,7 @@ const UserManagementPage = () => {
                     defaultValue="active"
                     onValueChange={(value) => {
                         resetUserListAction()
-                        fetchUserList(PaginationDirection.Next, value === 'active')
+                        fetchUserList(PaginationDirectionEnum.Next, value === 'active')
                     }}
                 >
                     <TabsList>
@@ -193,9 +199,11 @@ const UserManagementPage = () => {
                                 currentPage={currentPage}
                                 totalRecords={totalUserList}
                                 recordsPerPage={10}
-                                fetchNext={() => fetchUserList(PaginationDirection.Next)}
+                                fetchNext={() =>
+                                    fetchUserList(PaginationDirectionEnum.Next)
+                                }
                                 fetchPrev={() =>
-                                    fetchUserList(PaginationDirection.Previous)
+                                    fetchUserList(PaginationDirectionEnum.Previous)
                                 }
                             />
                         </div>
@@ -212,10 +220,10 @@ const UserManagementPage = () => {
                                 totalRecords={totalUserList}
                                 recordsPerPage={10}
                                 fetchNext={() =>
-                                    fetchUserList(PaginationDirection.Next, false)
+                                    fetchUserList(PaginationDirectionEnum.Next, false)
                                 }
                                 fetchPrev={() =>
-                                    fetchUserList(PaginationDirection.Previous, false)
+                                    fetchUserList(PaginationDirectionEnum.Previous, false)
                                 }
                             />
                         </div>

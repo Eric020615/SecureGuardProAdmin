@@ -7,7 +7,7 @@ import {
     GetNoticeDetailsByIdDto,
 } from '@dtos/notice/notice.dto'
 import { handleApiRequest, IResponse } from '../globalHandler'
-import { PaginationDirection } from '@config/constant'
+import { PaginationDirectionEnum } from '@config/constant'
 
 // Function to create a notice
 export const createNotice = async (notice: CreateNoticeDto): Promise<IResponse<any>> => {
@@ -23,7 +23,7 @@ export const createNotice = async (notice: CreateNoticeDto): Promise<IResponse<a
 
 // Function to get a list of notices
 export const getNoticeList = async (
-    direction: PaginationDirection,
+    direction: PaginationDirectionEnum,
     id: number,
     limit: number
 ): Promise<IResponse<GetNoticeDto[] | null>> => {

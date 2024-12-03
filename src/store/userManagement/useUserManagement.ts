@@ -12,7 +12,7 @@ import {
     GetUserDetailsByUserGuidDto,
     GetUserDto,
 } from '@dtos/user-management/userManagement.dto'
-import { PaginationDirection } from '@config/constant'
+import { PaginationDirectionEnum } from '@config/constant'
 
 interface State {
     userDetails: GetUserDetailsByUserGuidDto
@@ -24,7 +24,7 @@ interface State {
 interface Actions {
     getUserListAction: (
         isActive: boolean,
-        direction: PaginationDirection,
+        direction: PaginationDirectionEnum,
         limit: number
     ) => Promise<IResponse<any>>
     resetUserListAction: () => void
@@ -43,14 +43,14 @@ export const useUserManagement = create<State & Actions>((set, get) => ({
     totalUserList: 0,
     getUserListAction: async (
         isActive: boolean,
-        direction: PaginationDirection,
+        direction: PaginationDirectionEnum,
         limit: number
     ) => {
         return generalAction(
             async () => {
                 let response: any
                 const { userList, currentPage } = get()
-                if (direction === PaginationDirection.Next) {
+                if (direction === PaginationDirectionEnum.Next) {
                     // Pass the last booking ID from the current list for next pagination
                     const lastId =
                         userList.length > 0 ? userList[userList.length - 1].userId : 0 // If no history, pass 0 or handle accordingly

@@ -6,7 +6,7 @@ import { z } from 'zod'
 import { useRouter } from 'nextjs-toploader/app'
 import React, { useEffect } from 'react'
 import {
-    FacilitySelect,
+    FacilityOptions,
     DurationOptions,
     NumOfGuestOptions,
 } from '@config/listOption/facility'
@@ -16,7 +16,7 @@ import { convertDateStringToFormattedString } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
 import CustomForm, { CustomField } from '@components/form/element/CustomForm'
 import moment from 'moment'
-import { FacilityEnum } from '@config/constant/facility'
+import { FacilityDescriptionEnum } from '@config/constant/facility'
 
 const formSchema = z.object({
     user: z.string().min(1, {
@@ -60,7 +60,7 @@ const CreateBookingPage = () => {
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         const response = await submitBookingAction({
-            facilityId: values.facilityId as keyof typeof FacilityEnum,
+            facilityId: values.facilityId as keyof typeof FacilityDescriptionEnum,
             bookedBy: values.user,
             startDate: convertDateStringToFormattedString(
                 values.startDate,
@@ -123,7 +123,7 @@ const CreateBookingPage = () => {
         facilityId: {
             type: 'select',
             label: 'Facility',
-            options: FacilitySelect.map((item) => ({
+            options: FacilityOptions.map((item) => ({
                 label: item.label,
                 value: item.value,
             })),

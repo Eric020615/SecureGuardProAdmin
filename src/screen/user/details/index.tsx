@@ -8,7 +8,7 @@ import {
 import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
 import { ITimeFormat } from '@config/constant'
-import { GenderConst, GenderDescriptionEnum, RoleDescriptionEnum, RoleEnum } from '@config/constant/user'
+import { RoleEnum } from '@config/constant/user'
 import {
     ResidentInformationDto,
     StaffInformationDto,

@@ -1,20 +1,20 @@
-import { FacilityEnum } from '@config/constant/facility'
+import { FacilityDescriptionEnum } from '@config/constant/facility'
 
-export const FacilitySelect: {
-    value: keyof typeof FacilityEnum
-    label: string
+export const FacilityOptions: {
+    value: keyof typeof FacilityDescriptionEnum
+    label: FacilityDescriptionEnum
 }[] = [
     {
         value: 'BC',
-        label: 'Badminton Court',
+        label: FacilityDescriptionEnum.BC,
     },
     {
         value: 'BBC',
-        label: 'Basketball Court',
+        label: FacilityDescriptionEnum.BBC,
     },
     {
         value: 'GR',
-        label: 'Gym Room',
+        label: FacilityDescriptionEnum.GR,
     },
 ]
 

@@ -1,3 +1,4 @@
+import { DocumentStatusDescriptionEnum } from "@config/constant"
 import { GeneralFileDto, GeneralFileResponseDto } from "@dtos/application/application.dto"
 
 export interface CreateNoticeDto {
@@ -28,7 +29,7 @@ export interface GetNoticeDto {
     description: string
     startDate: string
     endDate: string
-    status: string
+    status: keyof typeof DocumentStatusDescriptionEnum
 }
 
 export interface GetNoticeDetailsByIdDto {
@@ -38,7 +39,7 @@ export interface GetNoticeDetailsByIdDto {
     description: string
     startDate: string
     endDate: string
-    status: string
+    status: keyof typeof DocumentStatusDescriptionEnum
     attachments: GeneralFileResponseDto[]
     createdBy: string
     createdDateTime: string
