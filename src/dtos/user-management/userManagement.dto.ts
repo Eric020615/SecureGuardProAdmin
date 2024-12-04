@@ -22,8 +22,8 @@ export interface GetUserDetailsByUserGuidDto {
     userName: string
     email: string
     contactNumber: string
-    gender: string
-    role: string
+    gender: keyof typeof GenderDescriptionEnum
+    role: keyof typeof RoleDescriptionEnum
     roleInformation: ResidentInformationDto | StaffInformationDto
     dateOfBirth: string
     isActive: boolean

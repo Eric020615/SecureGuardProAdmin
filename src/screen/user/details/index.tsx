@@ -8,7 +8,11 @@ import {
 import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
 import { ITimeFormat } from '@config/constant'
-import { RoleEnum } from '@config/constant/user'
+import {
+    GenderDescriptionEnum,
+    RoleDescriptionEnum,
+    RoleEnum,
+} from '@config/constant/user'
 import {
     ResidentInformationDto,
     StaffInformationDto,
@@ -222,7 +226,7 @@ const UserDetailsPage = () => {
                                             Gender:
                                         </span>
                                         <span className="text-sm">
-                                            {userDetails.gender}
+                                            {GenderDescriptionEnum[userDetails.gender]}
                                         </span>
                                     </div>
                                     <div className="flex flex-col gap-1">
@@ -250,9 +254,7 @@ const UserDetailsPage = () => {
                                             Role:
                                         </span>
                                         <span className="text-sm">
-                                            {
-                                                userDetails.role
-                                            }
+                                            {RoleDescriptionEnum[userDetails.role]}
                                         </span>
                                     </div>
                                     {userDetails.roleInformation &&
