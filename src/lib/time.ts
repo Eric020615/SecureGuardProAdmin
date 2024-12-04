@@ -1,7 +1,10 @@
 import moment from 'moment-timezone'
 
 // Convert a DateTimeOffset string to a Date object
-export const convertDateStringToDate = (dateString: string) => {
+export const convertDateStringToDate = (dateString: string, isUTC = true) => {
+    if (!isUTC) {
+        return moment(dateString).toDate()
+    }
     return moment.parseZone(dateString).toDate()
 }
 
@@ -22,7 +25,7 @@ export const convertDateStringToFormattedString = (
 
 // Get the current date as a Date object
 export const getCurrentDate = () => {
-    return new Date()
+    return moment().toDate()
 }
 
 // Get the current date as a formatted DateTimeOffset string

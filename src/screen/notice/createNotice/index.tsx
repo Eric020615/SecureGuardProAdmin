@@ -8,12 +8,19 @@ import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialo
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { getGeneralFileDto } from '@lib/file'
+import { convertDateStringToDate, getCurrentDate } from '@lib/time'
 
 const formSchema = z
     .object({
         title: z.string().min(1, { message: 'Notice title is required' }),
         description: z.string().min(1, { message: 'Notice description is required' }),
-        startDate: z.string().min(1, { message: 'Start Date is required' }),
+        startDate: z
+            .string()
+            .min(1, { message: 'Start Date is required' })
+            .refine(
+                (date) => convertDateStringToDate(date, false) >= getCurrentDate(),
+                { message: 'Start Date must be today or later' }
+            ),
         endDate: z.string().min(1, { message: 'End Date is required' }),
         attachments: z.array(z.any()),
     })

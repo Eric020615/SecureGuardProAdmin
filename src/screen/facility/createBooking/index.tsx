@@ -12,7 +12,7 @@ import {
 } from '@config/listOption/facility'
 import { useFacility } from '@store/facility/useFacility'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
-import { convertDateStringToFormattedString } from '@lib/time'
+import { convertDateStringToDate, convertDateStringToFormattedString, getCurrentDate } from '@lib/time'
 import { ITimeFormat } from '@config/constant'
 import CustomForm, { CustomField } from '@components/form/element/CustomForm'
 import moment from 'moment'
@@ -25,9 +25,13 @@ const formSchema = z.object({
     facilityId: z.string().min(1, {
         message: 'Facility is required to be selected',
     }),
-    startDate: z.string().min(1, {
-        message: 'Start date must be in the future',
-    }),
+    startDate: z
+            .string()
+            .min(1, { message: 'Start Date is required' })
+            .refine(
+                (date) => convertDateStringToDate(date, false) >= getCurrentDate(),
+                { message: 'Start Date must be today or later' }
+            ),
     duration: z.string().min(1, {
         message: 'Duration is required',
     }),
