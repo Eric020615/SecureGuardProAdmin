@@ -10,6 +10,7 @@ export const middleware = async (request: NextRequest) => {
             path.startsWith('/403') ||
             path.startsWith('/sign-in') ||
             path.startsWith('/sign-up') ||
+            path.startsWith('/reset-password') ||
             path.startsWith('/user-information') ||
             path.startsWith('/sub-user') ||
             path.startsWith('/visitor/access-pass')
