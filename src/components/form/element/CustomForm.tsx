@@ -23,6 +23,7 @@ export interface CustomField {
     options?: any // For select input options
     uploadedFiles?: GeneralFileResponseDto[]
     handleDeleteFile?: (fileGuid: string) => void
+    testId?: string
 }
 
 interface CustomFormProps {
@@ -81,6 +82,7 @@ const CustomForm: React.FC<CustomFormProps> = ({ form, fields, onSubmit }) => {
             case 'text':
                 return (
                     <FormField
+                        data-testid={fieldType.testId}
                         control={form.control}
                         name={key}
                         render={({ field }) => (
@@ -101,6 +103,7 @@ const CustomForm: React.FC<CustomFormProps> = ({ form, fields, onSubmit }) => {
             case 'phone':
                 return (
                     <FormField
+                        data-testid={fieldType.testId}
                         control={form.control}
                         name={key}
                         render={({ field: { onChange, value } }) => (
@@ -123,6 +126,7 @@ const CustomForm: React.FC<CustomFormProps> = ({ form, fields, onSubmit }) => {
             case 'select':
                 return (
                     <FormField
+                        data-testid={fieldType.testId}
                         control={form.control}
                         name={key}
                         render={({ field: { onChange, value } }) => (
@@ -145,6 +149,7 @@ const CustomForm: React.FC<CustomFormProps> = ({ form, fields, onSubmit }) => {
             case 'date':
                 return (
                     <FormField
+                        data-testid={fieldType.testId}
                         control={form.control}
                         name={key}
                         render={({ field }) => (
@@ -161,6 +166,7 @@ const CustomForm: React.FC<CustomFormProps> = ({ form, fields, onSubmit }) => {
             case 'datetime':
                 return (
                     <FormField
+                        data-testid={fieldType.testId}
                         control={form.control}
                         name={key}
                         render={({ field }) => (
@@ -182,6 +188,7 @@ const CustomForm: React.FC<CustomFormProps> = ({ form, fields, onSubmit }) => {
                 const [showPassword, setShowPassword] = useState(false)
                 return (
                     <FormField
+                        data-testid={fieldType.testId}
                         control={form.control}
                         name={key}
                         render={({ field }) => (
@@ -218,6 +225,7 @@ const CustomForm: React.FC<CustomFormProps> = ({ form, fields, onSubmit }) => {
             case 'file':
                 return (
                     <FormField
+                        data-testid={fieldType.testId}
                         control={form.control}
                         name={key}
                         render={({ field: { onChange, value } }) => (
@@ -265,8 +273,7 @@ const CustomForm: React.FC<CustomFormProps> = ({ form, fields, onSubmit }) => {
                                                         )}
                                                     </ul>
                                                 </aside>
-                                            )
-                                        }
+                                            )}
                                     </>
                                 </FormControl>
                                 <FormMessage />
@@ -285,7 +292,7 @@ const CustomForm: React.FC<CustomFormProps> = ({ form, fields, onSubmit }) => {
                 {Object.entries(fields).map(([key, fieldType]) => (
                     <div key={key}>{renderField(key, fieldType)}</div>
                 ))}
-                <Button type="submit" className="w-[30%]">
+                <Button type="submit" className="w-[30%]" data-testid="submit-button">
                     Submit
                 </Button>
             </form>

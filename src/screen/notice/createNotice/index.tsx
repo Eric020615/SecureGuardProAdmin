@@ -17,10 +17,9 @@ const formSchema = z
         startDate: z
             .string()
             .min(1, { message: 'Start Date is required' })
-            .refine(
-                (date) => convertDateStringToDate(date, false) >= getCurrentDate(),
-                { message: 'Start Date must be today or later' }
-            ),
+            .refine((date) => convertDateStringToDate(date, false) >= getCurrentDate(), {
+                message: 'Start Date must be today or later',
+            }),
         endDate: z.string().min(1, { message: 'End Date is required' }),
         attachments: z.array(z.any()),
     })
@@ -43,28 +42,42 @@ const CreateNoticePage = () => {
         },
     })
     const fields: Record<string, CustomField> = {
-        title: { type: 'text', label: 'Title' },
-        description: { type: 'text', label: 'Description' },
-        startDate: { type: 'datetime', label: 'Start Date' },
-        endDate: { type: 'datetime', label: 'End Date' },
-        attachments: { type: 'file', label: 'Attachments' },
+        title: { type: 'text', label: 'Title', testId: 'title-form-field' },
+        description: {
+            type: 'text',
+            label: 'Description',
+            testId: 'description-form-field',
+        },
+        startDate: {
+            type: 'datetime',
+            label: 'Start Date',
+            testId: 'start-date-form-field',
+        },
+        endDate: { type: 'datetime', label: 'End Date', testId: 'end-date-form-field' },
+        attachments: {
+            type: 'file',
+            label: 'Attachments',
+            testId: 'attachments-form-field',
+        },
     }
     const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-        await createNoticeAction({
-            title: values.title,
-            description: values.description,
-            startDate: values.startDate,
-            endDate: values.endDate,
-            attachments:
-                values.attachments.length > 0
-                    ? await Promise.all(
-                          values.attachments.map(async (file) => {
-                              const generalFile = await getGeneralFileDto(file)
-                              return generalFile
-                          })
-                      )
-                    : [],
-        })
+        try {
+            const attachments = await Promise.all(
+                values.attachments.map(async (file) => {
+                    const generalFile = await getGeneralFileDto(file)
+                    return generalFile
+                })
+            )
+            await createNoticeAction({
+                title: values.title,
+                description: values.description,
+                startDate: values.startDate,
+                endDate: values.endDate,
+                attachments: attachments,
+            })
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     return (
