@@ -101,7 +101,7 @@ const CustomTable = ({
                 </TableHeader>
                 <TableBody>
                     {data?.length > 0 ? (
-                        table.getRowModel().rows.map((row) => (
+                        table.getRowModel().rows.map((row, index) => (
                             <TableRow
                                 key={row.id}
                                 data-state={row.getIsSelected() && 'selected'}
@@ -109,6 +109,7 @@ const CustomTable = ({
                                     onView(row)
                                 }}
                                 className="cursor-pointer"
+                                data-testid={`table-row-${index}`}
                             >
                                 {row.getVisibleCells().map((cell) => (
                                     <TableCell key={cell.id}>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { act, fireEvent, render, waitFor } from '@testing-library/react'
+import { act, fireEvent, render } from '@testing-library/react'
 import UserManagementPage from '.'
 import { getUserList } from '@api/userManagementService/userManagementService'
 
@@ -80,9 +80,7 @@ describe('User Management', () => {
     it('verify inactive user button', async () => {
         const { triggerInactiveUserButton } = await setup()
         await triggerInactiveUserButton()
-        await waitFor(() => {
-            expect(getUserList).toHaveBeenCalled()
-            expect(getUserList).toHaveBeenCalledWith(false, 'next', 0, 10)
-        })
+        expect(getUserList).toHaveBeenCalled()
+        expect(getUserList).toHaveBeenCalledWith(false, 'next', 0, 10)
     })
 })
