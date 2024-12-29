@@ -92,6 +92,7 @@ const DashboardPage = () => {
                             onClick={() => {
                                 filterData()
                             }}
+                            data-testid="filter-button"
                         >
                             <p className="flex items-center text-center">Filter</p>
                         </Button>

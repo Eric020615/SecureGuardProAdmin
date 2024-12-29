@@ -29,6 +29,7 @@ const CustomDatePicker = ({
                         'w-full justify-start text-left font-normal',
                         !selectedDate && 'text-muted-foreground'
                     )}
+                    data-testid={`date-picker-button-${title.replace(/\s/g, '-').toLowerCase()}`}
                 >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {selectedDate ? format(selectedDate, 'PPP') : <span>{title}</span>}
@@ -40,6 +41,7 @@ const CustomDatePicker = ({
                     selected={selectedDate}
                     onSelect={setSelectedDate}
                     initialFocus
+                    data-testid={`date-picker-${title.replace(/\s/g, '-').toLowerCase()}`}
                 />
             </PopoverContent>
         </Popover>
