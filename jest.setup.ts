@@ -14,3 +14,9 @@ jest.mock('next/navigation', () => ({
         }
     },
 }))
+
+jest.mock('nextjs-toploader/app', () => ({
+    useRouter() {
+        
+    }
+}))
