@@ -5,10 +5,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useUser } from '@store/user/useUser'
 import Avatar from 'react-avatar'
-import {
-    GenderDescriptionEnum,
-    RoleDescriptionEnum,
-} from '@config/constant/user'
+import { GenderDescriptionEnum, RoleDescriptionEnum } from '@config/constant/user'
 import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
 import { Edit } from 'lucide-react'
@@ -96,23 +93,33 @@ const MyProfilePage = () => {
     }
 
     useEffect(() => {
-        form.setValue('firstName', userProfile?.firstName ? userProfile.firstName : '')
-        form.setValue('lastName', userProfile?.lastName ? userProfile.lastName : '')
-        form.setValue('userName', userProfile?.userName ? userProfile.userName : '')
-        form.setValue(
-            'phoneNumber',
-            userProfile?.contactNumber ? userProfile.contactNumber : ''
-        )
-        form.setValue('gender', userProfile?.gender ? userProfile.gender : '')
-        form.setValue(
-            'dateOfBirth',
-            userProfile?.dateOfBirth
-                ? convertDateStringToFormattedString(
-                      userProfile.dateOfBirth,
-                      ITimeFormat.date
-                  )
-                : ''
-        )
+        if (userProfile) {
+            form.setValue(
+                'firstName',
+                userProfile?.firstName ? userProfile.firstName : ''
+            )
+            form.setValue('lastName', userProfile?.lastName ? userProfile.lastName : '')
+            form.setValue('userName', userProfile?.userName ? userProfile.userName : '')
+            form.setValue(
+                'phoneNumber',
+                userProfile?.contactNumber ? userProfile.contactNumber : ''
+            )
+            form.setValue(
+                'gender',
+                userProfile?.gender
+                    ? (userProfile.gender as keyof typeof GenderDescriptionEnum)
+                    : 'M'
+            )
+            form.setValue(
+                'dateOfBirth',
+                userProfile?.dateOfBirth
+                    ? convertDateStringToFormattedString(
+                          userProfile.dateOfBirth,
+                          ITimeFormat.date
+                      )
+                    : ''
+            )
+        }
     }, [userProfile && pageMode === 'edit'])
 
     return (

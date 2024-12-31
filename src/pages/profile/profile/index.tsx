@@ -36,15 +36,6 @@ const ProfilePage = () => {
                                         Security
                                     </Link>
                                 </li>
-                                <li>
-                                    <Link
-                                        href="#"
-                                        className={`py-2 px-4 block rounded ${activeTab === 'settings' ? 'bg-primary text-white' : 'text-gray-700'}`}
-                                        onClick={() => setActiveTab('settings')}
-                                    >
-                                        Other Settings
-                                    </Link>
-                                </li>
                             </ul>
                         </nav>
                     </div>
@@ -56,14 +47,11 @@ const ProfilePage = () => {
                                 ? 'My Profile'
                                 : activeTab === 'security'
                                   ? 'Security'
-                                  : 'Other Settings'}
+                                  : ''}
                         </p>
                         <div className="mt-3">
                             {activeTab === 'profile' && <MyProfilePage />}
                             {activeTab === 'security' && <SecurityPage />}
-                            {activeTab === 'settings' && (
-                                <div>Other settings form or details here</div>
-                            )}
                         </div>
                     </div>
                 </div>
