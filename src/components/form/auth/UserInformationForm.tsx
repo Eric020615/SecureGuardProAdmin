@@ -53,7 +53,7 @@ const UserInformationForm = () => {
     })
 
     const onSubmit = async (values: z.infer<typeof userInformationSchema>) => {
-        const response = await createUserAction(
+        await createUserAction(
             {
                 firstName: values.firstName,
                 lastName: values.lastName,

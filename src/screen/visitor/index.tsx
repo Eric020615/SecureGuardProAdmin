@@ -2,7 +2,6 @@
 
 import { Button } from '@components/ui/button'
 import React, { useEffect } from 'react'
-import { RiAddBoxLine } from 'react-icons/ri'
 import { ColumnDef, Row } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
 import { Checkbox } from '@components/ui/checkbox'

@@ -17,10 +17,9 @@ const formSchema = z
         startDate: z
             .string()
             .min(1, { message: 'Start Date is required' })
-            .refine(
-                (date) => convertDateStringToDate(date, false) >= getCurrentDate(),
-                { message: 'Start Date must be today or later' }
-            ),
+            .refine((date) => convertDateStringToDate(date, false) >= getCurrentDate(), {
+                message: 'Start Date must be today or later',
+            }),
         endDate: z.string().min(1, { message: 'End Date is required' }),
         attachments: z.array(z.any()),
     })
@@ -50,20 +49,18 @@ const CreateNoticePage = () => {
         attachments: { type: 'file', label: 'Attachments' },
     }
     const handleSubmit = async (values: z.infer<typeof formSchema>) => {
+        const attachments = await Promise.all(
+            values.attachments.map(async (file) => {
+                const generalFile = await getGeneralFileDto(file)
+                return generalFile
+            })
+        )
         await createNoticeAction({
             title: values.title,
             description: values.description,
             startDate: values.startDate,
             endDate: values.endDate,
-            attachments:
-                values.attachments.length > 0
-                    ? await Promise.all(
-                          values.attachments.map(async (file) => {
-                              const generalFile = await getGeneralFileDto(file)
-                              return generalFile
-                          })
-                      )
-                    : [],
+            attachments: attachments,
         })
     }
 
