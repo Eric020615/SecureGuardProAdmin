@@ -54,3 +54,15 @@ export const initializeDateAtBoundary = (
         ? moment(date).startOf('day').toDate()
         : moment(date).endOf('day').toDate()
 }
+
+// Get a dynamic date boundary (e.g., first/last day of month/year)
+export const getDateAtBoundary = (
+    date: Date,
+    type: 'month' | 'year',
+    boundary: 'start' | 'end' = 'start'
+): Date => {
+    // Return the first or last day of the given month or year
+    return boundary === 'start'
+        ? moment(date).startOf(type).toDate()
+        : moment(date).endOf(type).toDate()
+}

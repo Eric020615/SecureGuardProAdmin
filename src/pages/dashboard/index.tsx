@@ -10,19 +10,25 @@ import {
     convertDateStringToFormattedString,
     convertDateToDateString,
     getCurrentDate,
-    getCurrentDateString,
+    getDateAtBoundary,
     initializeDateAtBoundary,
 } from '@lib/time'
 import { useAuth } from '@store/auth/useAuth'
 import { useVisitorManagement } from '@store/visitorManagement/useVisitorManagement'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { CSVLink } from 'react-csv'
 
 const DashboardPage = () => {
-    const [startDate, setStartDate] = useState<Date | undefined>(getCurrentDate())
+    const [startDate, setStartDate] = useState<Date | undefined>(
+        getDateAtBoundary(getCurrentDate(), 'month', 'start')
+    )
     const [endDate, setEndDate] = useState<Date | undefined>(getCurrentDate())
     const { visitorAnalytics, getVisitorAnalyticsAction } = useVisitorManagement()
     const { authTokenPayload } = useAuth()
+
+    useEffect(() => {
+        filterData()
+    }, [startDate, endDate])
 
     // Function to handle date validation and filtering
     const filterData = async () => {
@@ -58,8 +64,19 @@ const DashboardPage = () => {
         ]),
     ]
 
+    const generateFileName = () => {
+        if (!startDate || !endDate) {
+            alert('Please select a date range to export the data')
+            return
+        }
+        return `visitor_trends_${convertDateToDateString(
+            startDate,
+            ITimeFormat.date
+        )}_to_${convertDateToDateString(endDate, ITimeFormat.date)}.csv`
+    }
+
     return (
-        <>
+        <div className="max-h-screen">
             <ActionConfirmationDialog />
             <div className="flex flex-row justify-between">
                 <h3 className="text-3xl font-bold text-black">Dashboard</h3>
@@ -67,7 +84,7 @@ const DashboardPage = () => {
                     <Button className="flex items-center gap-1" onClick={() => {}}>
                         <CSVLink
                             data={csvData}
-                            filename={`visitor_trends_${getCurrentDateString(ITimeFormat.date)}.csv`}
+                            filename={generateFileName()}
                         >
                             Export as CSV
                         </CSVLink>
@@ -87,16 +104,8 @@ const DashboardPage = () => {
                             selectedDate={endDate}
                             setSelectedDate={setEndDate}
                         />
-                        <Button
-                            className="flex items-center gap-1"
-                            onClick={() => {
-                                filterData()
-                            }}
-                        >
-                            <p className="flex items-center text-center">Filter</p>
-                        </Button>
                     </div>
-                    <div className="flex-grow flex justify-center items-center bg-white p-5 rounded-lg shadow-md mt-5">
+                    <div className="flex-1 flex justify-center items-center bg-white p-5 rounded-lg shadow-md mt-5">
                         <LineChart
                             labels={chartLabels}
                             dataPoints={chartDataPoints}
@@ -105,7 +114,7 @@ const DashboardPage = () => {
                     </div>
                 </>
             )}
-        </>
+        </div>
     )
 }
 
