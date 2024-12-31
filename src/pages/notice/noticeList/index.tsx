@@ -14,7 +14,7 @@ import { GetNoticeDto } from '@dtos/notice/notice.dto'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import { convertDateStringToFormattedString } from '@lib/time'
 import { Badge } from '@components/ui/badge'
-import { tableStyles } from '@screen/style'
+import { tableStyles } from '@pages/style'
 
 const NoticeManagementPage = () => {
     const columns: ColumnDef<GetNoticeDto>[] = [

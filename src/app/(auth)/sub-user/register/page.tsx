@@ -1,4 +1,4 @@
-import SubUserRegistrationPage from '@screen/auth/sub-user/register'
+import SubUserRegistrationPage from '@pages/auth/sub-user/register'
 import React from 'react'
 
 const SubUserRegistration = () => {

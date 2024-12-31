@@ -20,7 +20,7 @@
     "paths": {
       // "@/*": ["./*"],
       "@components/*": ["./src/components/*"],
-      "@screen/*": ["./src/screen/*"],
+      "@pages/*": ["./src/pages/*"],
       "@lib/*": ["./src/lib/*"],
       "@api/*": ["./src/api/*"],
       "@config/*": ["./src/config/*"],

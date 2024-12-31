@@ -1,6 +1,6 @@
 "use client"
 
-import UserDetailsPage from '@screen/user/details';
+import UserDetailsPage from '@pages/user/details';
 import React from 'react'
 
 const UserDetails = () => {

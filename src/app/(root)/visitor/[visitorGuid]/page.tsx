@@ -1,4 +1,4 @@
-import VisitorDetailsPage from '@screen/visitor/details'
+import VisitorDetailsPage from '@pages/visitor/details'
 import React from 'react'
 
 const VisitorDetails = () => {

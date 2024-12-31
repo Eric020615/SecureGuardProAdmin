@@ -1,6 +1,6 @@
 "use client"
 
-import NoticeManagementPage from '@screen/notice'
+import NoticeManagementPage from '@pages/notice/noticeList'
 import React from 'react'
 
 const NoticeManagement = () => {

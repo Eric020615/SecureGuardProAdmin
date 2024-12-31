@@ -20,7 +20,7 @@ import {
     convertDateStringToFormattedString,
     getCurrentDate,
 } from '@lib/time'
-import { tableStyles } from '@screen/style'
+import { tableStyles } from '@pages/style'
 import { FacilityDescriptionEnum } from '@config/constant/facility'
 
 const FacilityBookingManagementPage = () => {

@@ -1,5 +1,5 @@
 "use client"
-import SignInPage from '@screen/auth/sign-in'
+import SignInPage from '@pages/auth/sign-in'
 
 const SignIn = () => {
   return (

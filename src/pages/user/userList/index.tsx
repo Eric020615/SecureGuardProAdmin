@@ -12,7 +12,7 @@ import { GetUserDto } from '@dtos/user-management/userManagement.dto'
 import { Button } from '@components/ui/button'
 import { PaginationDirectionEnum } from '@config/constant'
 import { Badge } from '@components/ui/badge'
-import { tableStyles } from '@screen/style'
+import { tableStyles } from '@pages/style'
 import { GenderDescriptionEnum, RoleDescriptionEnum } from '@config/constant/user'
 
 const UserManagementPage = () => {

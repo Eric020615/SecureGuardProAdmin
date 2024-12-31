@@ -1,4 +1,4 @@
-import NoticeDetailsPage from '@screen/notice/details'
+import NoticeDetailsPage from '@pages/notice/details'
 import React from 'react'
 
 const NoticeDetails = () => {

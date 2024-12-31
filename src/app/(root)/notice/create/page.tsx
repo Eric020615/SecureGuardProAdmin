@@ -1,6 +1,6 @@
 "use client"
 
-import CreateNoticePage from '@screen/notice/createNotice'
+import CreateNoticePage from '@pages/notice/createNotice'
 import React from 'react'
 
 const CreateNotice = () => {

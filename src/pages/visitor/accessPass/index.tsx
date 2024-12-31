@@ -11,7 +11,7 @@ import QRCode from 'react-qr-code'
 const VisitorPassDetailsPage = () => {
     const { visitorPassDetails, getVisitorPassDetailsAction } = useVisitor()
     const tokenParams = useSearchParams()
-    const token = tokenParams.get('token')
+    const token = tokenParams?.get('token')
 
     const getVisitorPassDetails = async () => {
         await getVisitorPassDetailsAction(token as string)

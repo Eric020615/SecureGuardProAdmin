@@ -1,5 +1,5 @@
 "use client"
-import CreateBookingPage from '@screen/facility/createBooking'
+import CreateBookingPage from '@pages/facility/createBooking'
 import React from 'react'
 
 const CreateFacility = () => {

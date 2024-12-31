@@ -1,4 +1,4 @@
-import VisitorCheckInPage from '@screen/visitor/check-in'
+import VisitorCheckInPage from '@pages/visitor/checkIn'
 import React from 'react'
 
 const VisitorCheckIn = () => {

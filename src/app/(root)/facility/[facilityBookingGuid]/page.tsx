@@ -1,4 +1,4 @@
-import FacilityBookingDetailsPage from '@screen/facility/details'
+import FacilityBookingDetailsPage from '@pages/facility/details'
 import React from 'react'
 
 const FacilityBookingDetails = () => {

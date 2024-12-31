@@ -1,8 +1,8 @@
 'use client'
 import Link from 'next/link'
 import React, { useState } from 'react'
-import MyProfilePage from './myProfile'
-import SecurityPage from './security'
+import MyProfilePage from '../myProfile'
+import SecurityPage from '../security'
 
 const ProfilePage = () => {
     const [activeTab, setActiveTab] = useState('profile')
