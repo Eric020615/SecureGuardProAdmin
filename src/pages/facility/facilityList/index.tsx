@@ -19,7 +19,7 @@ import {
     convertDateStringToDate,
     convertDateStringToFormattedString,
     getCurrentDate,
-} from '@lib/time'
+} from '@libs/time'
 import { tableStyles } from '@pages/style'
 import { FacilityDescriptionEnum } from '@config/constant/facility'
 

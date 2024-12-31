@@ -1,10 +1,10 @@
-import { getCookies } from '@lib/cookies'
-import { listUrl } from '../listUrl'
+import { getCookies } from '@libs/cookies'
+import { listUrl } from '@api/listUrl'
 import {
     GetUserDetailsByUserGuidDto,
     GetUserDto,
 } from '@dtos/user-management/userManagement.dto'
-import { handleApiRequest, IResponse } from '../globalHandler'
+import { handleApiRequest, IResponse } from '@api/globalHandler'
 import { PaginationDirectionEnum } from '@config/constant'
 
 // Function to get a list of users

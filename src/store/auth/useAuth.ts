@@ -18,7 +18,7 @@ import {
 } from '@dtos/auth/auth.dto'
 import { IResponse } from '@api/globalHandler'
 import { RoleEnum } from '@config/constant/user'
-import { deleteCookies } from '@lib/cookies'
+import { deleteCookies } from '@libs/cookies'
 
 interface State {
     isLogged: boolean

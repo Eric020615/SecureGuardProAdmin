@@ -12,7 +12,7 @@ import {
     GetCardByUserDto,
 } from '@dtos/card/card.dto'
 import { IResponse } from '@api/globalHandler'
-import { deleteCookies, setCookies } from '@lib/cookies'
+import { deleteCookies, setCookies } from '@libs/cookies'
 
 interface State {
     card: GetCardByUserDto

@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { getCookies } from '@lib/cookies'
+import { getCookies } from '@libs/cookies'
 import { checkJwtAuthAction } from '@store/auth/useAuth'
 import { RoleEnum } from '@config/constant/user'
 

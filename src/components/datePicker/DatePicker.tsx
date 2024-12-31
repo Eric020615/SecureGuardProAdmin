@@ -4,7 +4,7 @@ import React, { Dispatch, SetStateAction } from 'react'
 import { format } from 'date-fns'
 import { Calendar as CalendarIcon } from 'lucide-react'
 
-import { cn } from '@lib/utils'
+import { cn } from '@libs/utils'
 import { Button } from '@components/ui/button'
 import { Calendar } from '@components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover'

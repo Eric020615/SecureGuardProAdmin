@@ -8,7 +8,7 @@ import {
     DialogTitle,
 } from '@components/ui/dialog'
 import { useCard } from '@store/card/useCard'
-import { convertImageToGeneralFile } from '@lib/file'
+import { convertImageToGeneralFile } from '@libs/file'
 import SharedWebcam from '@components/camera/Webcam'
 
 interface FaceIDDialogProps {

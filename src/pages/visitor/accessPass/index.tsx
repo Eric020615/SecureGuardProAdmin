@@ -2,7 +2,7 @@
 
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import { ITimeFormat } from '@config/constant'
-import { convertDateStringToFormattedString } from '@lib/time'
+import { convertDateStringToFormattedString } from '@libs/time'
 import { useVisitor } from '@store/visitor/useVisitor'
 import { useSearchParams } from 'next/navigation'
 import React, { useEffect } from 'react'

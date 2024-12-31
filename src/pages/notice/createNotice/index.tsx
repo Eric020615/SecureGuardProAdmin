@@ -7,8 +7,8 @@ import CustomForm, { CustomField } from '@components/form/element/CustomForm'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { getGeneralFileDto } from '@lib/file'
-import { convertDateStringToDate, getCurrentDate } from '@lib/time'
+import { getGeneralFileDto } from '@libs/file'
+import { convertDateStringToDate, getCurrentDate } from '@libs/time'
 
 const formSchema = z
     .object({

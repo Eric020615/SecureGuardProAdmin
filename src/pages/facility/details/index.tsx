@@ -16,7 +16,7 @@ import {
     convertDateStringToDate,
     convertDateStringToFormattedString,
     getCurrentDate,
-} from '@lib/time'
+} from '@libs/time'
 import {
     DocumentStatusDescriptionEnum,
     DocumentStatusEnum,

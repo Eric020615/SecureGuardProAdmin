@@ -1,4 +1,4 @@
-import Axios, { AxiosError } from 'axios'
+import Axios from 'axios'
 import queryString from 'query-string'
 
 interface IHandler {

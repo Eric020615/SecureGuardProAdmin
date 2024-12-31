@@ -16,7 +16,7 @@ import {
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import { useVisitorManagement } from '@store/visitorManagement/useVisitorManagement'
 import { GetVisitorDto } from '@dtos/visitor/visitor.dto'
-import { convertDateStringToFormattedString } from '@lib/time'
+import { convertDateStringToFormattedString } from '@libs/time'
 import { tableStyles } from '@pages/style'
 import { VisitorCategoryDescriptionEnum } from '@config/constant/visitor'
 

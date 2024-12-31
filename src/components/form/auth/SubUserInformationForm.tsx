@@ -22,7 +22,7 @@ import { useUser } from '@store/user/useUser'
 import { ITimeFormat } from '@config/constant'
 import CustomSelect from '@components/select/Select'
 import { GenderOptions } from '@config/listOption/user'
-import { convertDateStringToFormattedString } from '@lib/time'
+import { convertDateStringToFormattedString } from '@libs/time'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 
 const userInformationSchema = z.object({

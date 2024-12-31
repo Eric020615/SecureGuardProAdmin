@@ -12,7 +12,7 @@ import {
     getCurrentDate,
     getDateAtBoundary,
     initializeDateAtBoundary,
-} from '@lib/time'
+} from '@libs/time'
 import { useAuth } from '@store/auth/useAuth'
 import { useVisitorManagement } from '@store/visitorManagement/useVisitorManagement'
 import React, { useEffect, useState } from 'react'

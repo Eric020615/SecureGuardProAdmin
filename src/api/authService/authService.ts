@@ -1,6 +1,6 @@
-import { handleApiRequest, IResponse } from '../globalHandler'
-import { listUrl } from '../listUrl'
-import { getCookies, setCookies } from '@lib/cookies'
+import { handleApiRequest, IResponse } from '@api/globalHandler'
+import { listUrl } from '@api/listUrl'
+import { getCookies, setCookies } from '@libs/cookies'
 import { RoleEnum } from '@config/constant/user'
 import {
     AuthTokenPayloadDto,

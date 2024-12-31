@@ -12,7 +12,7 @@ import {
 } from '@config/listOption/facility'
 import { useFacility } from '@store/facility/useFacility'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
-import { convertDateStringToDate, convertDateStringToFormattedString, getCurrentDate } from '@lib/time'
+import { convertDateStringToDate, convertDateStringToFormattedString, getCurrentDate } from '@libs/time'
 import { ITimeFormat } from '@config/constant'
 import CustomForm, { CustomField } from '@components/form/element/CustomForm'
 import moment from 'moment'

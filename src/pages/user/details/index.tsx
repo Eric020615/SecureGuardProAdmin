@@ -17,7 +17,7 @@ import {
     ResidentInformationDto,
     StaffInformationDto,
 } from '@dtos/user-management/userManagement.dto'
-import { convertDateStringToFormattedString } from '@lib/time'
+import { convertDateStringToFormattedString } from '@libs/time'
 import { useUserManagement } from '@store/userManagement/useUserManagement'
 import { ArrowLeft } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'

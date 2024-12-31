@@ -18,10 +18,9 @@
       }
     ],
     "paths": {
-      // "@/*": ["./*"],
       "@components/*": ["./src/components/*"],
       "@pages/*": ["./src/pages/*"],
-      "@lib/*": ["./src/lib/*"],
+      "@libs/*": ["./src/libs/*"],
       "@api/*": ["./src/api/*"],
       "@config/*": ["./src/config/*"],
       "@public/*": ["./src/public/*"],

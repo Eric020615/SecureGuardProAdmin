@@ -12,7 +12,7 @@ import { useRouter } from 'nextjs-toploader/app'
 import { DocumentStatusEnum, ITimeFormat, PaginationDirectionEnum } from '@config/constant'
 import { GetNoticeDto } from '@dtos/notice/notice.dto'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
-import { convertDateStringToFormattedString } from '@lib/time'
+import { convertDateStringToFormattedString } from '@libs/time'
 import { Badge } from '@components/ui/badge'
 import { tableStyles } from '@pages/style'
 

@@ -7,7 +7,7 @@ import {
     GetVisitorDto,
     GetVisitorPassDetailsDto,
 } from '@dtos/visitor/visitor.dto'
-import { getCookies } from '@lib/cookies'
+import { getCookies } from '@libs/cookies'
 
 // Get a list of visitors with pagination
 export const getVisitors = async (

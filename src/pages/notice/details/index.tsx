@@ -14,14 +14,14 @@ import { Button } from '@components/ui/button'
 import { Badge } from '@components/ui/badge'
 import {
     convertDateStringToFormattedString,
-} from '@lib/time'
+} from '@libs/time'
 import { DocumentStatusDescriptionEnum, DocumentStatusEnum, ITimeFormat } from '@config/constant'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import CustomForm, { CustomField } from '@components/form/element/CustomForm'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
-import { getGeneralFileDto } from '@lib/file'
+import { getGeneralFileDto } from '@libs/file'
 
 const formSchema = z
     .object({

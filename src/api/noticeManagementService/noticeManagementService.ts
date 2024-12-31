@@ -1,12 +1,12 @@
-import { getCookies } from '@lib/cookies'
-import { listUrl } from '../listUrl'
+import { getCookies } from '@libs/cookies'
+import { listUrl } from '@api/listUrl'
 import {
     CreateNoticeDto,
     GetNoticeDto,
     EditNoticeDto,
     GetNoticeDetailsByIdDto,
 } from '@dtos/notice/notice.dto'
-import { handleApiRequest, IResponse } from '../globalHandler'
+import { handleApiRequest, IResponse } from '@api/globalHandler'
 import { PaginationDirectionEnum } from '@config/constant'
 
 // Function to create a notice

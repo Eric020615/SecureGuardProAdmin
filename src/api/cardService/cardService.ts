@@ -1,6 +1,6 @@
-import { getCookies } from '@lib/cookies'
-import { handleApiRequest, IResponse } from '../globalHandler'
-import { listUrl } from '../listUrl'
+import { getCookies } from '@libs/cookies'
+import { handleApiRequest, IResponse } from '@api/globalHandler'
+import { listUrl } from '@api/listUrl'
 import {
     CreateUpdateVisitorFaceAuthDto,
     CreateUserFaceAuthDto,

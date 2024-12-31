@@ -1,6 +1,6 @@
 'use client'
 
-import { deleteCookies, getCookies } from '@lib/cookies'
+import { deleteCookies, getCookies } from '@libs/cookies'
 import { useAuth } from '@store/auth/useAuth'
 import React, { createContext, useContext, useEffect } from 'react'
 

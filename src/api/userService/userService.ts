@@ -1,6 +1,6 @@
 import { EditUserDetailsByIdDto, UserInformationFormDto } from '@dtos/user/user.dto'
-import { listUrl } from '../listUrl'
-import { getCookies } from '@lib/cookies'
+import { listUrl } from '@api/listUrl'
+import { getCookies } from '@libs/cookies'
 import { handleApiRequest, IResponse } from '@api/globalHandler'
 
 // Function to create a new user
