@@ -60,7 +60,6 @@ const UserDetailsPage = () => {
     } = useUserManagement()
     const getUserDetailsById = async () => {
         await getUserDetailsAction(params.userGuid)
-        console.log(userDetails)
     }
     useEffect(() => {
         getUserDetailsById()

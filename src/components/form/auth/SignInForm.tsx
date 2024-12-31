@@ -8,7 +8,7 @@ import { SignInFormDto } from '@dtos/auth/auth.dto'
 import CustomForm, { CustomField } from '@components/form/element/CustomForm'
 
 const formSchema = z.object({
-    email: z.string().email().min(1, { message: 'Email is required' }),
+    email: z.string().min(1, { message: 'Email is required' }).email(),
     password: z.string().min(1, { message: 'Password is required' }),
 })
 

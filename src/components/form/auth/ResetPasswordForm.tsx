@@ -17,7 +17,7 @@ import { useRouter } from 'nextjs-toploader/app';
 import { useAuth } from '@store/auth/useAuth'
 
 const resetPasswordSchema = z.object({
-    email: z.string().email().min(1, { message: 'Email is required' }),
+    email: z.string().min(1, { message: 'Email is required' }).email(),
 })
 
 const ResetPasswordForm = () => {
