@@ -142,7 +142,7 @@ const FacilityBookingManagementPage = () => {
             accessorKey: 'bookedBy',
             header: () => <div className={tableStyles.headerStyle}>Booked By</div>,
             cell: ({ row }) => (
-                <div className={`${tableStyles.dateCellStyle} capitalize`}>
+                <div className={`${tableStyles.dateCellStyle}`}>
                     {row.getValue('bookedBy')}
                 </div>
             ),

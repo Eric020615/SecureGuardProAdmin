@@ -9,7 +9,11 @@ import {
 } from '@components/ui/accordion'
 import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
-import { DocumentStatusDescriptionEnum, DocumentStatusEnum, ITimeFormat } from '@config/constant'
+import {
+    DocumentStatusDescriptionEnum,
+    DocumentStatusEnum,
+    ITimeFormat,
+} from '@config/constant'
 import { VisitorCategoryDescriptionEnum } from '@config/constant/visitor'
 import { convertDateStringToFormattedString } from '@libs/time'
 import { useVisitorManagement } from '@store/visitorManagement/useVisitorManagement'
@@ -24,7 +28,9 @@ const VisitorDetailsPage = () => {
     const { visitorDetails, getVisitorDetailsByIdAction } = useVisitorManagement()
 
     const getVisitorDetailsById = async () => {
-        await getVisitorDetailsByIdAction(params.visitorGuid)
+        if (params) {
+            await getVisitorDetailsByIdAction(params.visitorGuid)
+        }
     }
 
     useEffect(() => {
@@ -110,7 +116,13 @@ const VisitorDetailsPage = () => {
                                                           : 'bg-gray-500' // Default color for other statuses
                                                 } flex justify-center`}
                                             >
-                                                <span>{DocumentStatusDescriptionEnum[visitorDetails.status]}</span>
+                                                <span>
+                                                    {
+                                                        DocumentStatusDescriptionEnum[
+                                                            visitorDetails.status
+                                                        ]
+                                                    }
+                                                </span>
                                             </Badge>
                                         </span>
                                     </div>
@@ -136,6 +148,44 @@ const VisitorDetailsPage = () => {
                                         </span>
                                         <span className="text-sm">
                                             {visitorDetails.visitorContactNumber}
+                                        </span>
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-sm font-semibold">
+                                            Created By:
+                                        </span>
+                                        <span className="text-sm">
+                                            {visitorDetails?.createdBy ?? 'N/A'}
+                                        </span>
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-sm font-semibold">
+                                            Created Date:
+                                        </span>
+                                        <span className="text-sm">
+                                            {convertDateStringToFormattedString(
+                                                visitorDetails?.createdDateTime,
+                                                ITimeFormat.dateTime
+                                            ) ?? 'N/A'}
+                                        </span>
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-sm font-semibold">
+                                            Updated By:
+                                        </span>
+                                        <span className="text-sm">
+                                            {visitorDetails?.updatedBy ?? 'N/A'}
+                                        </span>
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-sm font-semibold">
+                                            Updated Date:
+                                        </span>
+                                        <span className="text-sm">
+                                            {convertDateStringToFormattedString(
+                                                visitorDetails?.updatedDateTime,
+                                                ITimeFormat.dateTime
+                                            ) ?? 'N/A'}
                                         </span>
                                     </div>
                                 </div>
@@ -165,7 +215,11 @@ const VisitorDetailsPage = () => {
                                             Visitor Category:
                                         </span>
                                         <span className="text-sm">
-                                            {VisitorCategoryDescriptionEnum[visitorDetails.visitorCategory]}
+                                            {
+                                                VisitorCategoryDescriptionEnum[
+                                                    visitorDetails.visitorCategory
+                                                ]
+                                            }
                                         </span>
                                     </div>
                                 </div>

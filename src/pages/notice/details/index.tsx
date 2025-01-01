@@ -12,10 +12,12 @@ import { useNotice } from '@store/notice/useNotice'
 import { ArrowLeft } from 'lucide-react'
 import { Button } from '@components/ui/button'
 import { Badge } from '@components/ui/badge'
+import { convertDateStringToFormattedString } from '@libs/time'
 import {
-    convertDateStringToFormattedString,
-} from '@libs/time'
-import { DocumentStatusDescriptionEnum, DocumentStatusEnum, ITimeFormat } from '@config/constant'
+    DocumentStatusDescriptionEnum,
+    DocumentStatusEnum,
+    ITimeFormat,
+} from '@config/constant'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -50,7 +52,9 @@ const NoticeDetailsPage = () => {
 
     // Fetch Notice Details
     const getNoticeDetailsById = async () => {
-        await getNoticeDetailsByIdAction(params.noticeGuid)
+        if (params) {
+            await getNoticeDetailsByIdAction(params.noticeGuid)
+        }
     }
 
     useEffect(() => {
@@ -146,12 +150,12 @@ const NoticeDetailsPage = () => {
                           )
                         : [],
             },
-            params.noticeGuid
+            params ? params.noticeGuid : ''
         )
     }
 
     const deleteNoticeById = async () => {
-        await deleteNoticeByIdAction(params.noticeGuid)
+        await deleteNoticeByIdAction(params ? params.noticeGuid : '') 
     }
 
     return (
@@ -161,15 +165,6 @@ const NoticeDetailsPage = () => {
                     setPageMode('view')
                 }}
             />
-            {/* <CustomConfirmDialog
-                onConfirm={isConfirm}
-                content={{
-                    title: 'Delete Notice',
-                    subtitle: 'Are you sure you want to delete this notice?',
-                }}
-                isOpen={openConfirmModal}
-                setOpen={setOpenConfirmModal}
-            /> */}
             <div className="flex justify-between items-center">
                 <div className="flex items-center gap-3">
                     <Button
@@ -268,7 +263,13 @@ const NoticeDetailsPage = () => {
                                                           : 'bg-gray-500' // Default color for other statuses
                                                 } flex justify-center`}
                                             >
-                                                <span>{DocumentStatusDescriptionEnum[noticeDetails.status]}</span>
+                                                <span>
+                                                    {
+                                                        DocumentStatusDescriptionEnum[
+                                                            noticeDetails.status
+                                                        ]
+                                                    }
+                                                </span>
                                             </Badge>
                                         </span>
                                     </div>

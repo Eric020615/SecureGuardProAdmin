@@ -5,11 +5,11 @@ import {
     getVisitorDetailsById,
     getVisitors,
 } from '@api/visitorService/visitorService'
-import { GetVisitorByDateDto, GetVisitorDto } from '@dtos/visitor/visitor.dto'
+import { GetVisitorByDateDto, GetVisitorDetailsDto, GetVisitorDto } from '@dtos/visitor/visitor.dto'
 import { PaginationDirectionEnum } from '@config/constant'
 
 interface State {
-    visitorDetails: GetVisitorDto
+    visitorDetails: GetVisitorDetailsDto
     visitorHistory: GetVisitorDto[]
     currentPage: number
     totalVisitorHistory: number
@@ -27,7 +27,7 @@ interface Actions {
 }
 
 export const useVisitorManagement = create<State & Actions>((set, get) => ({
-    visitorDetails: {} as GetVisitorDto,
+    visitorDetails: {} as GetVisitorDetailsDto,
     visitorHistory: [],
     currentPage: 0,
     totalVisitorHistory: 0,

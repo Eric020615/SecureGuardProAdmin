@@ -4,6 +4,7 @@ import { PaginationDirectionEnum } from '@config/constant'
 import {
     GetVisitorByDateDto,
     GetVisitorDetailsByTokenDto,
+    GetVisitorDetailsDto,
     GetVisitorDto,
     GetVisitorPassDetailsDto,
 } from '@dtos/visitor/visitor.dto'
@@ -28,9 +29,9 @@ export const getVisitors = async (
 // Get visitor details by ID
 export const getVisitorDetailsById = async (
     visitorGuid: string
-): Promise<IResponse<GetVisitorDto>> => {
+): Promise<IResponse<GetVisitorDetailsDto>> => {
     const cookieValue = await getCookies('token')
-    return handleApiRequest<GetVisitorDto>(
+    return handleApiRequest<GetVisitorDetailsDto>(
         listUrl.visitorManagement.getById.path,
         listUrl.visitorManagement.getById.type,
         {},
