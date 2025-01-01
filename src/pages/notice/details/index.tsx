@@ -24,6 +24,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import CustomForm, { CustomField } from '@components/form/element/CustomForm'
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
 import { getGeneralFileDto } from '@libs/file'
+import CustomConfirmDialog from '@components/dialog/CustomConfirmDialog'
 
 const formSchema = z
     .object({
@@ -49,6 +50,7 @@ const NoticeDetailsPage = () => {
         deleteAttachmentAction,
     } = useNotice()
     const [pageMode, setPageMode] = useState<'edit' | 'view'>('view')
+    const [deleteConfirm, setDeleteConfirm] = useState(false)
 
     // Fetch Notice Details
     const getNoticeDetailsById = async () => {
@@ -155,7 +157,7 @@ const NoticeDetailsPage = () => {
     }
 
     const deleteNoticeById = async () => {
-        await deleteNoticeByIdAction(params ? params.noticeGuid : '') 
+        await deleteNoticeByIdAction(params ? params.noticeGuid : '')
     }
 
     return (
@@ -164,6 +166,15 @@ const NoticeDetailsPage = () => {
                 onSuccessConfirm={() => {
                     setPageMode('view')
                 }}
+            />
+            <CustomConfirmDialog
+                isOpen={deleteConfirm}
+                setOpen={setDeleteConfirm}
+                content={{
+                    title: 'Delete Notice',
+                    subtitle: 'Are you sure you want to delete this notice?',
+                }}
+                onConfirm={deleteNoticeById}
             />
             <div className="flex justify-between items-center">
                 <div className="flex items-center gap-3">
@@ -187,24 +198,28 @@ const NoticeDetailsPage = () => {
                             View
                         </Button>
                     ) : (
-                        <>
-                            <Button
-                                type="button"
-                                className="flex-1 bg-primary"
-                                onClick={() => {
-                                    setPageMode('edit')
-                                }}
-                            >
-                                Edit
-                            </Button>
-                            <Button
-                                type="button"
-                                className="flex-1 bg-red-800"
-                                onClick={deleteNoticeById}
-                            >
-                                Delete
-                            </Button>
-                        </>
+                        noticeDetails?.status === DocumentStatusEnum.Active && (
+                            <>
+                                <Button
+                                    type="button"
+                                    className="flex-1 bg-primary"
+                                    onClick={() => {
+                                        setPageMode('edit')
+                                    }}
+                                >
+                                    Edit
+                                </Button>
+                                <Button
+                                    type="button"
+                                    className="flex-1 bg-red-800"
+                                    onClick={() => {
+                                        setDeleteConfirm(true)
+                                    }}
+                                >
+                                    Delete
+                                </Button>
+                            </>
+                        )
                     )}
                 </div>
             </div>

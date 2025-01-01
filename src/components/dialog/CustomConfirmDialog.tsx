@@ -39,6 +39,7 @@ const CustomConfirmDialog = ({
                         className="flex justify-center items-center"
                         onClick={() => {
                             onConfirm()
+                            setOpen(false)
                         }}
                     >
                         Confirm

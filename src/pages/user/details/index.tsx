@@ -1,4 +1,5 @@
 import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
+import CustomConfirmDialog from '@components/dialog/CustomConfirmDialog'
 import {
     Accordion,
     AccordionContent,
@@ -7,7 +8,7 @@ import {
 } from '@components/ui/accordion'
 import { Badge } from '@components/ui/badge'
 import { Button } from '@components/ui/button'
-import { ITimeFormat } from '@config/constant'
+import { DocumentStatusEnum, ITimeFormat } from '@config/constant'
 import {
     GenderDescriptionEnum,
     RoleDescriptionEnum,
@@ -21,7 +22,7 @@ import { convertDateStringToFormattedString } from '@libs/time'
 import { useUserManagement } from '@store/userManagement/useUserManagement'
 import { ArrowLeft } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Avatar from 'react-avatar'
 
 // Method to render Resident Role Information
@@ -51,6 +52,7 @@ const RenderStaffInformation = (roleInfo: StaffInformationDto) => (
 const UserDetailsPage = () => {
     const params = useParams<{ userGuid: string }>()
     const router = useRouter()
+    const [deleteConfirm, setDeleteConfirm] = useState(false)
     const {
         userDetails,
         getUserDetailsAction,
@@ -59,8 +61,12 @@ const UserDetailsPage = () => {
         deleteUserByIdAction,
     } = useUserManagement()
     const getUserDetailsById = async () => {
-        await getUserDetailsAction(params.userGuid)
+        await getUserDetailsAction(params ? params.userGuid : '')
     }
+    const deleteUserById = async () => {
+        await deleteUserByIdAction(params ? params.userGuid : '')
+    }
+
     useEffect(() => {
         getUserDetailsById()
     }, [])
@@ -78,6 +84,15 @@ const UserDetailsPage = () => {
                 onSuccessConfirm={() => {
                     window.location.reload()
                 }}
+            />
+            <CustomConfirmDialog
+                isOpen={deleteConfirm}
+                setOpen={setDeleteConfirm}
+                content={{
+                    title: 'Delete User',
+                    subtitle: 'Are you sure you want to delete this user?',
+                }}
+                onConfirm={deleteUserById}
             />
             <div className="flex justify-between items-center">
                 <div className="flex items-center gap-3">
@@ -114,15 +129,17 @@ const UserDetailsPage = () => {
                                 Enable
                             </Button>
                         )}
-                        <Button
-                            type="submit"
-                            className="w-full bg-red-600"
-                            onClick={() => {
-                                deleteUserByIdAction(params.userGuid)
-                            }}
-                        >
-                            Delete
-                        </Button>
+                        {userDetails.status === DocumentStatusEnum.Active && (
+                            <Button
+                                type="button"
+                                className="w-full bg-red-600"
+                                onClick={() => {
+                                    setDeleteConfirm(true)
+                                }}
+                            >
+                                Delete
+                            </Button>
+                        )}
                     </div>
                 </div>
             </div>
