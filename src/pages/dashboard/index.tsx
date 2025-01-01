@@ -18,7 +18,7 @@ import { useVisitorManagement } from '@store/visitorManagement/useVisitorManagem
 import React, { useEffect, useState } from 'react'
 import { CSVLink } from 'react-csv'
 
-const DashboardPage = () => {
+const DashboardPage = () => {    
     const [startDate, setStartDate] = useState<Date | undefined>(
         getDateAtBoundary(getCurrentDate(), 'month', 'start')
     )
@@ -32,6 +32,10 @@ const DashboardPage = () => {
 
     // Function to handle date validation and filtering
     const filterData = async () => {
+        if (authTokenPayload?.role !== RoleEnum.SYSTEM_ADMIN) {
+            return
+        }
+        
         if (startDate && endDate && startDate > endDate) {
             alert('End date cannot be before start date')
             return

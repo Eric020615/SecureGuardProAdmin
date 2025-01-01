@@ -33,9 +33,18 @@ export const signIn = async (ISignIn: SignInFormDto): Promise<IResponse<any>> =>
         ISignIn
     )
 
-    if (response.success) {
-        await setCookies('token', response.data)
+    if (!response.success) {
+        throw new Error('Invalid Credentials')
     }
+
+    const authToken = await checkAuth(response.data, true)
+    if (
+        authToken.data.role !== RoleEnum.SYSTEM_ADMIN &&
+        authToken.data.role !== RoleEnum.STAFF
+    ) {
+        throw new Error('Invalid Role')
+    }
+    await setCookies('token', response.data)
 
     return response
 }
@@ -74,6 +83,7 @@ export const checkAuth = async (
         listUrl.auth.checkAuth.type,
         undefined,
         token,
+        { check }
     )
     return response
 }

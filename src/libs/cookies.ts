@@ -23,5 +23,9 @@ export const getCookies = async (name: string) => {
 }
 
 export const deleteCookies = (name: string) => {
+    const cookieValue = cookies().get(name)?.value
+    if (!cookieValue) {
+        return null
+    }
     cookies().delete(name)
 }

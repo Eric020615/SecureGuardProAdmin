@@ -1,3 +1,5 @@
+"use server"
+
 import { NextResponse, type NextRequest } from 'next/server'
 import { getCookies } from '@libs/cookies'
 import { checkJwtAuthAction } from '@store/auth/useAuth'
@@ -15,7 +17,7 @@ export const middleware = async (request: NextRequest) => {
             path.startsWith('/sub-user') ||
             path.startsWith('/visitor/access-pass')
         ) {
-            return
+            return NextResponse.next()
         }
         const currentToken = await getCookies('token')
         const response = await checkJwtAuthAction(currentToken as string, true)
@@ -37,7 +39,9 @@ export const middleware = async (request: NextRequest) => {
         )
         return newResponse
     } catch (error) {
-        return Response.redirect(new URL('/sign-in', request.url))
+        const redirectResponse = NextResponse.rewrite(new URL('/sign-in', request.url))
+        redirectResponse.cookies.delete('token') // Clear the token cookie
+        return redirectResponse
     }
 }
 
