@@ -48,6 +48,7 @@ const CustomConfirmDialog = ({
                         className="flex justify-center items-center"
                         onClick={() => {
                             onCancel()
+                            setOpen(false)
                         }}
                     >
                         Cancel

@@ -29,10 +29,6 @@ const MyProfilePage = () => {
     const { getUserProfileByIdAction, editUserProfileByIdAction, userProfile } = useUser()
     const [pageMode, setPageMode] = useState<'edit' | 'view'>('view')
 
-    useEffect(() => {
-        getData()
-    }, [pageMode])
-
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -93,7 +89,11 @@ const MyProfilePage = () => {
     }
 
     useEffect(() => {
-        if (userProfile) {
+        getData()
+    }, [pageMode])
+
+    useEffect(() => {
+        if (userProfile && pageMode === 'edit') {
             form.setValue(
                 'firstName',
                 userProfile?.firstName ? userProfile.firstName : ''
@@ -104,12 +104,8 @@ const MyProfilePage = () => {
                 'phoneNumber',
                 userProfile?.contactNumber ? userProfile.contactNumber : ''
             )
-            form.setValue(
-                'gender',
-                userProfile?.gender
-                    ? (userProfile.gender as keyof typeof GenderDescriptionEnum)
-                    : 'M'
-            )
+            form.setValue('gender', userProfile?.gender || 'M')
+
             form.setValue(
                 'dateOfBirth',
                 userProfile?.dateOfBirth
@@ -120,7 +116,7 @@ const MyProfilePage = () => {
                     : ''
             )
         }
-    }, [userProfile && pageMode === 'edit'])
+    }, [userProfile])
 
     return (
         <div className="h-full">
