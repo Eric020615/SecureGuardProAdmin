@@ -37,12 +37,13 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, menuList }: SidebarProps) => {
 
     const handleLogout = () => {
         logOutAction()
-        router.replace('/sign-up')
+        router.replace('/')
     }
 
     useEffect(() => {
         setIsClient(true)
     }, [])
+    
     if (!isClient) return <></>
 
     return (

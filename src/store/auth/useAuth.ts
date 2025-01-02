@@ -85,6 +85,8 @@ export const useAuth = create<State & Actions>((set) => ({
         return internalGeneralAction(
             async () => {
                 set({ isLogged: false, authTokenPayload: {} as AuthTokenPayloadDto })
+                // Clear localStorage or cookies
+                localStorage.clear()
                 deleteCookies('token')
                 return null
             },
