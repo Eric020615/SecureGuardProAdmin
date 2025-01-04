@@ -7,6 +7,8 @@ import { DialogDescription } from '@radix-ui/react-dialog'
 import { CreateUpdateVisitorFaceAuthDto } from '@dtos/card/card.dto'
 import SharedWebcam from '@components/camera/Webcam'
 import SharedScanner from '@components/camera/Scanner'
+import { convertDateStringToFormattedString } from '@libs/time'
+import { ITimeFormat } from '@config/constant'
 
 interface VisitorCheckInDialogProps {
     open: boolean
@@ -76,7 +78,12 @@ const VisitorCheckInDialog = ({ open, setOpen }: VisitorCheckInDialogProps) => {
                             <p>Email: {visitorDetails.visitorEmail}</p>
                             <p>Category: {visitorDetails.visitorCategory}</p>
                             <p>Contact Number: {visitorDetails.visitorContactNumber}</p>
-                            <p>Visit Date/Time: {visitorDetails.visitDateTime}</p>
+                            <p>
+                                Visit Date/Time: {convertDateStringToFormattedString(
+                                    visitorDetails.visitDateTime,
+                                    ITimeFormat.dateTime
+                                )}
+                            </p>
                             <div className="mt-4">
                                 <h2>Face ID Registration</h2>
                                 <div className="mt-2">
