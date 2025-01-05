@@ -1,9 +1,18 @@
-"use server"
+'use server'
 
 import { NextResponse, type NextRequest } from 'next/server'
 import { getCookies } from '@libs/cookies'
 import { checkJwtAuthAction } from '@store/auth/useAuth'
 import { RoleEnum } from '@config/constant/user'
+
+const roleBasedAllowed = {
+    '/visitor/check-in': ['STF'], // Check-In restricted for SYSTEM_ADMIN
+    '/facility': ['SA'], // Facility Management restricted for STAFF
+    '/notice': ['SA'], // Notices Management restricted for STAFF
+    '/user': ['SA'], // User Management restricted for STAFF
+    '/visitor': ['SA'], // Visitor Management restricted for STAFF
+    '/profile': ['SA', 'STF'], // No restrictions (accessible by both SA and STF)
+}
 
 export const middleware = async (request: NextRequest) => {
     try {
@@ -29,6 +38,23 @@ export const middleware = async (request: NextRequest) => {
             response.data.role !== RoleEnum.STAFF
         ) {
             throw new Error('Invalid Role')
+        }
+        // when staff direct to dashboard direct to check-in page
+        if (path === '/' && response.data.role === RoleEnum.STAFF) {
+            return NextResponse.rewrite(new URL('/visitor/check-in', request.url))
+        }
+        // Check if the user's role is allowed for the current path
+        for (const [allowedPath, allowedRoles] of Object.entries(roleBasedAllowed)) {
+            if (path === "visitor/check-in" && response.data.role === RoleEnum.SYSTEM_ADMIN) {
+                return NextResponse.rewrite(new URL('/403', request.url)) // Redirect to 403 page
+            }
+            if ( 
+                path !== "/visitor/check-in" &&
+                path.startsWith(allowedPath) && // Check for exact match
+                !allowedRoles.includes(response.data.role)
+            ) {
+                return NextResponse.rewrite(new URL('/403', request.url)) // Redirect to 403 page
+            }
         }
         // Set authTokenPayload as a cookie for client-side usage
         const newResponse = NextResponse.next()

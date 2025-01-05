@@ -17,7 +17,7 @@ const fullMenuList = [
                 link: '/',
                 text: 'Dashboard',
                 icon: <LayoutDashboard className="mr-2 h-5 w-5" />,
-                roles: ['SA', 'STF'], // Allowed roles
+                roles: ['SA'], // Allowed roles
             },
             {
                 link: '/visitor/check-in',
