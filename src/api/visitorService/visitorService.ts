@@ -1,4 +1,4 @@
-import { handleApiRequest, IResponse } from '@api/globalHandler'
+import { handleApiPaginationRequest, handleApiRequest, IPaginatedResponse, IResponse } from '@api/globalHandler'
 import { listUrl } from '@api/listUrl'
 import { PaginationDirectionEnum } from '@config/constant'
 import {
@@ -15,9 +15,9 @@ export const getVisitors = async (
     direction: PaginationDirectionEnum,
     id: number,
     limit: number
-): Promise<IResponse<GetVisitorDto>> => {
+): Promise<IPaginatedResponse<GetVisitorDto>> => {
     const cookieValue = await getCookies('token')
-    return handleApiRequest<GetVisitorDto>(
+    return handleApiPaginationRequest<GetVisitorDto>(
         listUrl.visitorManagement.getAll.path,
         listUrl.visitorManagement.getAll.type,
         {},

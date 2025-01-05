@@ -6,7 +6,7 @@ import {
     getUserDetailsById,
     getUserList,
 } from '@api/userManagementService/userManagementService'
-import { IResponse } from '@api/globalHandler'
+import { IPaginatedResponse, IResponse } from '@api/globalHandler'
 import { generalAction } from '@store/application/useApplication'
 import {
     GetUserDetailsByUserGuidDto,
@@ -48,7 +48,7 @@ export const useUserManagement = create<State & Actions>((set, get) => ({
     ) => {
         return generalAction(
             async () => {
-                let response: any
+                let response: IPaginatedResponse<GetUserDto>
                 const { userList, currentPage } = get()
                 if (direction === PaginationDirectionEnum.Next) {
                     // Pass the last booking ID from the current list for next pagination

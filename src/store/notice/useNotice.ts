@@ -7,7 +7,7 @@ import {
     updateNoticeById,
 } from '@api/noticeManagementService/noticeManagementService'
 import { generalAction } from '@store/application/useApplication'
-import { IResponse } from '@api/globalHandler'
+import { IPaginatedResponse, IResponse } from '@api/globalHandler'
 import {
     CreateNoticeDto,
     DeleteNoticeDto,
@@ -50,7 +50,7 @@ export const useNotice = create<State & Actions>((set, get) => ({
     getNoticeAction: async (direction: PaginationDirectionEnum, limit: number) => {
         return generalAction(
             async () => {
-                let response: any
+                let response: IPaginatedResponse<GetNoticeDto>
                 const { notices, currentPage } = get()
                 if (direction === PaginationDirectionEnum.Next) {
                     // Pass the last booking ID from the current list for next pagination

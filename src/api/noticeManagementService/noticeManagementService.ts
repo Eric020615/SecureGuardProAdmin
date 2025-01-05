@@ -6,7 +6,7 @@ import {
     EditNoticeDto,
     GetNoticeDetailsByIdDto,
 } from '@dtos/notice/notice.dto'
-import { handleApiRequest, IResponse } from '@api/globalHandler'
+import { handleApiPaginationRequest, handleApiRequest, IPaginatedResponse, IResponse } from '@api/globalHandler'
 import { PaginationDirectionEnum } from '@config/constant'
 
 // Function to create a notice
@@ -26,9 +26,9 @@ export const getNoticeList = async (
     direction: PaginationDirectionEnum,
     id: number,
     limit: number
-): Promise<IResponse<GetNoticeDto[] | null>> => {
+): Promise<IPaginatedResponse<GetNoticeDto>> => {
     const cookieValue = await getCookies('token')
-    const response = await handleApiRequest<GetNoticeDto[]>(
+    const response = await handleApiPaginationRequest<GetNoticeDto>(
         listUrl.noticeManagement.getAll.path,
         listUrl.noticeManagement.getAll.type,
         {},

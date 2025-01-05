@@ -8,7 +8,7 @@ import {
     getFacilityBookingUser,
 } from '@api/facilityService/facilityService'
 import { generalAction } from '@store/application/useApplication'
-import { IResponse } from '@api/globalHandler'
+import { IPaginatedResponse, IResponse } from '@api/globalHandler'
 import {
     CancelFacilityBookingDto,
     FacilityBookingFormDto,
@@ -74,7 +74,7 @@ export const useFacility = create<State & Actions>((set, get) => ({
     ) => {
         return generalAction(
             async () => {
-                let response: any
+                let response : IPaginatedResponse<GetFacilityBookingHistoryDto>
                 const { facilityBookingHistory, currentPage } = get()
                 if (direction === PaginationDirectionEnum.Next) {
                     // Pass the last booking ID from the current list for next pagination

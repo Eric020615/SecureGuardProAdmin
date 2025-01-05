@@ -60,6 +60,45 @@ export const handleApiRequest = async <T>(
     }
 }
 
+export const handleApiPaginationRequest = async <T>(
+    path: string,
+    type: string,
+    data: any,
+    token?: string,
+    params?: any,
+    pathVariables?: { placeholder: string; value: string } // Optional parameter for path variable replacement
+): Promise<IPaginatedResponse<T>> => {
+    try {
+        if (pathVariables) {
+            path = path.replace(pathVariables.placeholder, pathVariables.value)
+        }
+        const [success, response] = await GlobalHandler({
+            path,
+            type,
+            data,
+            _token: token,
+            params,
+        })
+        return {
+            success,
+            msg: success ? 'success' : response?.message,
+            data: {
+                list: response?.data?.list,
+                count: response?.data?.count,
+            },
+        }
+    } catch (error) {
+        return {
+            success: false,
+            msg: error instanceof Error ? error.message : String(error),
+            data: {
+                list: [],
+                count: 0,
+            },
+        } as IPaginatedResponse<T>
+    }
+}
+
 const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
     const _handler = async (payload: IHandler): Promise<[boolean, any]> => {
         try {

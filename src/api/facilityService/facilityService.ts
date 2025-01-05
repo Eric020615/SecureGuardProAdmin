@@ -1,10 +1,11 @@
 import { getCookies } from '@libs/cookies'
-import { handleApiRequest, IResponse } from '@api/globalHandler'
+import { handleApiPaginationRequest, handleApiRequest, IPaginatedResponse, IResponse } from '@api/globalHandler'
 import { listUrl } from '@api/listUrl'
 import {
     CancelFacilityBookingDto,
     FacilityBookingFormDto,
     GetFacilityBookingDetailsDto,
+    GetFacilityBookingHistoryDto,
     GetFacilityBookingUserDto,
     SpaceAvailabilityDto,
 } from '@dtos/facility/facility.dto'
@@ -27,9 +28,9 @@ export const getBookingHistory = async (
     direction: PaginationDirectionEnum,
     id: number,
     limit: number
-): Promise<IResponse<any>> => {
+): Promise<IPaginatedResponse<GetFacilityBookingHistoryDto>> => {
     const cookieValue = await getCookies('token')
-    const response = await handleApiRequest<any>(
+    const response = await handleApiPaginationRequest<GetFacilityBookingHistoryDto>(
         listUrl.facilities.getBookingHistory.path,
         listUrl.facilities.getBookingHistory.type,
         {},

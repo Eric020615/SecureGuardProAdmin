@@ -4,7 +4,7 @@ import {
     GetUserDetailsByUserGuidDto,
     GetUserDto,
 } from '@dtos/user-management/userManagement.dto'
-import { handleApiRequest, IResponse } from '@api/globalHandler'
+import { handleApiPaginationRequest, handleApiRequest, IPaginatedResponse, IResponse } from '@api/globalHandler'
 import { PaginationDirectionEnum } from '@config/constant'
 
 // Function to get a list of users
@@ -13,9 +13,9 @@ export const getUserList = async (
     direction: PaginationDirectionEnum,
     id: number,
     limit: number
-): Promise<IResponse<GetUserDto[]>> => {
+): Promise<IPaginatedResponse<GetUserDto>> => {
     const cookieValue = await getCookies('token')
-    const response = await handleApiRequest<GetUserDto[]>(
+    const response = await handleApiPaginationRequest<GetUserDto>(
         listUrl.userManagement.getAll.path,
         listUrl.userManagement.getAll.type,
         {},

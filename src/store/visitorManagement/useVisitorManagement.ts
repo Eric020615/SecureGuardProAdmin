@@ -7,6 +7,7 @@ import {
 } from '@api/visitorService/visitorService'
 import { GetVisitorByDateDto, GetVisitorDetailsDto, GetVisitorDto } from '@dtos/visitor/visitor.dto'
 import { PaginationDirectionEnum } from '@config/constant'
+import { IPaginatedResponse } from '@api/globalHandler'
 
 interface State {
     visitorDetails: GetVisitorDetailsDto
@@ -49,7 +50,7 @@ export const useVisitorManagement = create<State & Actions>((set, get) => ({
     getVisitorHistoryAction: async (direction: PaginationDirectionEnum, limit: number) => {
         return generalAction(
             async () => {
-                let response: any
+                let response: IPaginatedResponse<GetVisitorDto>
                 const { visitorHistory, currentPage } = get()
                 if (direction === PaginationDirectionEnum.Next) {
                     // Pass the last booking ID from the current list for next pagination
