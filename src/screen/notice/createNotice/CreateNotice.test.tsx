@@ -182,8 +182,8 @@ describe('CreateNotice', () => {
         } = await setup()
         await fillTitle('Test Notice Title')
         await fillDescription('This is a test description')
-        await fillStartDate('2024-12-30T10:00')
-        await fillEndDate('2024-12-31T12:00') // Using datetime-local format
+        await fillStartDate('2025-12-11T10:00')
+        await fillEndDate('2025-12-12T12:00') // Using datetime-local format
         const file = new File(['dummy content'], 'example.txt', { type: 'text/plain' })
         await fillAttachments(file)
         await triggerSubmit()

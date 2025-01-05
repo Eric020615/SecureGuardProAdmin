@@ -157,12 +157,12 @@ describe('Dashboard', () => {
 
     it('verify filter button', async () => {
         const { fillStartDate, fillEndDate, triggerFilterButton } = await setup()
-        await fillStartDate('2024-11-5')
-        await fillEndDate('2024-12-25')
+        await fillStartDate('2025-12-05')
+        await fillEndDate('2025-12-25')
         await triggerFilterButton()
         expect(getVisitorAnalytics).toHaveBeenCalledWith(
-            '2024-11-05T00:00:00+08:00',
-            '2024-12-25T23:59:59+08:00'
+            '2025-12-05T00:00:00+08:00',
+            '2025-12-25T23:59:59+08:00'
         )
     })
 })
