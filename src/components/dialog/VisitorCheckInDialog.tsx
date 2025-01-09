@@ -28,7 +28,7 @@ const VisitorCheckInDialog = ({ open, setOpen }: VisitorCheckInDialogProps) => {
         if (faceImage) {
             const file = await convertImageToGeneralFile(faceImage)
             await uploadVisitorFaceAuthAction({
-                visitorDetails: visitorDetails,
+                visitorGuid: visitorDetails.visitorGuid,
                 faceData: file,
             } as CreateUpdateVisitorFaceAuthDto)
             setOpen(false)

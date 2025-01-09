@@ -118,7 +118,7 @@ const SharedWebcam: React.FC<SharedWebcamProps> = ({
 
     return (
         <div className="w-full">
-            <div>
+            <div className="relative w-full max-w-screen-sm aspect-square mx-auto overflow-hidden rounded-md">
                 {faceImage ? <img src={faceImage} alt="Captured" /> : renderWebcam()}
             </div>
             <div className="flex justify-center gap-4 mt-5">
