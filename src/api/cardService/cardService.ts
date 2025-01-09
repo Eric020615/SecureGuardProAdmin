@@ -37,7 +37,10 @@ export const uploadUserFaceAuth = async (
         listUrl.cards.upload.path,
         listUrl.cards.upload.type,
         createUserFaceAuthDto,
-        cookieValue as string
+        cookieValue as string,
+        null,
+        {placeholder: "", value: ""},
+        1
     )
 }
 

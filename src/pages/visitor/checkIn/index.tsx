@@ -1,19 +1,34 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { RiAddBoxLine } from 'react-icons/ri'
 import { FaUserCheck, FaClipboardList, FaRegCalendarAlt } from 'react-icons/fa'
+import VisitorCheckInDialog from '@components/dialog/VisitorCheckInDialog'
+import ActionConfirmationDialog from '@components/dialog/ActionConfirmationDialog'
+import { Button } from '@components/ui/button'
 
 const VisitorCheckInPage = () => {
+    const [openCheckInDialog, setOpenCheckInDialog] = useState(false)
+
     return (
         <>
+            <VisitorCheckInDialog
+                open={openCheckInDialog}
+                setOpen={setOpenCheckInDialog}
+            />
+            <ActionConfirmationDialog />
             {/* Header */}
-            <div className="flex flex-row justify-between items-center border-b pb-4 border-gray-300">
-                <h3 className="text-3xl font-bold text-gray-800">Visitor Check-In</h3>
-                <div className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:shadow-lg">
+            <div className="flex flex-row justify-between">
+                <h3 className="text-3xl font-bold text-black">Visitor Check In</h3>
+                <Button
+                    className="flex items-center gap-1"
+                    onClick={() => {
+                        setOpenCheckInDialog(true)
+                    }}
+                >
                     <RiAddBoxLine className="text-xl" />
-                    <span>Create</span>
-                </div>
+                    <p className="flex items-center text-center">Create</p>
+                </Button>
             </div>
 
             {/* Main Decorative Section */}

@@ -9,7 +9,8 @@ interface IHandler {
     _token?: string
     isFormData?: boolean
     isUrlencoded?: Boolean
-    isBloob?: boolean
+    isBloob?: boolean,
+    retryTimes?: number
 }
 
 export interface IResponse<T> {
@@ -33,7 +34,8 @@ export const handleApiRequest = async <T>(
     data: any,
     token?: string,
     params?: any,
-    pathVariables?: { placeholder: string; value: string } // Optional parameter for path variable replacement
+    pathVariables?: { placeholder: string; value: string },// Optional parameter for path variable replacement,
+    retryTimes: number = 2 // Optional parameter for retry times with default value 2
 ): Promise<IResponse<T>> => {
     try {
         if (pathVariables) {
@@ -45,6 +47,7 @@ export const handleApiRequest = async <T>(
             data,
             _token: token,
             params,
+            retryTimes: retryTimes
         })
         return {
             success,
@@ -102,11 +105,11 @@ export const handleApiPaginationRequest = async <T>(
 const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
     const _handler = async (payload: IHandler): Promise<[boolean, any]> => {
         try {
-            const { path, type, data, isBloob } = payload
+            const { path, type, data, isBloob, retryTimes } = payload
             const token = payload._token
             const baseURL = `${process.env.NEXT_PUBLIC_BACKEND_API}${path}`
             let success = false
-            const maxAttempt = 2
+            const maxAttempt = retryTimes ? retryTimes : 2
             let attempt = 0
             const performRequest = async (): Promise<any> => {
                 let response = null
