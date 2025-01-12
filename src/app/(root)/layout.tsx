@@ -2,8 +2,15 @@
 
 import Navbar from '@components/navbar/Navbar'
 import Sidebar from '@components/sidebar/Sidebar'
-import React, { useEffect, useState } from 'react'
-import { LayoutDashboard, Newspaper, Building, CircleUser, Users, ScanBarcode } from 'lucide-react'
+import React, { useEffect, useMemo, useState } from 'react'
+import {
+    LayoutDashboard,
+    Newspaper,
+    Building,
+    CircleUser,
+    Users,
+    ScanBarcode,
+} from 'lucide-react'
 import { useApplication } from '@store/application/useApplication'
 import CustomLoader from '@components/loader/Loader'
 import { useMediaQuery } from 'usehooks-ts'
@@ -75,13 +82,18 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         setIsMounted(true)
     }, [])
 
-    // Filter menu items based on role
-    const filteredMenuList = fullMenuList.map((menuGroup) => ({
-        ...menuGroup,
-        items: menuGroup.items.filter((item) =>
-            item.roles.includes(authTokenPayload.role)
-        ),
-    }))
+    // Ensure the menu updates dynamically when authTokenPayload.role updates
+    const filteredMenuList = useMemo(() => {
+        if (!authTokenPayload || !authTokenPayload.role) {
+            return [] // Return an empty menu list while loading
+        }
+        return fullMenuList.map((menuGroup) => ({
+            ...menuGroup,
+            items: menuGroup.items.filter((item) =>
+                item.roles.includes(authTokenPayload.role)
+            ),
+        }))
+    }, [authTokenPayload])
 
     return (
         <>

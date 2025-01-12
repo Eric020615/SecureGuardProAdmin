@@ -21,6 +21,7 @@ import {
 import { usePathname, useRouter } from 'next/navigation'
 import { LogOut } from 'lucide-react'
 import { useAuth } from '@store/auth/useAuth'
+import { useSession } from '../../context/SessionContext'
 
 interface SidebarProps {
     menuList: any
@@ -34,10 +35,12 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, menuList }: SidebarProps) => {
     const path = usePathname()
     const logOutAction = useAuth((state) => state.logOutAction)
     const router = useRouter()
+    const session = useSession()
 
     const handleLogout = () => {
         logOutAction()
         router.replace('/')
+        session.clearSession()
     }
 
     useEffect(() => {

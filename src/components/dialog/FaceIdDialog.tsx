@@ -42,10 +42,6 @@ const FaceIDDialog = ({ open, setOpen }: FaceIDDialogProps) => {
         }
     }, [open])
 
-    useEffect(() => {
-        console.log(faceImage)
-    }, [faceImage])
-
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="sm:max-w-[625px] w-full">

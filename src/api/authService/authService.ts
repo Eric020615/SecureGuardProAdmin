@@ -45,7 +45,7 @@ export const signIn = async (ISignIn: SignInFormDto): Promise<IResponse<any>> =>
         throw new Error('Invalid Role')
     }
     await setCookies('token', response.data)
-
+    await setCookies('authTokenPayload', JSON.stringify(authToken.data))
     return response
 }
 
