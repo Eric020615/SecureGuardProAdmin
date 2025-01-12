@@ -34,7 +34,7 @@ const FacilityBookingDetailsPage = () => {
 
     // Fetch Booking Details
     const getBookingDetailsById = async () => {
-        await getFacilityBookingDetailsAction(params.facilityBookingGuid)
+        await getFacilityBookingDetailsAction(params ? params.facilityBookingGuid : "")
     }
 
     useEffect(() => {
@@ -46,7 +46,7 @@ const FacilityBookingDetailsPage = () => {
             <CancelBookingDialog
                 open={openCancelDialog}
                 setOpen={setOpenCancelDialog}
-                bookingGuid={params.facilityBookingGuid}
+                bookingGuid={params ? params.facilityBookingGuid : ""}
             />
             <ActionConfirmationDialog />
             <div className="flex justify-between items-center">

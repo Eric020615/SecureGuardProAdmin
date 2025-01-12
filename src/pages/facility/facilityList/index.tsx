@@ -87,6 +87,15 @@ const FacilityBookingManagementPage = () => {
             ),
         },
         {
+            accessorKey: 'spaceId',
+            header: () => <div className={tableStyles.headerStyle}>Space</div>,
+            cell: ({ row }) => (
+                <div className={`${tableStyles.dateCellStyle} capitalize`}>
+                    {row.getValue('spaceId')}
+                </div>
+            ),
+        },
+        {
             accessorKey: 'startDate',
             header: ({ column }) => {
                 return (
