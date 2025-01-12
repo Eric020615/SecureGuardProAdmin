@@ -34,7 +34,7 @@ const FacilityBookingDetailsPage = () => {
 
     // Fetch Booking Details
     const getBookingDetailsById = async () => {
-        await getFacilityBookingDetailsAction(params ? params.facilityBookingGuid : "")
+        await getFacilityBookingDetailsAction(params ? params.facilityBookingGuid : '')
     }
 
     useEffect(() => {
@@ -46,7 +46,7 @@ const FacilityBookingDetailsPage = () => {
             <CancelBookingDialog
                 open={openCancelDialog}
                 setOpen={setOpenCancelDialog}
-                bookingGuid={params ? params.facilityBookingGuid : ""}
+                bookingGuid={params ? params.facilityBookingGuid : ''}
             />
             <ActionConfirmationDialog />
             <div className="flex justify-between items-center">
@@ -61,15 +61,17 @@ const FacilityBookingDetailsPage = () => {
                 </div>
                 <div>
                     <div>
-                        {!facilityBookingDetails.isCancelled && (
-                            <Button
-                                type="submit"
-                                className="w-full bg-red-800"
-                                onClick={() => setOpenCancelDialog(true)}
-                            >
-                                Cancel Booking
-                            </Button>
-                        )}
+                        {!facilityBookingDetails.isCancelled &&
+                            convertDateStringToDate(facilityBookingDetails.startDate) >
+                                getCurrentDate() && (
+                                <Button
+                                    type="submit"
+                                    className="w-full bg-red-800"
+                                    onClick={() => setOpenCancelDialog(true)}
+                                >
+                                    Cancel Booking
+                                </Button>
+                            )}
                     </div>
                 </div>
             </div>
@@ -88,6 +90,14 @@ const FacilityBookingDetailsPage = () => {
                                 <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
                                     <div className="flex flex-col gap-1">
                                         <span className="text-sm font-semibold">
+                                            Booking ID:
+                                        </span>
+                                        <span className="text-sm">
+                                            {facilityBookingDetails.bookingId}
+                                        </span>
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-sm font-semibold">
                                             Facility:
                                         </span>
                                         <span className="text-sm">
@@ -100,10 +110,10 @@ const FacilityBookingDetailsPage = () => {
                                     </div>
                                     <div className="flex flex-col gap-1">
                                         <span className="text-sm font-semibold">
-                                            Booking ID:
+                                            Space:
                                         </span>
                                         <span className="text-sm">
-                                            {facilityBookingDetails.bookingId}
+                                            {facilityBookingDetails.spaceId}
                                         </span>
                                     </div>
                                     <div className="flex flex-col gap-1">
@@ -133,28 +143,10 @@ const FacilityBookingDetailsPage = () => {
                                     </div>
                                     <div className="flex flex-col gap-1">
                                         <span className="text-sm font-semibold">
-                                            Status:
+                                            Number of Guests:
                                         </span>
-                                        <span>
-                                            <Badge
-                                                className={`w-[80px] ${
-                                                    facilityBookingDetails.status ===
-                                                    DocumentStatusEnum.SoftDeleted
-                                                        ? 'bg-orange-500'
-                                                        : facilityBookingDetails.status ===
-                                                            DocumentStatusEnum.Active
-                                                          ? 'bg-green-500'
-                                                          : 'bg-gray-500' // Default color for other statuses
-                                                } flex justify-center`}
-                                            >
-                                                <span>
-                                                    {
-                                                        DocumentStatusDescriptionEnum[
-                                                            facilityBookingDetails.status
-                                                        ]
-                                                    }
-                                                </span>
-                                            </Badge>
+                                        <span className="text-sm">
+                                            {facilityBookingDetails.numOfGuest}
                                         </span>
                                     </div>
                                     <div className="flex flex-col gap-1">
@@ -177,14 +169,6 @@ const FacilityBookingDetailsPage = () => {
                                                 facilityBookingDetails.endDate,
                                                 ITimeFormat.dateTime
                                             )}
-                                        </span>
-                                    </div>
-                                    <div className="flex flex-col gap-1">
-                                        <span className="text-sm font-semibold">
-                                            Number of Guests:
-                                        </span>
-                                        <span className="text-sm">
-                                            {facilityBookingDetails.numOfGuest}
                                         </span>
                                     </div>
                                     <div className="flex flex-col gap-1">
