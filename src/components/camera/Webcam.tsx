@@ -1,5 +1,5 @@
 import { Button } from '@components/ui/button'
-import { Camera, Repeat, Upload } from 'lucide-react'
+import { Camera, Repeat, Upload, RefreshCcw } from 'lucide-react'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import Webcam from 'react-webcam'
 
@@ -25,7 +25,8 @@ const SharedWebcam: React.FC<SharedWebcamProps> = ({
     const webcamRef = useRef<Webcam>(null)
     const [webcamError, setWebcamError] = useState<string | null>(null)
     const [isWebcamAvailable, setIsWebcamAvailable] = useState<boolean>(false)
-    const mediaStreamRef = useRef<MediaStream | null>(null) // To store the media stream
+    const [isFrontCamera, setIsFrontCamera] = useState<boolean>(true) // State for camera type
+    const mediaStreamRef = useRef<MediaStream | null>(null)
 
     const capture = useCallback(() => {
         if (!webcamRef.current) return
@@ -37,14 +38,14 @@ const SharedWebcam: React.FC<SharedWebcamProps> = ({
     const retake = () => {
         setFaceImage('')
     }
+
     const checkWebcamAvailability = async () => {
         try {
             const constraints = {
                 video: {
+                    facingMode: isFrontCamera ? 'user' : 'environment', // Toggle front/back camera
                     width: { ideal: 1280 },
                     height: { ideal: 720 },
-                    exposureMode: 'manual', // Try adjusting exposure
-                    exposureCompensation: -1, // Lower brightness
                 },
             }
             const stream = await navigator.mediaDevices.getUserMedia(constraints)
@@ -55,9 +56,13 @@ const SharedWebcam: React.FC<SharedWebcamProps> = ({
         }
     }
 
+    const toggleCamera = () => {
+        setIsFrontCamera((prev) => !prev)
+    }
+
     const stopWebcam = () => {
         if (mediaStreamRef.current) {
-            mediaStreamRef.current.getTracks().forEach((track) => track.stop()) // Stop all tracks
+            mediaStreamRef.current.getTracks().forEach((track) => track.stop())
             mediaStreamRef.current = null
         }
     }
@@ -71,15 +76,7 @@ const SharedWebcam: React.FC<SharedWebcamProps> = ({
         return () => {
             stopWebcam()
         }
-    }, [])
-
-    useEffect(() => {
-        // Stop webcam when modal closes
-        if (onClose) {
-            onClose()
-            stopWebcam()
-        }
-    }, [onClose])
+    }, [isFrontCamera]) // Recheck availability when toggling camera
 
     const handleError = (error: unknown) => {
         const errorMessage =
@@ -99,11 +96,15 @@ const SharedWebcam: React.FC<SharedWebcamProps> = ({
         if (isWebcamAvailable) {
             return (
                 <Webcam
+                    key={isFrontCamera ? 'front' : 'back'} // Force reinitialization
                     height={height}
                     width={width}
                     ref={webcamRef}
-                    mirrored
+                    mirrored={isFrontCamera} // Mirror only for front camera
                     screenshotFormat="image/jpeg"
+                    videoConstraints={{
+                        facingMode: isFrontCamera ? 'user' : 'environment',
+                    }}
                     onError={(error) => handleError(error)}
                 />
             )
@@ -132,9 +133,14 @@ const SharedWebcam: React.FC<SharedWebcamProps> = ({
                         </Button>
                     </div>
                 ) : (
-                    <Button onClick={capture}>
-                        <Camera className="mr-2 h-5 w-5" /> Capture
-                    </Button>
+                    <>
+                        <Button onClick={capture}>
+                            <Camera className="mr-2 h-5 w-5" /> Capture
+                        </Button>
+                        <Button onClick={toggleCamera}>
+                            <RefreshCcw className="mr-2 h-5 w-5" /> Switch Camera
+                        </Button>
+                    </>
                 )}
             </div>
         </div>
