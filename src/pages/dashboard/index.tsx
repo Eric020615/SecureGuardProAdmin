@@ -15,10 +15,10 @@ import {
 } from '@libs/time'
 import { useAuth } from '@store/auth/useAuth'
 import { useVisitorManagement } from '@store/visitorManagement/useVisitorManagement'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { CSVLink } from 'react-csv'
 
-const DashboardPage = () => {    
+const DashboardPage = () => {
     const [startDate, setStartDate] = useState<Date | undefined>(
         getDateAtBoundary(getCurrentDate(), 'month', 'start')
     )
@@ -27,15 +27,19 @@ const DashboardPage = () => {
     const { authTokenPayload } = useAuth()
 
     useEffect(() => {
+        filterData();
+    }, []);
+
+    useEffect(() => {
         filterData()
-    }, [startDate, endDate])
+    }, [startDate, endDate, authTokenPayload])
 
     // Function to handle date validation and filtering
     const filterData = async () => {
         if (authTokenPayload?.role !== RoleEnum.SYSTEM_ADMIN) {
             return
         }
-        
+
         if (startDate && endDate && startDate > endDate) {
             alert('End date cannot be before start date')
             return
@@ -53,11 +57,15 @@ const DashboardPage = () => {
         )
     }
 
-    // Prepare data for the chart
-    const chartLabels = visitorAnalytics.map((data) =>
-        convertDateStringToFormattedString(data.date, ITimeFormat.date)
-    )
-    const chartDataPoints = visitorAnalytics.map((data) => data.count)
+    const chartLabels = useMemo(() => {
+        return visitorAnalytics.map((data) =>
+            convertDateStringToFormattedString(data.date, ITimeFormat.date)
+        )
+    }, [visitorAnalytics])
+
+    const chartDataPoints = useMemo(() => {
+        return visitorAnalytics.map((data) => data.count)
+    }, [visitorAnalytics])
 
     // CSV data
     const csvData = [
@@ -86,10 +94,7 @@ const DashboardPage = () => {
                 <h3 className="text-3xl font-bold text-black">Dashboard</h3>
                 {authTokenPayload?.role === RoleEnum.SYSTEM_ADMIN && (
                     <Button className="flex items-center gap-1" onClick={() => {}}>
-                        <CSVLink
-                            data={csvData}
-                            filename={generateFileName()}
-                        >
+                        <CSVLink data={csvData} filename={generateFileName()}>
                             Export as CSV
                         </CSVLink>
                     </Button>
