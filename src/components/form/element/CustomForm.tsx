@@ -38,13 +38,19 @@ const phoneNumberInput = forwardRef<HTMLInputElement>((props, ref) => {
 interface FileDropzoneProps {
     onChange: (event: any[]) => void
     value: FileWithPath[]
+    acceptedFiles?: Record<string, string[]>
 }
 
-const FileDropzoneInput = ({ onChange, value }: FileDropzoneProps) => {
+const FileDropzoneInput = ({
+    onChange,
+    value,
+    acceptedFiles = { 'application/pdf': ['.pdf'] }, // Default to PDF files
+}: FileDropzoneProps) => {
     const { getRootProps, getInputProps } = useDropzone({
         onDrop: (acceptedFiles: FileWithPath[]) => {
             onChange(acceptedFiles)
         },
+        accept: acceptedFiles, // Use the prop here
     })
 
     return (
@@ -265,8 +271,7 @@ const CustomForm: React.FC<CustomFormProps> = ({ form, fields, onSubmit }) => {
                                                         )}
                                                     </ul>
                                                 </aside>
-                                            )
-                                        }
+                                            )}
                                     </>
                                 </FormControl>
                                 <FormMessage />
