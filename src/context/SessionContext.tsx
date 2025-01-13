@@ -1,11 +1,13 @@
 'use client'
 
+import { AuthTokenPayloadDto } from '@dtos/auth/auth.dto'
 import { deleteCookies, getCookies } from '@libs/cookies'
 import { useAuth } from '@store/auth/useAuth'
-import React, { createContext, useContext, useEffect } from 'react'
+import React, { createContext, useCallback, useContext, useEffect } from 'react'
 
 // Define the structure of your session state
 interface SessionState {
+    fetchSession: () => void // Function to fetch the session
     setSession: () => void // Function to update the session
     clearSession: () => void // Function to clear session (logout)
 }
@@ -15,16 +17,20 @@ const SessionContext = createContext<SessionState | undefined>(undefined)
 export const SessionProvider = ({ children }: { children: React.ReactNode }) => {
     const { setAuthTokenPayload } = useAuth()
 
-    useEffect(() => {
-        const fetchAuthTokenPayload = async () => {
-            const authCookie = await getCookies('authTokenPayload')
-            if (authCookie) {
-                const { userGuid, role } = JSON.parse(decodeURIComponent(authCookie))
-                setAuthTokenPayload({ userGuid, role })
-            }
+    const fetchSession = useCallback(async () => {
+        const authCookie = await getCookies('authTokenPayload')
+        if (authCookie) {
+            const { userGuid, role } = JSON.parse(decodeURIComponent(authCookie))
+            setAuthTokenPayload({ userGuid, role })
+        } else {
+            // If no cookie, clear the session
+            setAuthTokenPayload({} as AuthTokenPayloadDto)
         }
-        fetchAuthTokenPayload()
-    }, []) // Runs once when the app loads
+    }, [setAuthTokenPayload])
+
+    useEffect(() => {
+        fetchSession()
+    }, [fetchSession]) // Ensure it runs once on mount
 
     const setSession = () => {}
 
@@ -33,7 +39,7 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
     }
 
     return (
-        <SessionContext.Provider value={{ setSession, clearSession }}>
+        <SessionContext.Provider value={{ fetchSession, setSession, clearSession }}>
             {children}
         </SessionContext.Provider>
     )

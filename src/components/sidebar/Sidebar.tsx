@@ -39,7 +39,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, menuList }: SidebarProps) => {
 
     const handleLogout = () => {
         logOutAction()
-        router.replace('/')
+        router.replace('/sign-in')
         session.clearSession()
     }
 

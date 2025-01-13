@@ -10,6 +10,7 @@ import {
     SubUserAuthTokenPayloadDto,
     UserSignUpFormDto,
 } from '@dtos/auth/auth.dto'
+import { useSession } from '../../context/SessionContext'
 
 // Sign up a new user
 export const signUp = async (

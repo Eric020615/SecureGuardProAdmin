@@ -15,6 +15,7 @@ import { useApplication } from '@store/application/useApplication'
 import CustomLoader from '@components/loader/Loader'
 import { useMediaQuery } from 'usehooks-ts'
 import { useAuth } from '@store/auth/useAuth'
+import { useSession } from '../../context/SessionContext'
 
 const fullMenuList = [
     {
@@ -70,29 +71,45 @@ const fullMenuList = [
     },
 ]
 
+interface MenuItem {
+    link: string // URL link for the menu item
+    text: string // Display text for the menu item
+    icon?: React.ReactNode // Icon component (optional)
+    roles: string[] // Allowed roles
+}
+
+interface MenuGroup {
+    group: string // Group name
+    items: MenuItem[] // List of menu items within the group
+}
+
+type MenuList = MenuGroup[] // Full menu list type
+
 const Layout = ({ children }: { children: React.ReactNode }) => {
     const [isCollapsed, setIsCollapsed] = useState(false)
     const { isLoading } = useApplication()
     const { authTokenPayload } = useAuth()
     const isMobileView = useMediaQuery('(max-width: 768px)')
     const [isMounted, setIsMounted] = useState(false)
+    const [filteredMenuList, setFilteredMenuList] = useState<MenuList>([]) // Use state for filtered menu list
+    const session = useSession()
 
     useEffect(() => {
         // Set mounted to true once component mounts on the client
         setIsMounted(true)
+        session.fetchSession()
     }, [])
 
     // Ensure the menu updates dynamically when authTokenPayload.role updates
-    const filteredMenuList = useMemo(() => {
-        if (!authTokenPayload || !authTokenPayload.role) {
-            return [] // Return an empty menu list while loading
-        }
-        return fullMenuList.map((menuGroup) => ({
-            ...menuGroup,
-            items: menuGroup.items.filter((item) =>
-                item.roles.includes(authTokenPayload.role)
-            ),
-        }))
+    useEffect(() => {
+        setFilteredMenuList(
+            fullMenuList.map((menuGroup) => ({
+                ...menuGroup,
+                items: menuGroup.items.filter((item) =>
+                    item.roles.includes(authTokenPayload.role)
+                ),
+            }))
+        )
     }, [authTokenPayload])
 
     return (
